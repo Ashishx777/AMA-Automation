@@ -1,0 +1,2593 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Social Proof — Ad Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400..700&family=Geist:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300..800&family=Lora:ital,wght@0,400..700;1,400..700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:wght@300..800&family=Nunito:wght@300..800&family=Argentum+Sans:wght@300..700&family=Bebas+Neue&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&f[]=clash-display@400,500,600,700&f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  /* Neue Haas Grot Text — used by The Solved Skin headlines.
+     OTFs are user-provided trial files; loaded as four weight variants. */
+  @font-face {
+    font-family: "Neue Haas Grot Text";
+    src: url("assets/fonts/NeueHaasGrotText-55Roman.otf") format("opentype");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "Neue Haas Grot Text";
+    src: url("assets/fonts/NeueHaasGrotText-65Medium.otf") format("opentype");
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "Neue Haas Grot Text";
+    src: url("assets/fonts/NeueHaasGrotText-75Bold.otf") format("opentype");
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+  html,body{margin:0;padding:0;background:#efece5;font-family:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;}
+
+  /* ───── Tweaks panel ───── */
+  .tw-panel{position:fixed;top:16px;right:16px;width:380px;max-height:calc(100vh - 32px);
+    background:#13100c;color:#efeadc;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.45);
+    font-family:"Geist",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    font-size:13px;display:flex;flex-direction:column;z-index:1000;overflow:hidden}
+  .tw-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+  .tw-title{font-weight:600;font-size:14px;letter-spacing:-.2px}
+  .tw-close{background:transparent;border:none;color:rgba(255,255,255,.6);cursor:pointer;
+    width:28px;height:28px;border-radius:6px;font-size:18px;line-height:1;padding:0}
+  .tw-close:hover{background:rgba(255,255,255,.08);color:#fff}
+  .tw-body{overflow-y:auto;padding:10px 6px 14px;flex:1}
+  .tw-tabs{display:flex;gap:2px;padding:8px 10px 4px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.08)}
+  .tw-tab{border:none;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);
+    padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500}
+  .tw-tab:hover{background:rgba(255,255,255,.12);color:#fff}
+  .tw-tab.active{background:#b58a54;color:#fff}
+  .tw-tab.add{background:transparent;color:rgba(255,255,255,.5);border:1px dashed rgba(255,255,255,.2)}
+  .tw-tab.add:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .tw-toolbar{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
+  .tw-tool{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);border:none;
+    padding:6px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;
+    font-weight:500;display:inline-flex;align-items:center;gap:5px}
+  .tw-tool:hover{background:rgba(255,255,255,.12);color:#fff}
+  .tw-tool.danger{color:rgba(255,170,150,.9)}
+  .tw-tool.danger:hover{background:rgba(255,80,60,.15);color:#ff9884}
+  .tw-card{padding:12px 14px;margin:6px 10px;background:rgba(255,255,255,.04);border-radius:8px}
+  .tw-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+  .tw-card-title{font-weight:600;font-size:12px;color:#fff;letter-spacing:.2px}
+  .tw-field{margin-bottom:10px}
+  .tw-label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.8px;
+    color:rgba(255,255,255,.45);margin-bottom:4px;font-weight:600}
+  .tw-input,.tw-textarea,.tw-select{width:100%;box-sizing:border-box;background:rgba(0,0,0,.3);
+    color:#efeadc;border:1px solid rgba(255,255,255,.08);border-radius:6px;
+    padding:7px 9px;font-family:inherit;font-size:12px;line-height:1.35;resize:vertical}
+  .tw-textarea{min-height:54px}
+  .tw-input:focus,.tw-textarea:focus,.tw-select:focus{outline:none;border-color:#b58a54;
+    background:rgba(0,0,0,.4)}
+  .tw-drop{border:1.5px dashed rgba(255,255,255,.18);border-radius:8px;padding:18px 12px;
+    text-align:center;color:rgba(255,255,255,.55);font-size:12px;cursor:pointer;
+    transition:border-color .15s,background .15s}
+  .tw-drop:hover,.tw-drop.over{border-color:#b58a54;color:#fff;background:rgba(181,138,84,.1)}
+  .tw-drop .tw-drop-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px}
+  .tw-thumb{width:100%;height:120px;border-radius:6px;background-size:cover;background-position:center;
+    background-color:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);margin-bottom:6px;
+    display:flex;align-items:flex-end;justify-content:flex-end;padding:6px}
+  .tw-thumb-replace{background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:3px 7px;
+    border-radius:4px;border:none;cursor:pointer;font-family:inherit;font-weight:500}
+  .tw-thumb-replace:hover{background:#b58a54}
+  .tw-footer{padding:10px 14px;border-top:1px solid rgba(255,255,255,.08);
+    font-size:11px;color:rgba(255,255,255,.5);display:flex;gap:10px;align-items:center}
+  .tw-footer button{background:transparent;border:1px solid rgba(255,255,255,.15);
+    color:rgba(255,255,255,.7);padding:4px 9px;border-radius:5px;cursor:pointer;
+    font-family:inherit;font-size:11px}
+  .tw-footer button:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .tw-hint{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;line-height:1.4}
+
+  /* Layout picker chips */
+  .lp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .lp-chip{border:1.5px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);
+    border-radius:8px;padding:8px 6px;cursor:pointer;color:rgba(255,255,255,.7);
+    font-family:inherit;font-size:10px;font-weight:600;text-align:center;
+    display:flex;flex-direction:column;align-items:center;gap:5px;letter-spacing:.3px;text-transform:uppercase}
+  .lp-chip:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+  .lp-chip.active{border-color:#b58a54;background:rgba(181,138,84,.18);color:#fff}
+  .lp-chip svg{width:38px;height:38px}
+
+  /* Draggable hotspots */
+  .ad-hot{position:absolute;cursor:grab;user-select:none}
+  .ad-hot.dragging{cursor:grabbing;z-index:10}
+  .ad-hot .ad-handle{position:absolute;top:-22px;left:-22px;width:44px;height:44px;
+    border-radius:50%;background:#b58a54;color:#fff;font-size:20px;font-weight:700;
+    display:none;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.35);
+    border:3px solid #fff;pointer-events:none}
+  .ad-hot .ad-resize{position:absolute;right:-20px;bottom:-20px;width:38px;height:38px;
+    border-radius:50%;background:#fff;border:3px solid #b58a54;cursor:nwse-resize;
+    display:none;box-shadow:0 3px 10px rgba(0,0,0,.3);z-index:11}
+  [data-edit-on] .ad-hot .ad-handle,
+  [data-edit-on] .ad-hot.dragging .ad-handle,
+  [data-edit-on] .ad-hot.resizing .ad-handle{display:flex}
+  [data-edit-on] .ad-hot .ad-resize,
+  [data-edit-on] .ad-hot.dragging .ad-resize,
+  [data-edit-on] .ad-hot.resizing .ad-resize{display:block}
+  [data-edit-on] .ad-hot > .ad-hot-inner{outline:2px dashed rgba(181,138,84,.45);outline-offset:2px}
+  [data-edit-on] .ad-hot:hover > .ad-hot-inner{outline:2px solid #b58a54;outline-offset:2px}
+
+  /* Image pan/zoom handle overlay */
+  .img-handle{position:absolute;z-index:5;display:none;align-items:center;gap:6px;
+    padding:6px 10px;border-radius:999px;background:rgba(19,16,12,.92);color:#fff;
+    font-size:11px;font-family:"Geist",system-ui,sans-serif;font-weight:500;
+    letter-spacing:.3px;box-shadow:0 4px 14px rgba(0,0,0,.3);pointer-events:auto}
+  [data-edit-on] .img-handle{display:inline-flex}
+  .img-handle button{background:rgba(255,255,255,.15);border:none;color:#fff;
+    width:22px;height:22px;border-radius:50%;cursor:pointer;font-family:inherit;
+    font-size:14px;line-height:1;padding:0;font-weight:600}
+  .img-handle button:hover{background:#b58a54}
+  .img-handle .img-drag{cursor:move;padding:0 6px}
+  .img-resize{position:absolute;right:-9px;bottom:-9px;width:18px;height:18px;
+    border-radius:50%;background:#fff;border:2px solid #b58a54;cursor:nwse-resize;
+    display:none;z-index:5;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+  [data-edit-on] .img-resize{display:block}
+
+  .v-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .v-btn{background:#fff;border:1px solid rgba(0,0,0,.1);color:#222;
+    padding:5px 10px;font-size:11px;border-radius:5px;cursor:pointer;font-family:inherit;font-weight:500}
+  .v-btn:hover{background:#13100c;color:#fff;border-color:#13100c}
+  .v-btn.subtle{background:transparent;color:rgba(60,50,40,.55);border-color:transparent}
+  .v-btn.subtle:hover{background:rgba(0,0,0,.05);color:#222}
+  .v-btn:disabled{opacity:.4;cursor:not-allowed}
+  .v-btn:disabled:hover{background:#fff;color:#222;border-color:rgba(0,0,0,.1)}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx" data-plugins="transform-react-jsx-source" data-filename="design-canvas.jsx"></script>
+<script type="text/babel" src="social-proof-layouts.jsx" data-plugins="transform-react-jsx-source" data-filename="social-proof-layouts.jsx"></script>
+<script type="text/babel" src="social-proof-adtypes.jsx" data-plugins="transform-react-jsx-source" data-filename="social-proof-adtypes.jsx"></script>
+<script type="text/babel" data-plugins="transform-react-jsx-source" data-filename="social-proof-app.jsx">
+
+/*
+ * Social Proof — reusable ad template
+ *
+ * Each brand → variations[]. Each variation has:
+ *   layout : 'card' | 'editorial' | 'tabbed'
+ *   headline, body, author, rating  (0..5, half-steps)
+ *   pos    : { square: {...}, story: {...} } — per-layout drag positions
+ *   image  : session-only (not persisted)
+ *
+ * Rendered in 1:1 + 9:16 side-by-side per variation.
+ * Export PNG at 2x via html-to-image.
+ */
+
+const FRAMES = {
+  square: { w: 1080, h: 1080, label: '1:1', previewW: 360 },
+  story: { w: 1080, h: 1920, label: '9:16', previewW: 260 }
+};
+
+const FONTS = [
+{ id: 'instrument', label: 'Instrument', stack: '"Instrument Serif", Georgia, serif' },
+{ id: 'fraunces', label: 'Fraunces', stack: '"Fraunces", Georgia, serif' },
+{ id: 'playfair', label: 'Playfair', stack: '"Playfair Display", Georgia, serif' },
+{ id: 'geist', label: 'Geist', stack: '"Geist", -apple-system, system-ui, sans-serif' },
+{ id: 'inter', label: 'Inter', stack: '"Inter", -apple-system, system-ui, sans-serif' },
+{ id: 'system', label: 'System', stack: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif' }];
+
+const getFont = (id) => (FONTS.find((f) => f.id === id) || FONTS[0]).stack;
+
+/* ── Per-brand typography pairings.
+   H1 = display / headline, H2 = supporting / body / labels.
+   Some requested fonts are licensed (Very Vogue, Haas Grot Disp, Creato Display);
+   closest original substitutes are noted inline. Keyed by brand id → falls back
+   to {h1: getFont(brand.font), h2: Inter} for unknown brand ids. */
+const BRAND_TYPE = {
+  rara: { h1: '"Instrument Serif", Georgia, serif', h2: '"Inter", -apple-system, system-ui, sans-serif', label: 'Instrument Serif · Inter' },
+  solvedskin: { h1: '"Neue Haas Grot Text", "Space Grotesk", "Geist", -apple-system, sans-serif', h2: '"Inter", -apple-system, system-ui, sans-serif', label: 'Neue Haas Grot Text · Inter' },
+  mileenia: { h1: '"Lora", Georgia, serif', h2: '"Satoshi", "Inter", -apple-system, system-ui, sans-serif', label: 'Lora · Satoshi' },
+  zauv: { h1: '"Bodoni Moda", Didot, "Playfair Display", serif', h2: '"Instrument Sans", "Inter", -apple-system, sans-serif', label: 'Bodoni Moda · Instrument Sans' /* Very Vogue substitute */ },
+  parman: { h1: '"Clash Display", "Geist", -apple-system, sans-serif', h2: '"General Sans", "Inter", -apple-system, sans-serif', label: 'Clash Display · General Sans' /* Creato substitute */ },
+  pragyanam: { h1: '"Montserrat", -apple-system, system-ui, sans-serif', h2: '"Nunito", -apple-system, system-ui, sans-serif', label: 'Montserrat · Nunito' },
+  gyros: { h1: '"Argentum Sans", -apple-system, system-ui, sans-serif', h2: '"Satoshi", "Inter", -apple-system, system-ui, sans-serif', label: 'Argentum Sans · Satoshi' },
+  subtle: { h1: '"Instrument Serif", Georgia, serif', h2: '"Inter", -apple-system, system-ui, sans-serif', label: 'Instrument Serif · Inter' },
+  atovio: { h1: '"Bebas Neue", Impact, -apple-system, sans-serif', h2: '"General Sans", "Inter", -apple-system, sans-serif', label: 'Bebas Neue · General Sans' }
+};
+const getTypePair = (brand) => BRAND_TYPE[brand.id] || {
+  h1: getFont(brand.font),
+  h2: '"Inter", -apple-system, system-ui, sans-serif',
+  label: 'Custom'
+};
+
+const LAYOUTS = ['card', 'editorial', 'tabbed'];
+
+const DEFAULT_POS = {
+  card: { square: { card: { x: 0.06, y: 0.09 } }, story: { card: { x: 0.06, y: 0.09 } } },
+  editorial: { square: { quote: { x: 0.06, y: 0.08 }, cta: { x: 0.12, y: 0.84 } }, story: { quote: { x: 0.06, y: 0.08 }, cta: { x: 0.12, y: 0.88 } } },
+  tabbed: { square: { card: { x: 0.28, y: 0.40 }, product: { x: 0.02, y: 0.32 } }, story: { card: { x: 0.10, y: 0.55 }, product: { x: 0.08, y: 0.22 } } }
+};
+
+const mkVariation = (overrides = {}) => ({
+  id: `v${Math.random().toString(36).slice(2, 8)}`,
+  layout: 'card',
+  headline: '',
+  body: '',
+  author: '',
+  rating: 5,
+  cta: '',
+  ...overrides
+});
+
+const defaultBrand = (overrides = {}) => ({
+  id: `b${Date.now().toString(36)}`,
+  name: 'New brand',
+  font: 'instrument',
+  accent: '#13100c',
+  variations: [mkVariation()],
+  ...overrides
+});
+
+const TWEAKS = /*EDITMODE-BEGIN*/{
+  "activeBrandId": "solvedskin",
+  "brands": [
+    {
+      "id": "rara",
+      "name": "Rara",
+      "font": "instrument",
+      "accent": "#13100c",
+      "variations": [
+        {
+          "id": "v1",
+          "layout": "card",
+          "headline": "Clear, Sharp, Motivated",
+          "body": "I used to feel brain fogged all the time. Since wearing Rara, I feel clear, sharp, and motivated again. Seriously a game-changer.",
+          "author": "Huma Khan",
+          "rating": 4.5,
+          "cta": "",
+          "pos": {
+            "card": {
+              "_size": {
+                "card": {
+                  "w": 0.43721788194444444
+                }
+              },
+              "_pos": {
+                "card": {
+                  "x": 0.04194155799018012,
+                  "y": 0.06360677083333334
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "v2",
+          "layout": "editorial",
+          "headline": "Wore Rara to back-to-back meetings. Zero foot pain.",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": "Walk in comfort →",
+          "pos": {
+            "editorial": {
+              "_size": {
+                "quote": {
+                  "w": 0.5171779926006611
+                },
+                "cta": {
+                  "w": 0.42249713473849826
+                }
+              },
+              "_pos": {
+                "quote": {
+                  "x": 0.06,
+                  "y": 0.08
+                },
+                "cta": {
+                  "x": 0.28527200486924914,
+                  "y": 0.8399957868787977
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "v3",
+          "layout": "tabbed",
+          "headline": "",
+          "body": "The toe box is wide but the heel holds. Stays secure all day, even after 20,000 steps.",
+          "author": "Aayush, Gurugram",
+          "rating": 5,
+          "cta": "",
+          "pos": {
+            "tabbed": {
+              "square": {
+                "card": {
+                  "x": 0.1708698095543173,
+                  "y": 0.5725752361750759
+                },
+                "product": {
+                  "x": 0.02,
+                  "y": 0.32
+                }
+              },
+              "_pos": {
+                "card": {
+                  "x": 0.1402777539947927,
+                  "y": 0.7170066041723288
+                },
+                "product": {
+                  "x": 0.07715231088491586,
+                  "y": 0.4083790155557486
+                }
+              }
+            }
+          }
+        }
+      ],
+      "adTypeVariations": {
+        "testimonial": [
+          {
+            "id": "v1",
+            "layout": "card",
+            "headline": "Clear, Sharp, Motivated",
+            "body": "I used to feel brain fogged all the time. Since wearing Rara, I feel clear, sharp, and motivated again. Seriously a game-changer.",
+            "author": "Huma Khan",
+            "rating": 4.5,
+            "cta": "",
+            "pos": {
+              "card": {
+                "_size": {
+                  "card": {
+                    "w": 0.43721788194444444
+                  }
+                },
+                "_pos": {
+                  "card": {
+                    "x": 0.04194155799018012,
+                    "y": 0.06360677083333334
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "v2",
+            "layout": "editorial",
+            "headline": "Wore Rara to back-to-back meetings. Zero foot pain.",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": "Walk in comfort →",
+            "pos": {
+              "editorial": {
+                "_size": {
+                  "quote": {
+                    "w": 0.5171779926006611
+                  },
+                  "cta": {
+                    "w": 0.42249713473849826
+                  }
+                },
+                "_pos": {
+                  "quote": {
+                    "x": 0.06,
+                    "y": 0.08
+                  },
+                  "cta": {
+                    "x": 0.28527200486924914,
+                    "y": 0.8399957868787977
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "v3",
+            "layout": "tabbed",
+            "headline": "",
+            "body": "The toe box is wide but the heel holds. Stays secure all day, even after 20,000 steps.",
+            "author": "Aayush, Gurugram",
+            "rating": 5,
+            "cta": "",
+            "pos": {
+              "tabbed": {
+                "square": {
+                  "card": {
+                    "x": 0.1708698095543173,
+                    "y": 0.5725752361750759
+                  },
+                  "product": {
+                    "x": 0.02,
+                    "y": 0.32
+                  }
+                },
+                "_pos": {
+                  "card": {
+                    "x": 0.1402777539947927,
+                    "y": 0.7170066041723288
+                  },
+                  "product": {
+                    "x": 0.07715231088491586,
+                    "y": 0.4083790155557486
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "dm": [
+          {
+            "id": "vmocsdyv70bd7",
+            "layout": "dm-instagram",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocsdyv71dxi",
+            "layout": "dm-imessage",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocsdyv72oje",
+            "layout": "dm-whatsapp",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "review": [
+          {
+            "id": "vmocsed0n0bw6",
+            "layout": "review-bubble",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocsed0n1gw7",
+            "layout": "review-stars",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocsed0n2ecy",
+            "layout": "review-polaroid",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "ui": [
+          {
+            "id": "vmocseiie0lkz",
+            "layout": "ui-airdrop",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocseiie1fkv",
+            "layout": "ui-notification",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocseiie2giy",
+            "layout": "ui-composer",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "labelled": [
+          {
+            "id": "vmocsemx10e07",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocsemx11fgv",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocsemx12fod",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "beforeafter": [
+          {
+            "id": "vmoih9bp002ff",
+            "layout": "ba-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoih9bp01sdc",
+            "layout": "ba-checktable",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoih9bp02m60",
+            "layout": "ba-pillpair",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "problemsolution": [
+          {
+            "id": "vmomk8v3m0jqr",
+            "layout": "ps-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmomk8v3m1v15",
+            "layout": "ps-search",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmomk8v3m25uq",
+            "layout": "ps-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "solvedskin",
+      "name": "The Solved Skin",
+      "font": "fraunces",
+      "accent": "#0d4b4b",
+      "variations": [
+        {
+          "id": "ss1",
+          "layout": "card",
+          "headline": "Hello ",
+          "body": "This is my testimonial ",
+          "author": "Sapna Bhavnani",
+          "rating": 5,
+          "cta": ""
+        },
+        {
+          "id": "v5qubhw",
+          "layout": "card",
+          "headline": "",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": ""
+        }
+      ],
+      "adTypeVariations": {
+        "testimonial": [
+          {
+            "id": "ss1",
+            "layout": "editorial",
+            "headline": "Effective Results Within Few Days:",
+            "body": "“In just four days, I noticed a reduction in inflamed pimples, and my skin felt significantly clearer. It's ideal for normal to oily skin types.”\n",
+            "author": "",
+            "rating": 5,
+            "cta": "",
+            "pos": {
+              "editorial": {
+                "_img": {
+                  "x": 0.57497418185914,
+                  "y": 0.38092343059056644,
+                  "scale": 1.9000000000000008
+                },
+                "_pos": {
+                  "quote": {
+                    "x": 0.05210700028932632,
+                    "y": 0.22248574746659086
+                  },
+                  "cta": {
+                    "x": 0.12,
+                    "y": 0.84
+                  }
+                },
+                "_size": {
+                  "quote": {
+                    "w": 0.8777778729097262
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "vvdr5n7",
+            "layout": "editorial",
+            "headline": "Works On Hormonal Acne:",
+            "body": "“It's a great product! I have tried and spent so much money on various treatments & products but nothing stopped my hormonal acne. Before buying this solved skin facewash, I told myself this would be my last trial. Fortunately this has worked for my inflammatory acne filled with pus.”",
+            "author": "",
+            "rating": 5,
+            "cta": "",
+            "pos": {
+              "editorial": {
+                "_img": {
+                  "x": 0.4959042234069051,
+                  "y": 0.2677448860930578,
+                  "scale": 1.1
+                },
+                "_pos": {
+                  "quote": {
+                    "x": 0.07260966077950114,
+                    "y": 0.2669679520352491
+                  },
+                  "cta": {
+                    "x": 0.12,
+                    "y": 0.84
+                  }
+                },
+                "_size": {
+                  "quote": {
+                    "w": 0.8777778729097262
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "v0i862f",
+            "layout": "editorial",
+            "headline": "Helps Restore Skin Barrier",
+            "body": "“The rapid clear face wash and the barrier repair moisturiser has been working wonders for my active acne and overall skin health. I love how it is repairing my barrier and restoring my skin health back.”",
+            "author": "",
+            "rating": 5,
+            "cta": "",
+            "pos": {
+              "editorial": {
+                "_img": {
+                  "x": 0.57497418185914,
+                  "y": 0.38092343059056644,
+                  "scale": 1.9500000000000008
+                },
+                "_pos": {
+                  "quote": {
+                    "x": 0.122222094736745,
+                    "y": 0.32252333905874553
+                  },
+                  "cta": {
+                    "x": 0.12,
+                    "y": 0.84
+                  }
+                },
+                "_size": {
+                  "quote": {
+                    "w": 0.8777778729097262
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "v5qubhw",
+            "layout": "card",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "ui": [
+          {
+            "id": "vmocu4ujj0vhf",
+            "layout": "ui-chat-cluster",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": "",
+            "pos": {
+              "ui-airdrop": {
+                "_size": {
+                  "card": {
+                    "w": 0.5861134263660759
+                  }
+                }
+              },
+              "ui-before-after": {
+                "_size": {
+                  "product": {
+                    "w": 0.5273919280805391
+                  }
+                },
+                "_pos": {
+                  "before": {
+                    "x": 0.1222222434149848,
+                    "y": 0.06276762220594619
+                  },
+                  "after": {
+                    "x": 0.5466652128431532,
+                    "y": 0.05444149441189236
+                  },
+                  "product": {
+                    "x": 0.21916234758165148,
+                    "y": 0.5461082458496094
+                  },
+                  "bubble2": {
+                    "x": 0.31666668785942925,
+                    "y": 0.46998697916666665
+                  },
+                  "bubble1": {
+                    "x": 0.06555266910129123,
+                    "y": 0.49138454861111114
+                  }
+                }
+              },
+              "ui-review-cluster": {
+                "_pos": {
+                  "review0": {
+                    "x": 0.466435063337744,
+                    "y": 0.2094828958347736
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "vmocu4ujk1txl",
+            "layout": "ui-notification",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmocu4ujk2beq",
+            "layout": "ui-composer",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": "",
+            "pos": {
+              "ui-composer": {
+                "_pos": {
+                  "card": {
+                    "x": 0.11564452955905999,
+                    "y": 0.10521507851488869
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "dm": [
+          {
+            "id": "vmoe10vc10izz",
+            "layout": "dm-instagram",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoe10vc11c2c",
+            "layout": "dm-imessage",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoe10vc12468",
+            "layout": "dm-whatsapp",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "review": [
+          {
+            "id": "vmoiabrbz0n67",
+            "layout": "review-polaroid",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": "",
+            "pos": {
+              "review-polaroid": {
+                "_pos": {
+                  "card": {
+                    "x": 0.08769002689043445,
+                    "y": 0.6917545518203244
+                  }
+                },
+                "_img": {
+                  "x": 0.5,
+                  "y": 0.5,
+                  "scale": 1.9500000000000008
+                }
+              }
+            }
+          },
+          {
+            "id": "vmoiabrbz1496",
+            "layout": "review-stars",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoiabrbz2fu8",
+            "layout": "review-polaroid",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "labelled": [
+          {
+            "id": "vmoic20re0zqp",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoic20re1lbt",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoic20re23cl",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "beforeafter": [
+          {
+            "id": "vmoidvysk0h4w",
+            "layout": "ba-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoidvysk1cnr",
+            "layout": "ba-checktable",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoidvysk243j",
+            "layout": "ba-pillpair",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "problemsolution": [
+          {
+            "id": "vmomkallx0p2n",
+            "layout": "ps-search",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmomkallx2pls",
+            "layout": "ps-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "v2n3dwy",
+            "layout": "ps-search",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "v1r59ig",
+            "layout": "ps-search",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "mileenia",
+      "name": "Mileenia",
+      "font": "playfair",
+      "accent": "#1a1410",
+      "variations": [
+        {
+          "id": "mi1",
+          "layout": "editorial",
+          "headline": "",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": ""
+        }
+      ]
+    },
+    {
+      "id": "zauv",
+      "name": "Zauv",
+      "font": "instrument",
+      "accent": "#13100c",
+      "variations": [
+        {
+          "id": "zv1",
+          "layout": "card",
+          "headline": "",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": ""
+        }
+      ],
+      "adTypeVariations": {
+        "testimonial": [
+          {
+            "id": "zv1",
+            "layout": "card",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "ui": [
+          {
+            "id": "vmojmzpti0jyw",
+            "layout": "ui-airdrop",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojmzpti10nf",
+            "layout": "ui-notification",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojmzpti2a8x",
+            "layout": "ui-composer",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "review": [
+          {
+            "id": "vmojmzrs1019r",
+            "layout": "review-bubble",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojmzrs11mck",
+            "layout": "review-stars",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojmzrs1229s",
+            "layout": "review-polaroid",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "labelled": [
+          {
+            "id": "vmojmzuo70lo7",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": "",
+            "pos": {
+              "labelled-bubbles": {
+                "_pos": {
+                  "label0": {
+                    "x": 0.13961761926539296,
+                    "y": 0.22943148098505284
+                  }
+                },
+                "_img": {
+                  "x": 0.5,
+                  "y": 0.5,
+                  "scale": 0.8499999999999999
+                }
+              }
+            }
+          },
+          {
+            "id": "vmojmzuo71tn9",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojmzuo72doe",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "beforeafter": [
+          {
+            "id": "vmojmzyrh09no",
+            "layout": "ba-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojmzyrh1cjf",
+            "layout": "ba-checktable",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojmzyrh2w01",
+            "layout": "ba-pillpair",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "dm": [
+          {
+            "id": "vmojn0azl0sky",
+            "layout": "dm-instagram",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojn0azl1tgs",
+            "layout": "dm-imessage",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmojn0azl268b",
+            "layout": "dm-whatsapp",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "parman",
+      "name": "Parman",
+      "font": "geist",
+      "accent": "#13100c",
+      "variations": [
+        {
+          "id": "pa1",
+          "layout": "card",
+          "headline": "",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": ""
+        }
+      ]
+    },
+    {
+      "id": "pragyanam",
+      "name": "Pragyanam",
+      "font": "fraunces",
+      "accent": "#1a1410",
+      "variations": [
+        {
+          "id": "pg1",
+          "layout": "editorial",
+          "headline": "",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": ""
+        }
+      ],
+      "adTypeVariations": {
+        "testimonial": [
+          {
+            "id": "pg1",
+            "layout": "editorial",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "labelled": [
+          {
+            "id": "vmomxx1um0tq9",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmomxx1um1r01",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmomxx1um2eqg",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "gyros",
+      "name": "Gyros",
+      "font": "inter",
+      "accent": "#13100c",
+      "variations": [
+        {
+          "id": "gy1",
+          "layout": "card",
+          "headline": "",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": ""
+        }
+      ]
+    },
+    {
+      "id": "subtle",
+      "name": "Subtle",
+      "font": "instrument",
+      "accent": "#13100c",
+      "variations": [
+        {
+          "id": "sb1",
+          "layout": "card",
+          "headline": "",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": ""
+        }
+      ],
+      "adTypeVariations": {
+        "testimonial": [
+          {
+            "id": "sb1",
+            "layout": "card",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "labelled": [
+          {
+            "id": "vmomxww4o0ajo",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmomxww4o1a24",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmomxww4o28x9",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "atovio",
+      "name": "Atovio",
+      "font": "playfair",
+      "accent": "#13100c",
+      "variations": [
+        {
+          "id": "at1",
+          "layout": "editorial",
+          "headline": "",
+          "body": "",
+          "author": "",
+          "rating": 5,
+          "cta": ""
+        }
+      ],
+      "adTypeVariations": {
+        "testimonial": [
+          {
+            "id": "at1",
+            "layout": "editorial",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "dm": [
+          {
+            "id": "vmoo39p7i0z42",
+            "layout": "dm-instagram",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo39p7i17jf",
+            "layout": "dm-imessage",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo39p7i287f",
+            "layout": "dm-whatsapp",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "review": [
+          {
+            "id": "vmoo39u8v0tor",
+            "layout": "review-bubble",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo39u8v1gtq",
+            "layout": "review-stars",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo39u8v2bvn",
+            "layout": "review-polaroid",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "ui": [
+          {
+            "id": "vmoo3a6870w9a",
+            "layout": "ui-airdrop",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo3a6871ljk",
+            "layout": "ui-notification",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo3a6872exb",
+            "layout": "ui-composer",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "labelled": [
+          {
+            "id": "vmoo3a95u0lqs",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo3a95u1gb5",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo3a95u2g3j",
+            "layout": "labelled-bubbles",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "problemsolution": [
+          {
+            "id": "vmoo3acd90d91",
+            "layout": "ps-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo3acd91mee",
+            "layout": "ps-search",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo3acd920ha",
+            "layout": "ps-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ],
+        "beforeafter": [
+          {
+            "id": "vmoo3ae4t09h7",
+            "layout": "ba-split",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo3ae4t1681",
+            "layout": "ba-checktable",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          },
+          {
+            "id": "vmoo3ae4t24pf",
+            "layout": "ba-pillpair",
+            "headline": "",
+            "body": "",
+            "author": "",
+            "rating": 5,
+            "cta": ""
+          }
+        ]
+      }
+    }
+  ],
+  "activeAdType": "testimonial"
+}/*EDITMODE-END*/;
+
+const DEFAULTS = JSON.parse(JSON.stringify(TWEAKS));
+
+/* ── Ad types registry ─────────────────────────────────────────────────
+   Testimonial is the only one with real layouts right now. The others are
+   declared so tabs render; they show a "coming soon" placeholder until
+   their layouts are built. Brand variations are now stored per ad type:
+   brand.adTypeVariations[adType] = [...].  Legacy brand.variations is
+   migrated lazily into adTypeVariations.testimonial on first read. */
+const AD_TYPES = [
+  { id: 'testimonial', label: 'Testimonial', ready: true },
+  { id: 'dm',          label: 'Text / DM',   ready: true },
+  { id: 'review',      label: 'Review card', ready: true },
+  { id: 'ui',          label: 'UI ad',       ready: true },
+  { id: 'labelled',    label: 'Labelled',    ready: true },
+  { id: 'forum',       label: 'Forum post',  ready: false },
+  { id: 'tweet',       label: 'Tweet quote', ready: false },
+  { id: 'press',       label: 'Press wall',  ready: false },
+  { id: 'problemsolution', label: 'Problem / Solution', ready: true },
+  { id: 'beforeafter', label: 'Before/After',ready: true },
+  { id: 'starbanner',  label: 'Star banner', ready: false },
+  { id: 'ama',         label: 'AMA',         ready: false },
+];
+
+function migrateBrand(b) {
+  // If brand already has adTypeVariations, keep it. Otherwise lift legacy
+  // `variations` into adTypeVariations.testimonial.
+  if (b.adTypeVariations) return b;
+  const atv = { testimonial: b.variations || [mkVariation()] };
+  return { ...b, adTypeVariations: atv };
+}
+
+const getAdTypeVariations = (brand, adType) => {
+  const mig = migrateBrand(brand);
+  return mig.adTypeVariations[adType] || [];
+};
+
+/* activeBrandOf returns a brand with `variations` aliased to the active
+   ad type's bucket. Writes to `variations` get rerouted by updateActiveBrand
+   (see App) into adTypeVariations[activeAdType]. */
+const activeBrandOf = (s) => {
+  const raw = s.brands.find((b) => b.id === s.activeBrandId) || s.brands[0];
+  const mig = migrateBrand(raw);
+  const adType = s.activeAdType || 'testimonial';
+  const variations = mig.adTypeVariations[adType] || [];
+  return { ...mig, variations, _activeAdType: adType };
+};
+
+/* ── Image store (session-only) ── */
+const ImageStore = {
+  _map: {},
+  set(id, d) {this._map[id] = d;this._emit();},
+  get(id) {return this._map[id];},
+  clear(id) {delete this._map[id];this._emit();},
+  _subs: new Set(),
+  _emit() {this._subs.forEach((fn) => fn());},
+  subscribe(fn) {this._subs.add(fn);return () => this._subs.delete(fn);}
+};
+function useImageStore() {const [, f] = React.useReducer((x) => x + 1, 0);React.useEffect(() => ImageStore.subscribe(f), []);}
+window.ImageStore = ImageStore;
+
+/* ───── Draggable + resizable hotspot.
+   `size` — optional { w, h } fractional width/height. If h is undefined the
+   block auto-heights (intrinsic). Resize affects widthFrac and heightFrac. */
+function DraggableBlock({ frac, onChange, size, onResize, frameW, frameH, editOn, children, handleLabel, widthFrac = 0.52, minWidthFrac = 0.18, maxWidthFrac = 0.98 }) {
+  const ref = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const [resizing, setResizing] = React.useState(false);
+
+  const curWidth = size && size.w || widthFrac;
+  const curHeight = size && size.h; // may be undefined → auto
+
+  const onPointerDown = (e) => {
+    if (!editOn) return;
+    if (e.target.classList && e.target.classList.contains('ad-resize')) return;
+    e.preventDefault();
+    const el = ref.current;
+    const parent = el.parentElement;
+    const parentRect = parent.getBoundingClientRect();
+    const scale = parentRect.width / frameW;
+    const elRect = el.getBoundingClientRect();
+    const offX = e.clientX - elRect.left;
+    const offY = e.clientY - elRect.top;
+    setDragging(true);
+    const onMove = (ev) => {
+      const px = (ev.clientX - parentRect.left - offX) / scale;
+      const py = (ev.clientY - parentRect.top - offY) / scale;
+      const bw = elRect.width / scale,bh = elRect.height / scale;
+      const cx = Math.max(0, Math.min(frameW - bw, px));
+      const cy = Math.max(0, Math.min(frameH - bh, py));
+      onChange({ x: cx / frameW, y: cy / frameH });
+    };
+    const onUp = () => {setDragging(false);window.removeEventListener('pointermove', onMove);window.removeEventListener('pointerup', onUp);};
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
+
+  const onResizeDown = (e) => {
+    if (!editOn || !onResize) return;
+    e.preventDefault();e.stopPropagation();
+    const el = ref.current;
+    const parent = el.parentElement;
+    const parentRect = parent.getBoundingClientRect();
+    const scale = parentRect.width / frameW;
+    const startRect = el.getBoundingClientRect();
+    const startW = startRect.width / scale;
+    const startX = e.clientX;
+    setResizing(true);
+    const onMove = (ev) => {
+      const dx = (ev.clientX - startX) / scale;
+      const nw = Math.max(minWidthFrac * frameW, Math.min(maxWidthFrac * frameW, startW + dx));
+      onResize({ w: nw / frameW });
+    };
+    const onUp = () => {setResizing(false);window.removeEventListener('pointermove', onMove);window.removeEventListener('pointerup', onUp);};
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
+
+  const styleObj = { left: `${frac.x * 100}%`, top: `${frac.y * 100}%`, width: `${curWidth * 100}%` };
+
+  return (
+    <div ref={ref} className={`ad-hot ${dragging ? 'dragging' : ''} ${resizing ? 'resizing' : ''}`}
+    style={styleObj}
+    onPointerDown={onPointerDown}>
+      <div className="ad-handle">{handleLabel}</div>
+      <div className="ad-hot-inner">{children}</div>
+      {onResize && <div className="ad-resize" onPointerDown={onResizeDown} />}
+    </div>);
+
+}
+
+/* ───── Ad Frame: composes one of 3 layouts over uploaded image ───── */
+function AdFrame({ variation, frame, editOn, onPosChange, onResize, onImgChange, onUpload, exportRef, fontStack, fontH2, accent }) {
+  useImageStore();
+  const img = ImageStore.get(variation.id);
+  const F = FRAMES[frame];
+  const layout = variation.layout || 'card';
+  const layoutPos = (variation.pos && variation.pos[layout]) || {};
+  // Prefer shared buckets (_pos/_size/_img), fall back to per-frame (legacy) or defaults.
+  const pos    = layoutPos._pos  || layoutPos[frame]            || (DEFAULT_POS[layout] && DEFAULT_POS[layout][frame]) || {};
+  const sizes  = layoutPos._size || layoutPos[frame + '_size']  || {};
+  const imgCfg = layoutPos._img  || layoutPos[frame + '_img']   || { x: 0.5, y: 0.5, scale: 1 };
+
+  const frameRef = React.useRef(null);
+  const [imgDragging, setImgDragging] = React.useState(false);
+
+  const onImgDrag = (e) => {
+    if (!editOn || !img) return;
+    e.preventDefault();e.stopPropagation();
+    const parentRect = frameRef.current.getBoundingClientRect();
+    const scaleFactor = parentRect.width / F.w;
+    const startX = e.clientX,startY = e.clientY;
+    const start = { ...imgCfg };
+    setImgDragging(true);
+    const onMove = (ev) => {
+      const dx = (ev.clientX - startX) / scaleFactor / F.w;
+      const dy = (ev.clientY - startY) / scaleFactor / F.h;
+      onImgChange && onImgChange({ ...start, x: Math.max(-0.5, Math.min(1.5, start.x + dx)), y: Math.max(-0.5, Math.min(1.5, start.y + dy)) });
+    };
+    const onUp = () => {setImgDragging(false);window.removeEventListener('pointermove', onMove);window.removeEventListener('pointerup', onUp);};
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
+
+  const onImgZoom = (delta) => onImgChange && onImgChange({ ...imgCfg, scale: Math.max(0.4, Math.min(3, (imgCfg.scale || 1) + delta)) });
+
+  const onImgWheel = (e) => {
+    if (!editOn || !img) return;
+    e.preventDefault();
+    onImgZoom(e.deltaY > 0 ? -0.05 : 0.05);
+  };
+
+  const bgSize = `${(imgCfg.scale || 1) * 100}%`;
+  const bgPos = `${(imgCfg.x ?? 0.5) * 100}% ${(imgCfg.y ?? 0.5) * 100}%`;
+
+  return (
+    <div
+      ref={(el) => {frameRef.current = el;if (exportRef) exportRef.current = el;}}
+      data-edit-on={editOn ? '' : undefined}
+      onWheel={onImgWheel}
+      style={{
+        position: 'relative', width: F.w, height: F.h,
+        backgroundColor: img ? '#000' : '#e9e4d8',
+        backgroundImage: img ? `url(${img})` : 'none',
+        backgroundSize: img ? bgSize : 'cover',
+        backgroundPosition: bgPos, backgroundRepeat: 'no-repeat',
+        fontFamily: fontStack, overflow: 'hidden',
+        cursor: editOn && img && imgDragging ? 'grabbing' : 'default', padding: "0px", borderWidth: "0px", borderStyle: "solid", margin: "-0.5px"
+      }}>
+      {!img && !((window.LAYOUTS_NO_MAIN_IMAGE || {})[layout]) &&
+      <div
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => {e.stopPropagation();onUpload && onUpload();}}
+        onDragOver={(e) => {e.preventDefault();e.currentTarget.style.background = 'rgba(181,138,84,.12)';}}
+        onDragLeave={(e) => {e.currentTarget.style.background = 'transparent';}}
+        onDrop={(e) => {e.preventDefault();e.currentTarget.style.background = 'transparent';const f = e.dataTransfer.files[0];if (f && f.type.startsWith('image/') && onUpload) onUpload(f);}}
+        style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          color: 'rgba(40,30,20,.45)', fontSize: 28, fontWeight: 600, letterSpacing: -0.2, textAlign: 'center', padding: 40,
+          cursor: 'pointer', border: '3px dashed rgba(40,30,20,.18)', boxSizing: 'border-box', transition: 'background .15s, border-color .15s' }}
+        onMouseEnter={(e) => {e.currentTarget.style.borderColor = '#b58a54';e.currentTarget.style.color = '#b58a54';}}
+        onMouseLeave={(e) => {e.currentTarget.style.borderColor = 'rgba(40,30,20,.18)';e.currentTarget.style.color = 'rgba(40,30,20,.45)';}}>
+          <div style={{ fontSize: 48, marginBottom: 8 }}>↑</div>
+          <div>Click or drop to upload</div>
+          <div style={{ fontSize: 16, fontWeight: 400, marginTop: 4, opacity: .7 }}>Lifestyle / product photo</div>
+        </div>
+      }
+
+      {img && editOn &&
+      <div className="img-handle" style={{ position: 'absolute', top: 16, left: 16 }}
+      onPointerDown={(e) => e.stopPropagation()}>
+          <span className="img-drag" onPointerDown={onImgDrag} title="Drag to reposition image">✥ move image</span>
+          <button onClick={(e) => {e.stopPropagation();onImgZoom(-0.1);}} title="Zoom out">−</button>
+          <span style={{ minWidth: 32, textAlign: 'center', opacity: .8 }}>{Math.round((imgCfg.scale || 1) * 100)}%</span>
+          <button onClick={(e) => {e.stopPropagation();onImgZoom(0.1);}} title="Zoom in">+</button>
+          <button onClick={(e) => {e.stopPropagation();onImgChange && onImgChange({ x: 0.5, y: 0.5, scale: 1 });}} title="Reset" style={{ fontSize: 10 }}>⟲</button>
+        </div>
+      }
+
+      {(() => {
+        // Testimonial has its own layout components (LayoutCard/Editorial/Tabbed);
+        // new ad types register theirs in window.ADTYPE_LAYOUTS.
+        if (layout === 'card')
+          return <LayoutCard variation={variation} pos={pos} sizes={sizes} F={F} frame={frame} editOn={editOn} onPosChange={onPosChange} onResize={onResize} accent={accent} fontStack={fontStack} fontH2={fontH2} />;
+        if (layout === 'editorial')
+          return <LayoutEditorial variation={variation} pos={pos} sizes={sizes} F={F} frame={frame} editOn={editOn} onPosChange={onPosChange} onResize={onResize} accent={accent} fontStack={fontStack} fontH2={fontH2} />;
+        if (layout === 'tabbed')
+          return <LayoutTabbed variation={variation} pos={pos} sizes={sizes} F={F} frame={frame} editOn={editOn} onPosChange={onPosChange} onResize={onResize} accent={accent} fontStack={fontStack} fontH2={fontH2} />;
+        const L = (window.ADTYPE_LAYOUTS || {})[layout];
+        if (L) return <L variation={variation} pos={pos} sizes={sizes} F={F} frame={frame} editOn={editOn} onPosChange={onPosChange} onResize={onResize} accent={accent} fontStack={fontStack} fontH2={fontH2} />;
+        return null;
+      })()}
+    </div>);
+
+}
+
+/* ───── Variation card: header + two previews side-by-side ───── */
+function VariationCard({ variation, index, editOn, fontStack, fontH2, accent, onPosChange, onDelete, onDuplicate }) {
+  useImageStore();
+  const img = ImageStore.get(variation.id);
+  const fileRef = React.useRef(null);
+  const squareRef = React.useRef(null);
+  const storyRef = React.useRef(null);
+
+  const onFile = (file) => {
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = (e) => ImageStore.set(variation.id, e.target.result);
+    r.readAsDataURL(file);
+  };
+
+  const exportPng = async (frame) => {
+    const ref = frame === 'square' ? squareRef : storyRef;
+    if (!ref.current) return;
+    try {
+      const dataUrl = await htmlToImage.toPng(ref.current, {
+        pixelRatio: 2, width: FRAMES[frame].w, height: FRAMES[frame].h, cacheBust: true
+      });
+      const link = document.createElement('a');
+      link.download = `${variation.id}-${variation.layout}-${FRAMES[frame].label.replace(':', 'x')}.png`;
+      link.href = dataUrl;link.click();
+    } catch (err) {console.error('Export failed', err);alert('Export failed — check console');}
+  };
+
+  const triggerDownload = (dataUrl, name) => {
+    const link = document.createElement('a');
+    link.download = name;
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportBoth = async () => {
+    if (!squareRef.current || !storyRef.current) return;
+    try {
+      const [sq, st] = await Promise.all([
+      htmlToImage.toPng(squareRef.current, { pixelRatio: 2, width: FRAMES.square.w, height: FRAMES.square.h, cacheBust: true }),
+      htmlToImage.toPng(storyRef.current, { pixelRatio: 2, width: FRAMES.story.w, height: FRAMES.story.h, cacheBust: true })]
+      );
+      triggerDownload(sq, `${variation.id}-${variation.layout}-1x1.png`);
+      await new Promise((r) => setTimeout(r, 600));
+      triggerDownload(st, `${variation.id}-${variation.layout}-9x16.png`);
+    } catch (err) {console.error('Export both failed', err);alert('Export failed — check console');}
+  };
+
+  const layoutLabel = (window.ADTYPE_LAYOUT_LABELS || {})[variation.layout]
+    || { card: 'Card review', editorial: 'Editorial quote', tabbed: 'Tabbed testimonial' }[variation.layout]
+    || variation.layout;
+
+  return (
+    <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 14, width: '100%', height: '100%', boxSizing: 'border-box' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ fontSize: 18, fontWeight: 700, color: '#1a1612', letterSpacing: -0.3 }}>Variation {index + 1}</div>
+          <div style={{ fontSize: 11, color: 'rgba(60,50,40,.55)', textTransform: 'uppercase', letterSpacing: .6, fontWeight: 600 }}>
+            {layoutLabel}
+          </div>
+          <div style={{ fontSize: 12, color: 'rgba(60,50,40,.5)' }}>{img ? '● Image uploaded' : '○ No image yet'}</div>
+        </div>
+        <div className="v-actions">
+          <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
+          onChange={(e) => {onFile(e.target.files[0]);e.target.value = '';}} />
+          <button className="v-btn" onPointerDown={(e) => e.stopPropagation()} onClick={(e) => {e.stopPropagation();fileRef.current.click();}}>
+            {img ? 'Replace image' : '↑ Upload image'}
+          </button>
+          <button className="v-btn" onPointerDown={(e) => e.stopPropagation()} onClick={(e) => {e.stopPropagation();exportPng('square');}} disabled={!img}>Export 1:1</button>
+          <button className="v-btn" onPointerDown={(e) => e.stopPropagation()} onClick={(e) => {e.stopPropagation();exportPng('story');}} disabled={!img}>Export 9:16</button>
+          <button className="v-btn" onPointerDown={(e) => e.stopPropagation()} onClick={(e) => {e.stopPropagation();exportBoth();}} disabled={!img} style={{ background: '#13100c', color: '#fff', borderColor: '#13100c' }}>↓ Export both</button>
+          <button className="v-btn subtle" onPointerDown={(e) => e.stopPropagation()} onClick={(e) => {e.stopPropagation();onDuplicate();}} title="Duplicate">⧉</button>
+          <button className="v-btn subtle" onPointerDown={(e) => e.stopPropagation()} onClick={(e) => {e.stopPropagation();onDelete();}} title="Delete">✕</button>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+        {['square', 'story'].map((frame) => {
+          const F = FRAMES[frame];
+          const scale = F.previewW / F.w;
+          return (
+            <div key={frame} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ fontSize: 11, color: 'rgba(60,50,40,.55)', fontWeight: 600, letterSpacing: .4, textTransform: 'uppercase' }}>
+                {F.label} · {F.w}×{F.h}
+              </div>
+              <div style={{ width: F.previewW, height: F.h * scale, position: 'relative', overflow: 'hidden',
+                borderRadius: 8, border: '1px solid rgba(0,0,0,.06)', background: '#f4f1ea' }}>
+                <div style={{ width: F.w, height: F.h, transform: `scale(${scale})`, transformOrigin: 'top left', position: 'absolute', top: 0, left: 0 }}>
+                  <AdFrame variation={variation} frame={frame} editOn={editOn}
+                  exportRef={frame === 'square' ? squareRef : storyRef}
+                  fontStack={fontStack} fontH2={fontH2} accent={accent}
+                  onUpload={(f) => f ? onFile(f) : fileRef.current.click()}
+                  onPosChange={(role, p) => onPosChange(variation.id, frame, role, p)}
+                  onResize={(role, s) => onPosChange(variation.id, frame, role, s, 'size')}
+                  onImgChange={(cfg) => onPosChange(variation.id, frame, '_img', cfg, 'img')} />
+                </div>
+              </div>
+            </div>);
+
+        })}
+      </div>
+    </div>);
+
+}
+
+/* ───── Tweaks panel ───── */
+function TweaksPanel({ state, setState, updateActiveBrand, onClose, onSelectBrand, onAddBrand, onDeleteBrand, onRenameBrand }) {
+  const brand = activeBrandOf(state);
+  const adType = state.activeAdType || 'testimonial';
+  const [activeIdx, setActiveIdx] = React.useState(0);
+  const [renameOn, setRenameOn] = React.useState(false);
+  const [nameDraft, setNameDraft] = React.useState(brand.name);
+  const csvRef = React.useRef(null);
+  const imgRef = React.useRef(null);
+  const [dragOver, setDragOver] = React.useState(false);
+
+  React.useEffect(() => {
+    if (activeIdx >= brand.variations.length) setActiveIdx(Math.max(0, brand.variations.length - 1));
+  }, [brand.id, adType, brand.variations.length]);
+
+  React.useEffect(() => { setRenameOn(false); setNameDraft(brand.name); }, [brand.id]);
+
+  const persist = (next) => {
+    setState(next);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: next }, '*');
+  };
+
+  const update = (i, key, value) => {
+    updateActiveBrand((b) => ({ variations: b.variations.map((v, j) => j === i ? { ...v, [key]: value } : v) }));
+  };
+  const setBrandField = (key, value) => updateActiveBrand(() => ({ [key]: value }));
+
+  const addVariation = () => {
+    const defaultLayout = (window.ADTYPE_DEFAULT_LAYOUT || {})[adType] || 'card';
+    const nv = mkVariation({ layout: brand.variations[activeIdx]?.layout || defaultLayout });
+    updateActiveBrand((b) => ({ variations: [...b.variations, nv] }));
+    setActiveIdx(brand.variations.length);
+  };
+  const duplicateActive = () => {
+    const v = brand.variations[activeIdx];
+    const copy = { ...v, id: `v${Math.random().toString(36).slice(2, 8)}` };
+    updateActiveBrand((b) => ({ variations: [...b.variations.slice(0, activeIdx + 1), copy, ...b.variations.slice(activeIdx + 1)] }));
+    setActiveIdx(activeIdx + 1);
+  };
+  const deleteActive = () => {
+    if (brand.variations.length <= 1) {alert('Keep at least one variation');return;}
+    if (!confirm(`Delete variation ${activeIdx + 1}?`)) return;
+    ImageStore.clear(brand.variations[activeIdx].id);
+    ImageStore.clear(brand.variations[activeIdx].id + '__product');
+    updateActiveBrand((b) => ({ variations: b.variations.filter((_, j) => j !== activeIdx) }));
+    setActiveIdx(Math.max(0, activeIdx - 1));
+  };
+  const resetAll = () => {
+    if (!confirm('Reset ALL brands and variations to defaults?')) return;
+    persist(JSON.parse(JSON.stringify(DEFAULTS)));
+    setActiveIdx(0);
+  };
+
+  const onCsvFile = (file) => {
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = (e) => {
+      const rows = parseCsv(e.target.result);
+      if (!rows.length) {alert('No rows found');return;}
+      const first = rows[0].map((s) => s.toLowerCase().trim());
+      const hasHeader = first.includes('layout') || first.includes('headline') || first.includes('body');
+      // If header present, map columns by name; else assume order: layout, headline, body, author, rating, cta
+      let idx = { layout: 0, headline: 1, body: 2, author: 3, rating: 4, cta: 5 };
+      if (hasHeader) {
+        idx = Object.fromEntries(Object.keys(idx).map((k) => [k, first.indexOf(k)]));
+      }
+      const data = hasHeader ? rows.slice(1) : rows;
+      updateActiveBrand(() => ({
+        variations: data.map((r, i) => {
+          const get = (k) => idx[k] >= 0 ? r[idx[k]] || '' : '';
+          const layout = (get('layout') || 'card').toLowerCase();
+          const rating = parseFloat(get('rating')) || 5;
+          return mkVariation({
+            id: `v${Date.now().toString(36)}${i}`,
+            layout: LAYOUTS.includes(layout) ? layout : 'card',
+            headline: get('headline'),
+            body: get('body'),
+            author: get('author'),
+            rating: Math.max(0, Math.min(5, rating)),
+            cta: get('cta')
+          });
+        })
+      }));
+      setActiveIdx(0);
+    };
+    r.readAsText(file);
+  };
+
+  const onImgFile = (file) => {
+    if (!file) return;
+    const v = brand.variations[activeIdx];
+    const r = new FileReader();
+    r.onload = (e) => ImageStore.set(v.id, e.target.result);
+    r.readAsDataURL(file);
+  };
+
+  const onDrop = (e) => {
+    e.preventDefault();setDragOver(false);
+    const f = e.dataTransfer.files[0];if (!f) return;
+    if (f.type === 'text/csv' || f.name.endsWith('.csv')) onCsvFile(f);else
+    if (f.type.startsWith('image/')) onImgFile(f);
+  };
+
+  const v = brand.variations[activeIdx];
+  const hasVariations = !!v;
+
+  return (
+    <div className="tw-panel">
+      <div className="tw-head">
+        <div className="tw-title">Tweaks · {brand.name} <span style={{ opacity: .5, fontWeight: 400 }}>· {(AD_TYPES.find((t) => t.id === adType) || {}).label}</span></div>
+        <button className="tw-close" onClick={onClose}>×</button>
+      </div>
+
+      <div className="tw-body" style={{ borderBottom: '1px solid rgba(255,255,255,.08)', paddingBottom: 10, flex: '0 0 auto', maxHeight: '38vh' }}>
+        <div className="tw-card">
+          <div className="tw-card-head"><div className="tw-card-title" style={{ fontSize: 11, letterSpacing: .6, textTransform: 'uppercase', color: 'rgba(255,255,255,.5)' }}>Brand</div></div>
+
+          <div className="tw-field">
+            <label className="tw-label">Active brand</label>
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+              <select className="tw-input" value={brand.id} onChange={(e) => onSelectBrand && onSelectBrand(e.target.value)}
+                style={{ flex: 1, cursor: 'pointer' }}>
+                {state.brands.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
+              </select>
+              <button className="tw-tool" title="Add brand" onClick={() => onAddBrand && onAddBrand()} style={{ padding: '6px 10px' }}>+</button>
+              {state.brands.length > 1 &&
+                <button className="tw-tool danger" title="Delete current brand" onClick={() => onDeleteBrand && onDeleteBrand(brand.id)} style={{ padding: '6px 10px' }}>✕</button>}
+            </div>
+            <div className="tw-hint">Each brand keeps its own variations per ad type, typography, and accent color.</div>
+          </div>
+
+          <div className="tw-field">
+            <label className="tw-label">Brand name</label>
+            <input className="tw-input" value={brand.name} onChange={(e) => setBrandField('name', e.target.value)} />
+          </div>
+          <div className="tw-field" style={{ marginBottom: 0 }}>
+            <label className="tw-label">Typography</label>
+            <div style={{ padding: '10px 12px', borderRadius: 6, background: 'rgba(0,0,0,.3)', border: '1px solid rgba(255,255,255,.08)' }}>
+              <div style={{ fontFamily: getTypePair(brand).h1, fontSize: 22, lineHeight: 1.1, color: '#efeadc', marginBottom: 4 }}>
+                Headline sample
+              </div>
+              <div style={{ fontFamily: getTypePair(brand).h2, fontSize: 12, lineHeight: 1.4, color: 'rgba(255,255,255,.65)', marginBottom: 8 }}>
+                Supporting body text — quiet and readable
+              </div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,.45)', letterSpacing: .4, textTransform: 'uppercase', fontFamily: '"Geist", sans-serif', fontWeight: 600 }}>
+                {getTypePair(brand).label}
+              </div>
+            </div>
+            <div className="tw-hint">Per-brand H1/H2 pairing baked in. Unknown brands fall back to the legacy font picker.</div>
+          </div>
+          {!BRAND_TYPE[brand.id] &&
+          <div className="tw-field" style={{ marginTop: 10, marginBottom: 0 }}>
+              <label className="tw-label">Fallback display font</label>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                {FONTS.map((f) =>
+              <button key={f.id} onClick={() => setBrandField('font', f.id)}
+              style={{ padding: '5px 9px', borderRadius: 5,
+                border: brand.font === f.id ? '1.5px solid #b58a54' : '1px solid rgba(255,255,255,.15)',
+                background: brand.font === f.id ? 'rgba(181,138,84,.25)' : 'rgba(0,0,0,.25)',
+                color: brand.font === f.id ? '#fff' : 'rgba(255,255,255,.8)',
+                fontFamily: f.stack, fontSize: 12, cursor: 'pointer' }}>{f.label}</button>
+              )}
+              </div>
+            </div>
+          }
+          <div className="tw-field" style={{ marginTop: 10, marginBottom: 0 }}>
+            <label className="tw-label">Accent color</label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <input type="color" value={brand.accent || '#13100c'} onChange={(e) => setBrandField('accent', e.target.value)}
+              style={{ width: 40, height: 28, border: 'none', background: 'transparent', cursor: 'pointer', padding: 0 }} />
+              <input className="tw-input" value={brand.accent || ''} onChange={(e) => setBrandField('accent', e.target.value)} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {hasVariations ? <>
+
+      <div className="tw-toolbar">
+        <input ref={csvRef} type="file" accept=".csv,text/csv" style={{ display: 'none' }}
+        onChange={(e) => onCsvFile(e.target.files[0])} />
+        <button className="tw-tool" onClick={() => csvRef.current.click()}>⤓ Import CSV</button>
+        <button className="tw-tool" onClick={addVariation}>+ Add</button>
+        <button className="tw-tool" onClick={duplicateActive}>⧉ Duplicate</button>
+        <button className="tw-tool danger" onClick={deleteActive}>✕ Delete</button>
+      </div>
+
+      <div className="tw-tabs">
+        {brand.variations.map((_, i) =>
+        <button key={i} className={`tw-tab ${i === activeIdx ? 'active' : ''}`} onClick={() => setActiveIdx(i)}>V{i + 1}</button>
+        )}
+        <button className="tw-tab add" onClick={addVariation}>+</button>
+      </div>
+
+      <div className="tw-body">
+        <div className="tw-card">
+          <div className="tw-card-head"><div className="tw-card-title">Variation {activeIdx + 1}</div></div>
+
+          <div className="tw-field">
+            <label className="tw-label">Layout</label>
+            <div className="lp-grid">
+              {((window.ADTYPE_LAYOUT_LIST || {})[adType] || LAYOUTS).map((L) => {
+                const labelText = (window.ADTYPE_LAYOUT_LABELS || {})[L] || L;
+                return (
+                  <button key={L} className={`lp-chip ${v.layout === L ? 'active' : ''}`} onClick={() => update(activeIdx, 'layout', L)}>
+                    <LayoutIcon L={L} />
+                    {labelText}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="tw-field">
+            <label className="tw-label">Product / lifestyle image</label>
+            <input ref={imgRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => onImgFile(e.target.files[0])} />
+            {ImageStore.get(v.id) ?
+            <div className="tw-thumb" style={{ backgroundImage: `url(${ImageStore.get(v.id)})` }}>
+                <button className="tw-thumb-replace" onClick={() => imgRef.current.click()}>Replace</button>
+              </div> :
+
+            <div className={`tw-drop ${dragOver ? 'over' : ''}`}
+            onClick={() => imgRef.current.click()}
+            onDragOver={(e) => {e.preventDefault();setDragOver(true);}}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={onDrop}>
+                Drop image or CSV here
+                <div className="tw-drop-sub">Images are session-only · CSV replaces this brand's variations</div>
+              </div>
+            }
+          </div>
+
+          {v.layout !== 'tabbed' &&
+          <div className="tw-field">
+              <label className="tw-label">Headline</label>
+              <textarea className="tw-textarea" value={v.headline} onChange={(e) => update(activeIdx, 'headline', e.target.value)} />
+            </div>
+          }
+
+          <div className="tw-field">
+            <label className="tw-label">{v.layout === 'editorial' ? 'Body (optional)' : 'Body / quote'}</label>
+            <textarea className="tw-textarea" style={{ minHeight: 72 }} value={v.body} onChange={(e) => update(activeIdx, 'body', e.target.value)} />
+          </div>
+
+          <div className="tw-field">
+            <label className="tw-label">Author / name</label>
+            <input className="tw-input" value={v.author} onChange={(e) => update(activeIdx, 'author', e.target.value)} />
+          </div>
+
+          <div className="tw-field">
+            <label className="tw-label">Rating ({v.rating}/5)</label>
+            <input type="range" min="0" max="5" step="0.5" value={v.rating}
+            onChange={(e) => update(activeIdx, 'rating', parseFloat(e.target.value))}
+            style={{ width: '100%' }} />
+          </div>
+
+          {v.layout === 'editorial' &&
+          <div className="tw-field" style={{ marginBottom: 0 }}>
+              <label className="tw-label">CTA (optional)</label>
+              <input className="tw-input" value={v.cta || ''} onChange={(e) => update(activeIdx, 'cta', e.target.value)} />
+            </div>
+          }
+
+          {/* Per-layout color slots (BA layouts mainly). */}
+          {(() => {
+            const slots = (window.LAYOUT_COLOR_SLOTS || {})[v.layout];
+            if (!slots) return null;
+            const bg = v.bg || {};
+            const setSlot = (key, value) => update(activeIdx, 'bg', { ...bg, [key]: value });
+            const resetAll = () => update(activeIdx, 'bg', {});
+            return (
+              <div className="tw-field" style={{ marginTop: 12, marginBottom: 0,
+                paddingTop: 12, borderTop: '1px solid rgba(255,255,255,.08)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <label className="tw-label" style={{ marginBottom: 0 }}>Colors</label>
+                  <button className="tw-tool" onClick={resetAll}
+                    style={{ padding: '3px 8px', fontSize: 10, opacity: .8 }}>Reset</button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                  {slots.map((s) => {
+                    const cur = bg[s.key] || s.default;
+                    // <input type="color"> can't take rgba/named; strip alpha for the swatch
+                    const hex = /^#[0-9a-f]{6}$/i.test(cur) ? cur :
+                                /^#[0-9a-f]{3}$/i.test(cur) ? cur :
+                                '#888888';
+                    return (
+                      <div key={s.key} style={{ display: 'flex', alignItems: 'center', gap: 6,
+                        background: 'rgba(0,0,0,.25)', borderRadius: 5, padding: '5px 7px' }}>
+                        <input type="color" value={hex}
+                          onChange={(e) => setSlot(s.key, e.target.value)}
+                          style={{ width: 22, height: 22, border: 'none', background: 'transparent',
+                            padding: 0, cursor: 'pointer', flexShrink: 0 }} />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontSize: 9.5, color: 'rgba(255,255,255,.5)',
+                            letterSpacing: .4, textTransform: 'uppercase', lineHeight: 1.1 }}>{s.label}</div>
+                          <input value={cur} onChange={(e) => setSlot(s.key, e.target.value)}
+                            style={{ width: '100%', background: 'transparent', border: 'none',
+                              color: '#fff', fontSize: 10.5, fontFamily: 'ui-monospace, monospace',
+                              padding: '1px 0', outline: 'none' }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
+
+          <div className="tw-hint">Drag pieces directly on the canvas — each layout has its own per-aspect positions.</div>
+        </div>
+      </div>
+
+      </> : (
+        <div className="tw-body" style={{ paddingTop: 14 }}>
+          <div className="tw-card" style={{ textAlign: 'center', padding: '28px 16px' }}>
+            <div style={{ fontSize: 10.5, letterSpacing: .8, textTransform: 'uppercase', color: 'rgba(255,255,255,.45)', marginBottom: 8 }}>Coming soon</div>
+            <div style={{ fontSize: 15, color: 'rgba(255,255,255,.85)', marginBottom: 6 }}>
+              {(AD_TYPES.find((t) => t.id === adType) || {}).label} isn't wired up yet
+            </div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,.55)', lineHeight: 1.5 }}>
+              Switch to an ad type with layouts ready, or change brands above. Variations and images for this ad type will live here once it ships.
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="tw-footer">
+        <span style={{ flex: 1 }}>Copy, layout, font + positions save to disk</span>
+        <button onClick={resetAll}>Reset all</button>
+      </div>
+    </div>);
+
+}
+
+/* Tiny layout glyphs for chip buttons */
+function LayoutIcon({ L }) {
+  // DM / Review / UI / Labelled glyphs
+  if (L && L.startsWith('dm-')) return (
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <rect x="6" y="10" width="18" height="9" rx="4" fill="#fff" />
+      <rect x="14" y="22" width="18" height="7" rx="3" fill="#b58a54" />
+    </svg>);
+  if (L && L.startsWith('review-')) return (
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <path d="M7 11l1.5 3 3 .4-2 2 .7 3-2.6-1.5-2.6 1.5.7-3-2-2 3-.4z M17 11l1.5 3 3 .4-2 2 .7 3-2.6-1.5-2.6 1.5.7-3-2-2 3-.4z M27 11l1.5 3 3 .4-2 2 .7 3-2.6-1.5-2.6 1.5.7-3-2-2 3-.4z" fill="#b58a54" />
+      <rect x="8" y="24" width="22" height="2" fill="#fff" />
+      <rect x="8" y="28" width="14" height="2" fill="#fff" />
+    </svg>);
+  if (L && L.startsWith('ui-')) return (
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <rect x="7" y="8" width="24" height="20" rx="3" fill="#fff" />
+      <rect x="11" y="12" width="16" height="2" fill="#b58a54" />
+      <rect x="11" y="16" width="10" height="1.5" fill="#666" />
+      <rect x="11" y="22" width="6" height="3" rx="1" fill="#007aff" />
+      <rect x="20" y="22" width="7" height="3" rx="1" fill="#007aff" />
+    </svg>);
+  if (L === 'ps-split') return (
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <line x1="19" y1="6" x2="19" y2="32" stroke="rgba(255,255,255,.4)" strokeWidth="1" />
+      <rect x="5" y="9" width="9" height="3" rx="1.5" fill="#e6322a" />
+      <rect x="6" y="14" width="8" height="2" rx="1" fill="#d6e2fd" />
+      <rect x="5" y="18" width="8" height="2" rx="1" fill="#d6e2fd" />
+      <rect x="7" y="22" width="7" height="2" rx="1" fill="#d6e2fd" />
+      <ellipse cx="28" cy="11" rx="6" ry="2.5" stroke="#e6322a" strokeWidth="1" fill="none" />
+      <rect x="25" y="20" width="6" height="10" rx="1" fill="#fff" />
+    </svg>);
+  if (L === 'ps-search') return (
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <rect x="11" y="7" width="16" height="3" rx="1" fill="#fff" />
+      <rect x="6" y="13" width="26" height="5" rx="2" fill="#fff" />
+      <circle cx="9.5" cy="15.5" r="1.2" stroke="#888" strokeWidth=".7" fill="none" />
+      <rect x="11" y="22" width="16" height="3" rx="1" fill="#fff" />
+      <rect x="14" y="28" width="10" height="6" rx="1" fill="#b8c8e8" />
+    </svg>);
+  if (L === 'labelled-bubbles') return (
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <rect x="15" y="8" width="8" height="22" rx="3" fill="#b58a54" />
+      <rect x="4" y="10" width="9" height="4" rx="2" fill="#d6e2fd" />
+      <rect x="25" y="14" width="9" height="4" rx="2" fill="#d6e2fd" />
+      <rect x="4" y="22" width="9" height="4" rx="2" fill="#d6e2fd" />
+      <rect x="25" y="26" width="9" height="4" rx="2" fill="#d6e2fd" />
+    </svg>);
+
+  if (L === 'card') return (
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <rect x="7" y="10" width="24" height="14" rx="2" fill="#fff" />
+      <rect x="10" y="13" width="6" height="2" fill="#b58a54" />
+      <rect x="10" y="17" width="14" height="1.5" fill="#666" />
+      <rect x="10" y="20" width="11" height="1.5" fill="#666" />
+    </svg>);
+
+  if (L === 'editorial') return (
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <path d="M7 12h24 M7 16h18" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+      <path d="M13 20 l3 0 l0 2 l-3 0 z M18 20 l3 0 l0 2 l-3 0 z M23 20 l3 0 l0 2 l-3 0 z" fill="#b58a54" />
+      <rect x="10" y="27" width="18" height="4" rx="1" fill="#fff" />
+    </svg>);
+
+  return (/* tabbed */
+    <svg viewBox="0 0 38 38" fill="none">
+      <rect x="2" y="2" width="34" height="34" rx="3" fill="rgba(255,255,255,.1)" />
+      <rect x="5" y="12" width="10" height="18" rx="2" fill="#b58a54" />
+      <path d="M15 20 h16 v8 h-16 z" fill="#fff" />
+      <rect x="15" y="16" width="6" height="4" fill="#fff" />
+      <rect x="18" y="23" width="9" height="1.4" fill="#666" />
+      <rect x="18" y="26" width="6" height="1.4" fill="#666" />
+    </svg>);
+
+}
+
+/* ───── Brand switcher (unchanged from AMA, reskinned) ───── */
+function BrandSwitcher({ state, onSelect, onAdd, onRename, onDelete, editOn }) {
+  const [renamingId, setRenamingId] = React.useState(null);
+  const [draft, setDraft] = React.useState('');
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (renamingId && inputRef.current) {inputRef.current.focus();inputRef.current.select();}
+  }, [renamingId]);
+
+  const commitRename = () => {
+    if (renamingId && draft.trim()) onRename(renamingId, draft.trim());
+    setRenamingId(null);
+  };
+
+  return (
+    <div style={{ position: 'fixed', top: 12, left: '50%', transform: 'translateX(-50%)',
+      display: 'flex', alignItems: 'center', gap: 6, padding: 6,
+      background: 'rgba(255,255,255,0.95)', border: '1px solid #e4e4e4', borderRadius: 999,
+      boxShadow: '0 4px 16px rgba(0,0,0,.08)', zIndex: 50, fontSize: 13, backdropFilter: 'blur(8px)',
+      maxWidth: 'calc(100vw - 32px)', overflow: 'auto' }}>
+      <span style={{ padding: '0 10px', color: '#888', fontSize: 11, letterSpacing: .6, textTransform: 'uppercase' }}>Brand</span>
+      {state.brands.map((b) => {
+        const active = b.id === state.activeBrandId;
+        if (renamingId === b.id) return (
+          <input key={b.id} ref={inputRef} value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={commitRename}
+          onKeyDown={(e) => {if (e.key === 'Enter') commitRename();if (e.key === 'Escape') setRenamingId(null);}}
+          style={{ padding: '6px 12px', borderRadius: 999, border: '1.5px solid #13100c', background: '#fff', fontSize: 13, outline: 'none', minWidth: 80 }} />);
+
+        return (
+          <button key={b.id}
+          onClick={() => onSelect(b.id)}
+          onDoubleClick={() => editOn && (setDraft(b.name), setRenamingId(b.id))}
+          title={editOn ? 'Double-click to rename' : b.name}
+          style={{ padding: '6px 12px', borderRadius: 999, border: 'none',
+            background: active ? '#13100c' : 'transparent',
+            color: active ? '#fff' : '#222', fontSize: 13, cursor: 'pointer', fontWeight: active ? 600 : 500, whiteSpace: 'nowrap' }}>
+            {b.name}
+          </button>);
+
+      })}
+      {editOn && <>
+        <span style={{ width: 1, height: 16, background: '#e4e4e4' }} />
+        <button onClick={onAdd} title="Add brand" style={{ padding: '6px 10px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#444', fontSize: 15, lineHeight: 1 }}>+</button>
+        {state.brands.length > 1 &&
+        <button onClick={() => onDelete(state.activeBrandId)} title="Delete current brand" style={{ padding: '6px 10px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#b33', fontSize: 13, lineHeight: 1 }}>✕</button>}
+      </>}
+    </div>);
+
+}
+
+/* CSV parser */
+function parseCsv(text) {
+  const rows = [];let row = [],cell = '',q = false;
+  for (let i = 0; i < text.length; i++) {const c = text[i];
+    if (q) {if (c === '"' && text[i + 1] === '"') {cell += '"';i++;} else if (c === '"') q = false;else cell += c;} else
+    {if (c === '"') q = true;else if (c === ',') {row.push(cell);cell = '';} else
+      if (c === '\n' || c === '\r') {if (c === '\r' && text[i + 1] === '\n') i++;row.push(cell);cell = '';if (row.some((x) => x.trim() !== '')) rows.push(row);row = [];} else
+      cell += c;}}
+  if (cell !== '' || row.length) {row.push(cell);if (row.some((x) => x.trim() !== '')) rows.push(row);}
+  return rows;
+}
+
+/* ───── Ad-type tabs (top of canvas) ───── */
+function AdTypeTabs({ adType, onSelect }) {
+  return (
+    <div style={{ position: 'fixed', top: 12, left: '50%', transform: 'translateX(-50%)',
+      display: 'flex', alignItems: 'center', gap: 4, padding: 5,
+      background: 'rgba(255,255,255,0.96)', border: '1px solid #e4e4e4', borderRadius: 999,
+      boxShadow: '0 4px 16px rgba(0,0,0,.08)', zIndex: 50, fontSize: 12.5, backdropFilter: 'blur(8px)',
+      maxWidth: 'calc(100vw - 32px)', overflowX: 'auto', flexWrap: 'nowrap' }}>
+      <span style={{ padding: '0 10px', color: '#888', fontSize: 10.5, letterSpacing: .6, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Ad type</span>
+      {AD_TYPES.map((t) => {
+        const active = t.id === adType;
+        return (
+          <button key={t.id} onClick={() => onSelect(t.id)}
+            title={t.ready ? t.label : `${t.label} — coming soon`}
+            style={{ padding: '6px 11px', borderRadius: 999, border: 'none',
+              background: active ? '#13100c' : 'transparent',
+              color: active ? '#fff' : (t.ready ? '#222' : '#aaa'),
+              fontSize: 12.5, cursor: 'pointer', fontWeight: active ? 600 : 500, whiteSpace: 'nowrap',
+              opacity: t.ready || active ? 1 : 0.7,
+              display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+            {t.label}
+            {!t.ready && <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 999,
+              background: active ? 'rgba(255,255,255,.2)' : '#f0ece4', color: active ? '#fff' : '#8a7a5a',
+              letterSpacing: .4, textTransform: 'uppercase', fontWeight: 600 }}>Soon</span>}
+          </button>);
+      })}
+    </div>);
+}
+
+/* ───── Coming-soon placeholder artboard ───── */
+function ComingSoonPlaceholder({ label }) {
+  return (
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', gap: 12, padding: 40,
+      background: 'repeating-linear-gradient(45deg, #faf7f1, #faf7f1 14px, #f3ede1 14px, #f3ede1 28px)',
+      border: '1px dashed #c9bfa8', borderRadius: 8, textAlign: 'center' }}>
+      <div style={{ fontSize: 13, letterSpacing: .8, textTransform: 'uppercase', color: '#8a7a5a', fontWeight: 600 }}>Coming soon</div>
+      <div style={{ fontFamily: '"Instrument Serif", serif', fontSize: 42, lineHeight: 1.05, color: '#13100c', maxWidth: 440 }}>
+        {label}
+      </div>
+      <div style={{ fontSize: 13.5, color: '#6a6055', maxWidth: 380, lineHeight: 1.5 }}>
+        Layouts for this ad type are next up. Testimonial is the only ad type wired in right now — keep editing there, and this one will slot in with its own variations and drag-&-drop positioning.
+      </div>
+    </div>);
+}
+
+/* ───── App ───── */
+function App() {
+  const [state, setState] = React.useState(TWEAKS);
+  const [editOpen, setEditOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const d = e.data || {};
+      if (d.type === '__activate_edit_mode') setEditOpen(true);
+      if (d.type === '__deactivate_edit_mode') setEditOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const brand = activeBrandOf(state);
+  const adType = state.activeAdType || 'testimonial';
+  const setActiveAdType = (id) => persist({ ...state, activeAdType: id });
+
+  // Seed 3 starter variations when user visits a ready ad type bucket that's
+  // empty for the active brand. Keeps the canvas populated without requiring
+  // manual "+ Add variation" clicks.
+  React.useEffect(() => {
+    const meta = AD_TYPES.find((t) => t.id === adType);
+    if (!meta || !meta.ready) return;
+    if (adType === 'testimonial') return; // testimonial is seeded via initial TWEAKS
+    const rawBrand = state.brands.find((b) => b.id === state.activeBrandId);
+    if (!rawBrand) return;
+    const mig = migrateBrand(rawBrand);
+    const bucket = mig.adTypeVariations[adType] || [];
+    if (bucket.length > 0) return;
+    const defaultLayout = (window.ADTYPE_DEFAULT_LAYOUT || {})[adType] || 'card';
+    const layoutList = (window.ADTYPE_LAYOUT_LIST || {})[adType] || [defaultLayout];
+    const seeds = [0, 1, 2].map((i) => mkVariation({
+      id: `v${Date.now().toString(36)}${i}${Math.random().toString(36).slice(2, 5)}`,
+      layout: layoutList[i] || defaultLayout,
+    }));
+    const nextATV = { ...mig.adTypeVariations, [adType]: seeds };
+    const nextBrands = state.brands.map((b) =>
+      b.id === mig.id ? { ...mig, adTypeVariations: nextATV } : b
+    );
+    persist({ ...state, brands: nextBrands });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.activeBrandId, adType]);
+
+  const persist = (next) => {setState(next);window.parent.postMessage({ type: '__edit_mode_set_keys', edits: next }, '*');};
+
+  /* updateActiveBrand accepts updates that reference `variations`. We
+     transparently reroute those writes into adTypeVariations[adType] so the
+     rest of the app doesn't have to know about ad types. Other fields pass
+     through normally. */
+  const updateActiveBrand = (updater) => {
+    const next = { ...state, brands: state.brands.map((b) => {
+      if (b.id !== brand.id) return b;
+      const mig = migrateBrand(b);
+      const patch = updater({ ...mig, variations: mig.adTypeVariations[adType] || [] });
+      const { variations, adTypeVariations, ...rest } = patch;
+      let nextATV = mig.adTypeVariations;
+      if (variations) nextATV = { ...nextATV, [adType]: variations };
+      if (adTypeVariations) nextATV = { ...nextATV, ...adTypeVariations };
+      return { ...mig, ...rest, adTypeVariations: nextATV };
+    }) };
+    persist(next);
+  };
+
+  const setActiveBrandId = (id) => persist({ ...state, activeBrandId: id });
+
+  const addBrand = () => {
+    const b = defaultBrand({ name: `Brand ${state.brands.length + 1}` });
+    persist({ ...state, brands: [...state.brands, b], activeBrandId: b.id });
+  };
+  const renameBrand = (id, name) => persist({ ...state, brands: state.brands.map((b) => b.id === id ? { ...b, name } : b) });
+  const deleteBrand = (id) => {
+    if (state.brands.length <= 1) {alert('Keep at least one brand');return;}
+    if (!confirm(`Delete brand "${state.brands.find((b) => b.id === id).name}" and all its variations?`)) return;
+    const b = migrateBrand(state.brands.find((x) => x.id === id));
+    Object.values(b.adTypeVariations || {}).forEach((arr) =>
+      (arr || []).forEach((v) => { ImageStore.clear(v.id); ImageStore.clear(v.id + '__product'); })
+    );
+    const brands = state.brands.filter((b) => b.id !== id);
+    const activeBrandId = state.activeBrandId === id ? brands[0].id : state.activeBrandId;
+    persist({ ...state, brands, activeBrandId });
+  };
+
+  const onPosChange = (variationId, frame, role, p, kind) => {
+    updateActiveBrand((b) => ({
+      variations: b.variations.map((v) => {
+        if (v.id !== variationId) return v;
+        const layout = v.layout || 'card';
+        const curAll = v.pos || {};
+        const curLayout = curAll[layout] || {};
+        // SHARED across frames: write to one bucket per kind, not per-frame.
+        const bucketKey = kind === 'size' ? '_size' :
+        kind === 'img' ? '_img' :
+        '_pos';
+        if (kind === 'img') {
+          return { ...v, pos: { ...curAll, [layout]: { ...curLayout, [bucketKey]: p } } };
+        }
+        const curBucket = curLayout[bucketKey] || (kind ? {} : (DEFAULT_POS[layout] && DEFAULT_POS[layout].square) || {});
+        return { ...v, pos: { ...curAll, [layout]: { ...curLayout, [bucketKey]: { ...curBucket, [role]: p } } } };
+      })
+    }));
+  };
+
+  const onDelete = (i) => {
+    if (brand.variations.length <= 1) {alert('Keep at least one variation');return;}
+    if (!confirm(`Delete variation ${i + 1}?`)) return;
+    ImageStore.clear(brand.variations[i].id);
+    ImageStore.clear(brand.variations[i].id + '__product');
+    updateActiveBrand((b) => ({ variations: b.variations.filter((_, j) => j !== i) }));
+  };
+  const onDuplicate = (i) => {
+    const v = brand.variations[i];
+    const copy = { ...v, id: `v${Math.random().toString(36).slice(2, 8)}` };
+    updateActiveBrand((b) => ({ variations: [...b.variations.slice(0, i + 1), copy, ...b.variations.slice(i + 1)] }));
+  };
+
+  const pair = getTypePair(brand);
+  const fontStack = pair.h1;
+  const fontH2 = pair.h2;
+  const accent = brand.accent || '#13100c';
+
+  const activeAdTypeMeta = AD_TYPES.find((t) => t.id === adType) || AD_TYPES[0];
+  const ready = activeAdTypeMeta.ready;
+
+  return (
+    <>
+      <AdTypeTabs adType={adType} onSelect={setActiveAdType} />
+      <DesignCanvas>
+        <DCSection
+          id="ads"
+          title={`${brand.name} — ${activeAdTypeMeta.label}`}
+          subtitle={!ready ?
+          `${activeAdTypeMeta.label} layouts are in progress — coming soon.` :
+          editOpen ?
+          "Pick a layout in Tweaks · Drag pieces on any canvas · Upload per-variation images · Export PNG at 1:1 or 9:16" :
+          "Turn on Tweaks to pick an ad type, switch brands, upload images, edit copy, or import a CSV"}>
+          {ready ?
+            brand.variations.map((v, i) =>
+              <DCArtboard key={v.id} id={v.id} label={`V${i + 1} · ${v.layout}`} width={720} height={580}>
+                <VariationCard
+                  variation={v} index={i} editOn={editOpen}
+                  fontStack={fontStack} fontH2={fontH2} accent={accent}
+                  onPosChange={onPosChange}
+                  onDelete={() => onDelete(i)}
+                  onDuplicate={() => onDuplicate(i)} />
+              </DCArtboard>
+            )
+          :
+            <DCArtboard id={`${adType}-placeholder`} label={`${activeAdTypeMeta.label} · coming soon`} width={720} height={580}>
+              <ComingSoonPlaceholder label={activeAdTypeMeta.label} />
+            </DCArtboard>
+          }
+        </DCSection>
+      </DesignCanvas>
+      {editOpen && <TweaksPanel state={state} setState={setState} updateActiveBrand={updateActiveBrand}
+        onClose={() => setEditOpen(false)}
+        onSelectBrand={setActiveBrandId} onAddBrand={addBrand} onDeleteBrand={deleteBrand} onRenameBrand={renameBrand} />}
+    </>);
+
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body></html>

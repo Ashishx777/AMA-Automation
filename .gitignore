@@ -1,0 +1,59 @@
+# ─── Operator inputs & job outputs (never commit client data) ──────────────
+uploads/
+scratch/
+new-previews/
+**/test-output/
+**/out/
+*.zip
+
+# Debug PNGs from past sessions
+debug-*.png
+verify-*.png
+
+# Operator's local job folders (anything ending in -job or matching jobs/*)
+**/Rara-AMA-job/
+**/Mileenia-*/
+jobs/*/out/
+jobs/*/images/expanded/
+
+# ─── Standalone bundles — huge, regenerated, not source ──────────────────
+AMA Ad Template - Standalone.html
+Social Proof Ad Template - Standalone.html
+*.bundle.src.html
+
+# ─── Python ──────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+*.egg-info/
+
+# ─── Node (pipeline/) ────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-store/
+
+# ─── OS noise ────────────────────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+*~
+
+# ─── Editor / IDE ────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── Local-only artifacts ────────────────────────────────────────────────
+.claude/                       # local Claude Code settings + skill drafts
+.design-canvas.state.json      # local design-canvas state
+.env
+.env.local
+secrets.json

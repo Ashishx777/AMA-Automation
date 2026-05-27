@@ -1,0 +1,6 @@
+id,context_bar,question_text,answer_text,image_note
+v1,"<short hook line on top — feels like the OP's caption, optional emoji ✨>","<the question the community is asking (becomes the white pill)>","<the answer line that responds to the question (becomes the bubble below)>","<plain-English description of the image — used as an AI outpaint prompt when 1:1 → 9:16>"
+v2,"","","",""
+v3,"","","",""
+v4,"","","",""
+v5,"","","",""

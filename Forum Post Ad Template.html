@@ -1,0 +1,902 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forum Post — Ad Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Geist:wght@300;400;500;600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#efece5;font-family:"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;}
+
+  /* ───── Tweaks panel ───── */
+  .tw-panel{position:fixed;top:16px;right:16px;width:380px;max-height:calc(100vh - 32px);
+    background:#13100c;color:#efeadc;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.45);
+    font-family:"Geist",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    font-size:13px;display:flex;flex-direction:column;z-index:1000;overflow:hidden}
+  .tw-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+  .tw-title{font-weight:600;font-size:14px;letter-spacing:-.2px}
+  .tw-close{background:transparent;border:none;color:rgba(255,255,255,.6);cursor:pointer;
+    width:28px;height:28px;border-radius:6px;font-size:18px;line-height:1;padding:0}
+  .tw-close:hover{background:rgba(255,255,255,.08);color:#fff}
+  .tw-body{overflow-y:auto;padding:10px 6px 14px;flex:1}
+  .tw-tabs{display:flex;gap:2px;padding:8px 10px 4px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.08)}
+  .tw-tab{border:none;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);
+    padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500}
+  .tw-tab:hover{background:rgba(255,255,255,.12);color:#fff}
+  .tw-tab.active{background:#e07a4a;color:#fff}
+  .tw-tab.add{background:transparent;color:rgba(255,255,255,.5);border:1px dashed rgba(255,255,255,.2)}
+  .tw-tab.add:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .tw-toolbar{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
+  .tw-tool{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);border:none;
+    padding:6px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;
+    font-weight:500;display:inline-flex;align-items:center;gap:5px}
+  .tw-tool:hover{background:rgba(255,255,255,.12);color:#fff}
+  .tw-tool.danger{color:rgba(255,170,150,.9)}
+  .tw-tool.danger:hover{background:rgba(255,80,60,.15);color:#ff9884}
+  .tw-card{padding:12px 14px;margin:6px 10px;background:rgba(255,255,255,.04);border-radius:8px}
+  .tw-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+  .tw-card-title{font-weight:600;font-size:12px;color:#fff;letter-spacing:.2px}
+  .tw-field{margin-bottom:10px}
+  .tw-label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.8px;
+    color:rgba(255,255,255,.45);margin-bottom:4px;font-weight:600}
+  .tw-input,.tw-textarea,.tw-select{width:100%;box-sizing:border-box;background:rgba(0,0,0,.3);
+    color:#efeadc;border:1px solid rgba(255,255,255,.08);border-radius:6px;
+    padding:7px 9px;font-family:inherit;font-size:12px;line-height:1.35;resize:vertical}
+  .tw-textarea{min-height:54px}
+  .tw-input:focus,.tw-textarea:focus,.tw-select:focus{outline:none;border-color:#e07a4a;
+    background:rgba(0,0,0,.4)}
+  .tw-footer{padding:10px 14px;border-top:1px solid rgba(255,255,255,.08);
+    font-size:11px;color:rgba(255,255,255,.5);display:flex;gap:10px;align-items:center}
+  .tw-footer button{background:transparent;border:1px solid rgba(255,255,255,.15);
+    color:rgba(255,255,255,.7);padding:4px 9px;border-radius:5px;cursor:pointer;
+    font-family:inherit;font-size:11px}
+  .tw-footer button:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .tw-hint{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;line-height:1.4}
+
+  .v-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .v-btn{background:#fff;border:1px solid rgba(0,0,0,.1);color:#222;
+    padding:5px 10px;font-size:11px;border-radius:5px;cursor:pointer;font-family:inherit;font-weight:500}
+  .v-btn:hover{background:#13100c;color:#fff;border-color:#13100c}
+  .v-btn.subtle{background:transparent;color:rgba(60,50,40,.55);border-color:transparent}
+  .v-btn.subtle:hover{background:rgba(0,0,0,.05);color:#222}
+  .v-btn:disabled{opacity:.4;cursor:not-allowed}
+
+  /* Theme swatches */
+  .th-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .th-chip{border:1.5px solid rgba(255,255,255,.12);background:rgba(0,0,0,.25);
+    border-radius:8px;padding:8px 6px;cursor:pointer;color:rgba(255,255,255,.8);
+    font-family:inherit;font-size:10px;font-weight:600;text-align:center;letter-spacing:.3px;
+    display:flex;flex-direction:column;align-items:center;gap:5px}
+  .th-chip:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+  .th-chip.active{border-color:#e07a4a;background:rgba(224,122,74,.18);color:#fff}
+  .th-chip .th-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.15)}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-plugins="transform-react-jsx-source" data-filename="forum-app.jsx">
+
+/*
+ * Forum Post — social proof ad template
+ *
+ * Mimics the *feel* of a community forum endorsement post (header bar with
+ * community handle + platform mark, poster handle, post title, post body,
+ * engagement footer). All chrome/marks are ORIGINAL — not a recreation of any
+ * existing platform.
+ *
+ * Rendered in 1:1 + 9:16 side-by-side per variation. Export PNG @ 2x.
+ */
+
+const FRAMES = {
+  square: { w: 1080, h: 1080, label: '1:1', previewW: 360 },
+  story:  { w: 1080, h: 1920, label: '9:16', previewW: 260 }
+};
+
+/* ── Original "forum platform" themes (not emulating any specific brand) ── */
+const THEMES = {
+  threadly: {
+    id: 'threadly', name: 'Threadly',
+    accent: '#e07a4a',       // warm terracotta
+    bg: '#ffffff',
+    ink: '#111111',
+    muted: '#636363',
+    chipBg: '#f2efe9',
+    wordmark: 'threadly',
+    markBg: '#e07a4a',
+    markGlyph: 'T',
+  },
+  commune: {
+    id: 'commune', name: 'Commune',
+    accent: '#3d6b57',       // forest
+    bg: '#ffffff',
+    ink: '#141414',
+    muted: '#5a5a5a',
+    chipBg: '#eef2ee',
+    wordmark: 'commune',
+    markBg: '#3d6b57',
+    markGlyph: 'C',
+  },
+  canopy: {
+    id: 'canopy', name: 'Canopy',
+    accent: '#4a6cf7',       // cobalt
+    bg: '#fafafa',
+    ink: '#0e0e12',
+    muted: '#5f6370',
+    chipBg: '#eceff7',
+    wordmark: 'canopy',
+    markBg: '#4a6cf7',
+    markGlyph: 'c',
+  },
+  runes: {
+    id: 'runes', name: 'Runes',
+    accent: '#1a1410',       // black w/ ochre accents
+    bg: '#ffffff',
+    ink: '#13100c',
+    muted: '#5e584f',
+    chipBg: '#f4efe5',
+    wordmark: 'runes',
+    markBg: '#1a1410',
+    markGlyph: 'r',
+  },
+};
+
+const mkVariation = (overrides = {}) => ({
+  id: `v${Math.random().toString(36).slice(2,8)}`,
+  community: 'biohacking',
+  handle: 'quantified_sleep',
+  title: 'behavioural interventions help but they dont fix chronically dysregulated vagal tone. thats just the reality of it',
+  body: 'found DUSQ a few months back. targets vagus nerve before sleep and keeps intervening through the night. hrv has actualy been moving for the first time in years. should be talked about more here',
+  upvotes: '1.8K',
+  comments: '393',
+  ...overrides,
+});
+
+const TWEAKS = /*EDITMODE-BEGIN*/{
+  "activeBrandId": "dusq",
+  "brands": [
+    {
+      "id": "dusq",
+      "name": "DUSQ",
+      "theme": "threadly",
+      "variations": [
+        {
+          "id": "fp1",
+          "community": "biohacking",
+          "handle": "quantified_sleep",
+          "title": "behavioural interventions help but they dont fix chronically dysregulated vagal tone. thats just the reality of it",
+          "body": "found DUSQ a few months back. targets vagus nerve before sleep and keeps intervening through the night. hrv has actualy been moving for the first time in years. should be talked about more here",
+          "upvotes": "1.8K",
+          "comments": "393"
+        },
+        {
+          "id": "fp2",
+          "community": "sleep",
+          "handle": "unrested_since_2019",
+          "title": "8 hours in bed and still waking up wrecked. the problem isnt duration its that the nervous system never actually downshifts",
+          "body": "i did everything. magnesium, mouth tape, cold room, no screens. still garbage mornings. started using dusq 6 weeks ago and its the first thing thats moved the needle. deep sleep up measurably on my ring. not a sponsored post, just genuinely surprised",
+          "upvotes": "2.4K",
+          "comments": "512"
+        },
+        {
+          "id": "fp3",
+          "community": "HRV",
+          "handle": "autonomic_nerd",
+          "title": "my baseline hrv was stuck in the 30s for years. three months of dusq and im averaging 58. i have no other explanation",
+          "body": "cardio same. sleep hours same. diet same. the only variable i changed was introducing dusq before bed. vagal tone is the missing piece nobody talks about. if your sympathetic system is running 24\/7 no amount of zone 2 will fix it",
+          "upvotes": "3.1K",
+          "comments": "687"
+        },
+        {
+          "id": "fp4",
+          "community": "Nootropics",
+          "handle": "down_regulator",
+          "title": "stop stacking sedatives. the goal isnt to knock yourself out, its to help the body finish the transition from activation to inhibition",
+          "body": "this is what dusq is doing differently. its not a sleep aid in the traditional sense. its a signal. supports parasympathetic activation so sleep onset is actually coherent instead of forced. been a month and i wake up clear headed for the first time in forever",
+          "upvotes": "1.2K",
+          "comments": "284"
+        },
+        {
+          "id": "fp5",
+          "community": "longevity",
+          "handle": "healthspan_pilled",
+          "title": "lifespan means nothing if your recovery capacity is collapsing at 40. this is the stat nobody tracks but everyone feels",
+          "body": "fragmented sleep is the slow leak. you wont notice it for a decade and then suddenly everything is harder. dusq is the only thing ive tried that targets the underlying regulatory pathway instead of masking the symptom. real shift in resilience, not just vibes",
+          "upvotes": "4.7K",
+          "comments": "1.1K"
+        },
+        {
+          "id": "fp6",
+          "community": "stress",
+          "handle": "perpetually_activated",
+          "title": "if you feel tired but wired at 11pm every night, your problem is not sleep hygiene. your problem is that your body is not receiving the signal to descend",
+          "body": "i hate when wellness brands say stuff like this but honestly its what dusq fixed for me. the racing shutdown, the 3am wake ups, the feeling of being alive in bed. gone. took about 3 weeks. i dont know how it works mechanistically but it worked",
+          "upvotes": "2.8K",
+          "comments": "645"
+        },
+        {
+          "id": "fp7",
+          "community": "ChronicFatigue",
+          "handle": "post_exertional_mess",
+          "title": "non restorative sleep is the single most debilitating symptom and doctors have nothing for it. dusq is the first thing in 4 years that touched it",
+          "body": "not claiming a cure. but my mornings went from unusable to functional. pacing still matters, sleep still matters, but if your recovery system is broken you can pace perfectly and still crash. something about the vagal support is doing real work. worth a try if youre desperate like i was",
+          "upvotes": "3.6K",
+          "comments": "892"
+        },
+        {
+          "id": "fp8",
+          "community": "athletictraining",
+          "handle": "coach_lifts",
+          "title": "my athletes who had plateaued on recovery scores started moving again when we added dusq to the protocol. n=12 so far",
+          "body": "not a formal study. just observational. but hrv trends, subjective readiness, and deep sleep minutes all trending up within 4 to 6 weeks. the ones who were already sleeping 8h didnt need it. the ones whose autonomic recovery was compromised saw the biggest delta. tracking continues",
+          "upvotes": "5.2K",
+          "comments": "1.3K"
+        },
+        {
+          "id": "fp9",
+          "community": "perimenopause",
+          "handle": "40_and_waking_at_3",
+          "title": "the 3am wake up is autonomic not hormonal. hrt didnt fix it for me. dusq did. im as surprised as anyone",
+          "body": "i was skeptical because it doesnt position itself for women specifically. but brain body desynchrony is brain body desynchrony. whatever is happening with my nervous system at night, this is stabilizing it. sleeping through for the first time in 3 years. wanted to share because nobody is talking about this angle",
+          "upvotes": "6.8K",
+          "comments": "1.9K"
+        },
+        {
+          "id": "fp10",
+          "community": "meditation",
+          "handle": "breathwork_daily",
+          "title": "years of vagal training through breathwork got me part of the way. dusq closed the gap at night when conscious regulation isnt available",
+          "body": "this is the honest take. practice matters. but at some point youre asleep and your parasympathetic tone is on its own. dusq supports it through the night instead of just at sleep onset. thats the differentiator. my morning hrv is the highest its ever been and i train it daily",
+          "upvotes": "1.5K",
+          "comments": "342"
+        }
+      ],
+      "accentOverride": "#FF4500"
+    }
+  ]
+}/*EDITMODE-END*/;
+
+const DEFAULTS = JSON.parse(JSON.stringify(TWEAKS));
+const activeBrandOf = (s) => s.brands.find(b=>b.id===s.activeBrandId) || s.brands[0];
+
+/* ───── CSV parser (handles quoted values with commas/newlines) ───── */
+function parseCsv(text){
+  const rows = []; let row=[], cell='', inQ=false;
+  for (let i=0; i<text.length; i++){
+    const c = text[i];
+    if (inQ){
+      if (c === '"' && text[i+1] === '"'){ cell+='"'; i++; }
+      else if (c === '"'){ inQ=false; }
+      else cell+=c;
+    } else {
+      if (c === '"'){ inQ=true; }
+      else if (c === ','){ row.push(cell); cell=''; }
+      else if (c === '\n'){ row.push(cell); rows.push(row); row=[]; cell=''; }
+      else if (c === '\r'){ /* skip */ }
+      else cell+=c;
+    }
+  }
+  if (cell.length || row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => x && x.trim().length));
+}
+
+/* ────────────────────────── POST CHROME ───────────────────────────────── */
+
+/* Original platform mark — a stylized speech-balloon circle with a letter.
+   Deliberately generic so it reads as "a forum" not any specific product. */
+function PlatformMark({ theme, size = 72 }){
+  return (
+    <div style={{
+      position:'relative', width:size, height:size, flexShrink:0,
+    }}>
+      <div style={{
+        position:'absolute', inset:0, borderRadius:'50%', background: theme.markBg,
+      }}/>
+      {/* the little antenna/notch — original, not copying the "snoo" antenna */}
+      <div style={{
+        position:'absolute', top:-size*0.08, left:size*0.5 - 2, width:4, height:size*0.18,
+        background: theme.markBg, borderRadius:2,
+      }}/>
+      <div style={{
+        position:'absolute', top:-size*0.12, left:size*0.5 - size*0.06, width:size*0.12, height:size*0.12,
+        borderRadius:'50%', background: theme.markBg,
+      }}/>
+      <div style={{
+        position:'absolute', inset:0, display:'flex', alignItems:'center', justifyContent:'center',
+        color:'#fff', fontFamily:'"Geist", system-ui, sans-serif',
+        fontSize: size*0.5, fontWeight:800, letterSpacing:-1,
+      }}>{theme.markGlyph}</div>
+    </div>
+  );
+}
+
+/* Generic user avatar — muted blob silhouette */
+function UserAvatar({ size = 64, theme }){
+  return (
+    <div style={{
+      width:size, height:size, borderRadius:'50%',
+      background:'#b5a3b8',
+      display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0,
+      position:'relative', overflow:'hidden',
+    }}>
+      <div style={{
+        position:'absolute', top:size*0.18, left:size*0.30, width:size*0.40, height:size*0.40,
+        borderRadius:'50%', background:'#7e6a83',
+      }}/>
+      <div style={{
+        position:'absolute', bottom:-size*0.1, left:size*0.15, width:size*0.70, height:size*0.55,
+        borderRadius:'40% 40% 40% 40% / 50% 50% 40% 40%', background:'#7e6a83',
+      }}/>
+      {/* tiny antenna for whimsy */}
+      <div style={{ position:'absolute', top:size*0.04, left:size*0.5-1, width:2, height:size*0.12,
+        background:'#7e6a83' }}/>
+    </div>
+  );
+}
+
+/* Footer engagement pills */
+function Pill({ children, filled, theme, bold }){
+  return (
+    <div style={{
+      display:'inline-flex', alignItems:'center', gap:8,
+      padding:'8px 14px', borderRadius:999,
+      background: filled ? theme.accent : theme.chipBg,
+      color: filled ? '#fff' : theme.ink,
+      fontFamily:'"Geist", system-ui, sans-serif', fontSize:18, fontWeight: bold ? 600 : 500,
+      letterSpacing:-0.1,
+    }}>{children}</div>
+  );
+}
+
+/* SVG glyphs — original minimal outline icons */
+const Icon = {
+  upArrow: (c='#fff') => <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 3 L16 11 H12 V17 H8 V11 H4 Z" fill={c}/></svg>,
+  downArrow: (c='#111') => <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M10 17 L4 9 H8 V3 H12 V9 H16 Z" fill={c}/></svg>,
+  bubble: (c='#111') => <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M3 10c0-3.3 3.6-6 8-6s8 2.7 8 6-3.6 6-8 6c-.9 0-1.8-.1-2.6-.3L5 18l1.2-3.2C4.2 13.7 3 12 3 10z" stroke={c} strokeWidth="1.6" fill="none" strokeLinejoin="round"/></svg>,
+  ribbon: (c='#111') => <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="9" r="5" stroke={c} strokeWidth="1.6" fill="none"/><path d="M8 12.5 L6.5 18 L9.5 16.5 L11 18.5 L12.5 16.5 L15.5 18 L14 12.5" stroke={c} strokeWidth="1.6" fill="none" strokeLinejoin="round"/></svg>,
+  share: (c='#111') => <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><path d="M4 18 C 4 12 9 10 14 10 M14 10 L11 6 M14 10 L11 14" stroke={c} strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  more: (c='#111') => <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><circle cx="6" cy="11" r="1.6" fill={c}/><circle cx="11" cy="11" r="1.6" fill={c}/><circle cx="16" cy="11" r="1.6" fill={c}/></svg>,
+};
+
+/* ────────────────────────── MAIN POST FRAME ───────────────────────────── */
+
+function ForumPost({ variation, theme, frame }){
+  const isStory = frame === 'story';
+  const F = FRAMES[frame];
+
+  // Padding & type scale tuned so 1080-wide reads at a comfortable phone size.
+  const pad = isStory ? 64 : 56;
+  const titleSize = isStory ? 64 : 58;
+  const bodySize  = isStory ? 36 : 34;
+  const headerMarkSize = isStory ? 72 : 64;
+  const chromeGap = isStory ? 36 : 28;
+
+  const ink = theme.ink;
+  const muted = theme.muted;
+
+  return (
+    <div style={{
+      width:F.w, height:F.h, background:theme.bg, color:ink,
+      fontFamily:'"Geist", "Inter", -apple-system, system-ui, sans-serif',
+      display:'flex', flexDirection:'column',
+      boxSizing:'border-box',
+      position:'relative',
+      overflow:'hidden',
+    }}>
+      {/* ── top bar: community only ─────────────────────────────────── */}
+      <div style={{
+        padding: `${pad*0.7}px ${pad}px`,
+        display:'flex', alignItems:'center', justifyContent:'flex-start',
+        borderBottom:`2px solid ${theme.chipBg}`,
+      }}>
+        <div style={{
+          fontSize: isStory ? 42 : 38, fontWeight:600, letterSpacing:-0.4, color: ink,
+          fontFamily:'"Geist", system-ui, sans-serif',
+        }}>
+          <span style={{ opacity:.55 }}>f/</span>{variation.community}
+        </div>
+      </div>
+
+      {/* ── post body ─────────────────────────────────────────────────── */}
+      <div style={{
+        flex:1, padding:`${pad*0.9}px ${pad}px`, display:'flex', flexDirection:'column',
+        gap: chromeGap,
+      }}>
+        <div style={{ display:'flex', alignItems:'center', gap:18 }}>
+          <UserAvatar size={isStory ? 62 : 56} theme={theme} />
+          <div style={{
+            fontSize: isStory ? 32 : 28, color: muted, letterSpacing:-0.2,
+            fontFamily:'"Geist", system-ui, sans-serif', fontWeight:500,
+          }}>
+            <span style={{ opacity:.7 }}>u/</span>{variation.handle}
+          </div>
+        </div>
+
+        {variation.title && (
+          <div style={{
+            fontSize: titleSize,
+            fontWeight:700,
+            lineHeight: 1.14,
+            letterSpacing: -1.2,
+            color: ink,
+            textWrap:'pretty',
+            fontFamily:'"Geist", system-ui, sans-serif',
+          }}>
+            {variation.title}
+          </div>
+        )}
+
+        {variation.body && (
+          <div style={{
+            fontSize: bodySize,
+            lineHeight: 1.42,
+            color: muted,
+            letterSpacing:-0.15,
+            textWrap:'pretty',
+            fontFamily:'"Geist", system-ui, sans-serif',
+            fontWeight:400,
+            flex: isStory ? 1 : 'initial',
+          }}>
+            {variation.body}
+          </div>
+        )}
+
+        {/* spacer pushes footer down on square */}
+        {!isStory && <div style={{ flex:1 }} />}
+
+        {/* ── engagement footer ───────────────────────────────────── */}
+        <div style={{
+          display:'flex', alignItems:'center', gap: isStory ? 14 : 10, flexWrap:'nowrap',
+          marginTop: chromeGap/2,
+        }}>
+          {/* upvote pill — filled accent */}
+          <div style={{
+            display:'inline-flex', alignItems:'center', gap:10,
+            background: theme.accent, color:'#fff',
+            padding:'12px 16px 12px 14px', borderRadius:999,
+            fontFamily:'"Geist", system-ui, sans-serif', fontSize: isStory ? 22 : 20, fontWeight:600,
+          }}>
+            {Icon.upArrow('#fff')}
+            <span>{variation.upvotes}</span>
+            <div style={{ width:1, height:18, background:'rgba(255,255,255,.35)', margin:'0 4px' }}/>
+            {Icon.downArrow('#fff')}
+          </div>
+          {/* comments */}
+          <Pill theme={theme}>
+            {Icon.bubble(ink)} <span>{variation.comments}</span>
+          </Pill>
+          {/* award/ribbon */}
+          <Pill theme={theme}>
+            {Icon.ribbon(ink)}
+          </Pill>
+          {/* share */}
+          <Pill theme={theme}>
+            {Icon.share(ink)} <span>Share</span>
+          </Pill>
+          {/* more */}
+          <Pill theme={theme}>
+            {Icon.more(ink)}
+          </Pill>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ────────────────────────── VARIATION CARD ────────────────────────────── */
+
+function VariationCard({ variation, index, theme, onDelete, onDuplicate }){
+  const squareRef = React.useRef(null);
+  const storyRef = React.useRef(null);
+
+  const triggerDownload = (dataUrl, name) => {
+    const link = document.createElement('a');
+    link.download = name; link.href = dataUrl;
+    document.body.appendChild(link); link.click(); document.body.removeChild(link);
+  };
+
+  const exportPng = async (frame) => {
+    const ref = frame === 'square' ? squareRef : storyRef;
+    if (!ref.current) return;
+    try {
+      const dataUrl = await htmlToImage.toPng(ref.current, {
+        pixelRatio: 2, width: FRAMES[frame].w, height: FRAMES[frame].h, cacheBust:true,
+      });
+      triggerDownload(dataUrl, `forum-${variation.id}-${FRAMES[frame].label.replace(':','x')}.png`);
+    } catch(e){ console.error(e); alert('Export failed — see console'); }
+  };
+
+  const exportBoth = async () => {
+    if (!squareRef.current || !storyRef.current) return;
+    try {
+      const [sq, st] = await Promise.all([
+        htmlToImage.toPng(squareRef.current, { pixelRatio:2, width:FRAMES.square.w, height:FRAMES.square.h, cacheBust:true }),
+        htmlToImage.toPng(storyRef.current,  { pixelRatio:2, width:FRAMES.story.w,  height:FRAMES.story.h,  cacheBust:true }),
+      ]);
+      triggerDownload(sq, `forum-${variation.id}-1x1.png`);
+      await new Promise(r=>setTimeout(r,500));
+      triggerDownload(st, `forum-${variation.id}-9x16.png`);
+    } catch(e){ console.error(e); alert('Export failed — see console'); }
+  };
+
+  return (
+    <div style={{ padding:20, display:'flex', flexDirection:'column', gap:14,
+                  width:'100%', boxSizing:'border-box',
+                  background:'#fff', borderRadius:10, border:'1px solid rgba(0,0,0,.06)',
+                  boxShadow:'0 2px 10px rgba(0,0,0,.04)' }}>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:16 }}>
+        <div style={{ display:'flex', alignItems:'baseline', gap:10, flexWrap:'wrap' }}>
+          <div style={{ fontSize:18, fontWeight:700, color:'#1a1612', letterSpacing:-.3 }}>Variation {index+1}</div>
+          <div style={{ fontSize:11, color:'rgba(60,50,40,.55)', textTransform:'uppercase', letterSpacing:.6, fontWeight:600 }}>
+            Forum post · {theme.name}
+          </div>
+        </div>
+        <div className="v-actions">
+          <button className="v-btn" onClick={()=>exportPng('square')}>Export 1:1</button>
+          <button className="v-btn" onClick={()=>exportPng('story')}>Export 9:16</button>
+          <button className="v-btn" onClick={exportBoth}
+            style={{ background:'#13100c', color:'#fff', borderColor:'#13100c' }}>↓ Export both</button>
+          <button className="v-btn subtle" onClick={onDuplicate} title="Duplicate">⧉</button>
+          <button className="v-btn subtle" onClick={onDelete} title="Delete">✕</button>
+        </div>
+      </div>
+
+      <div style={{ display:'flex', gap:20, alignItems:'flex-start', flexWrap:'wrap' }}>
+        {['square','story'].map(frame => {
+          const F = FRAMES[frame];
+          const scale = F.previewW / F.w;
+          return (
+            <div key={frame} style={{ display:'flex', flexDirection:'column', gap:6 }}>
+              <div style={{ fontSize:11, color:'rgba(60,50,40,.55)', fontWeight:600, letterSpacing:.4, textTransform:'uppercase' }}>
+                {F.label} · {F.w}×{F.h}
+              </div>
+              <div style={{ width:F.previewW, height:F.h*scale, position:'relative', overflow:'hidden',
+                            borderRadius:8, border:'1px solid rgba(0,0,0,.06)', background:'#f4f1ea' }}>
+                <div ref={frame==='square' ? squareRef : storyRef}
+                     style={{ width:F.w, height:F.h, transform:`scale(${scale})`, transformOrigin:'top left', position:'absolute', top:0, left:0 }}>
+                  <ForumPost variation={variation} theme={theme} frame={frame} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ────────────────────────── TWEAKS PANEL ──────────────────────────────── */
+
+function TweaksPanel({ state, setState, updateActiveBrand, onClose }){
+  const brand = activeBrandOf(state);
+  const [activeIdx, setActiveIdx] = React.useState(0);
+  const csvRef = React.useRef(null);
+
+  React.useEffect(()=>{
+    if (activeIdx >= brand.variations.length) setActiveIdx(Math.max(0, brand.variations.length - 1));
+  }, [brand.id, brand.variations.length]);
+
+  const persist = (next) => {
+    setState(next);
+    window.parent.postMessage({ type:'__edit_mode_set_keys', edits: next }, '*');
+  };
+
+  const update = (i, key, value) => {
+    updateActiveBrand((b)=>({ variations: b.variations.map((v,j)=> j===i ? { ...v, [key]: value } : v) }));
+  };
+  const setBrandField = (key, value) => updateActiveBrand(()=>({ [key]: value }));
+
+  const addVariation = () => {
+    const nv = mkVariation();
+    updateActiveBrand((b)=>({ variations: [...b.variations, nv] }));
+    setActiveIdx(brand.variations.length);
+  };
+  const duplicateActive = () => {
+    const v = brand.variations[activeIdx];
+    const copy = { ...v, id:`v${Math.random().toString(36).slice(2,8)}` };
+    updateActiveBrand((b)=>({ variations: [...b.variations.slice(0,activeIdx+1), copy, ...b.variations.slice(activeIdx+1)] }));
+    setActiveIdx(activeIdx+1);
+  };
+  const deleteActive = () => {
+    if (brand.variations.length <= 1){ alert('Keep at least one variation'); return; }
+    if (!confirm(`Delete variation ${activeIdx+1}?`)) return;
+    updateActiveBrand((b)=>({ variations: b.variations.filter((_,j)=>j!==activeIdx) }));
+    setActiveIdx(Math.max(0, activeIdx-1));
+  };
+  const resetAll = () => {
+    if (!confirm('Reset to defaults?')) return;
+    persist(JSON.parse(JSON.stringify(DEFAULTS)));
+    setActiveIdx(0);
+  };
+
+  const onCsvFile = (file) => {
+    if (!file) return;
+    const r = new FileReader();
+    r.onload = (e) => {
+      const rows = parseCsv(e.target.result);
+      if (!rows.length){ alert('No rows found'); return; }
+      const first = rows[0].map(s=>s.toLowerCase().trim());
+      const expected = ['community','handle','title','body','upvotes','comments'];
+      const hasHeader = expected.some(k => first.includes(k));
+      let idx = { community:0, handle:1, title:2, body:3, upvotes:4, comments:5 };
+      if (hasHeader){ idx = Object.fromEntries(expected.map(k=>[k, first.indexOf(k)])); }
+      const data = hasHeader ? rows.slice(1) : rows;
+      updateActiveBrand(()=>({
+        variations: data.map((r,i)=>{
+          const get = (k) => idx[k] >= 0 ? (r[idx[k]] || '') : '';
+          return mkVariation({
+            id:`v${Date.now().toString(36)}${i}`,
+            community: get('community') || 'biohacking',
+            handle: get('handle') || 'anonymous',
+            title: get('title'),
+            body: get('body'),
+            upvotes: get('upvotes') || '1.2K',
+            comments: get('comments') || '147',
+          });
+        }),
+      }));
+      setActiveIdx(0);
+    };
+    r.readAsText(file);
+  };
+
+  const v = brand.variations[activeIdx];
+  if (!v) return null;
+  const baseTheme = THEMES[brand.theme] || THEMES.threadly;
+  const theme = brand.accentOverride
+    ? { ...baseTheme, accent: brand.accentOverride, markBg: brand.accentOverride }
+    : baseTheme;
+
+  return (
+    <div className="tw-panel">
+      <div className="tw-head">
+        <div className="tw-title">Tweaks · {brand.name}</div>
+        <button className="tw-close" onClick={onClose}>×</button>
+      </div>
+
+      <div className="tw-body" style={{ borderBottom:'1px solid rgba(255,255,255,.08)', paddingBottom:10, flex:'0 0 auto', maxHeight:'38vh' }}>
+        <div className="tw-card">
+          <div className="tw-card-head"><div className="tw-card-title" style={{ fontSize:11, letterSpacing:.6, textTransform:'uppercase', color:'rgba(255,255,255,.5)' }}>Brand</div></div>
+          <div className="tw-field">
+            <label className="tw-label">Brand name</label>
+            <input className="tw-input" value={brand.name} onChange={(e)=>setBrandField('name', e.target.value)} />
+          </div>
+          <div className="tw-field" style={{ marginBottom:0 }}>
+            <label className="tw-label">Forum theme</label>
+            <div className="th-grid">
+              {Object.values(THEMES).map(th => (
+                <button key={th.id} className={`th-chip ${brand.theme === th.id ? 'active' : ''}`}
+                  onClick={()=>setBrandField('theme', th.id)}>
+                  <div className="th-dot" style={{ background: th.accent }}/>
+                  {th.name}
+                </button>
+              ))}
+            </div>
+            <div className="tw-hint">Theme swaps platform mark, accent, wordmark. All four are original.</div>
+          </div>
+          <div className="tw-field" style={{ marginTop:10, marginBottom:0 }}>
+            <label className="tw-label">Accent color override</label>
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+              <input type="color" value={brand.accentOverride || baseTheme.accent}
+                onChange={(e)=>setBrandField('accentOverride', e.target.value)}
+                style={{ width:40, height:28, border:'none', background:'transparent', cursor:'pointer', padding:0 }} />
+              <input className="tw-input" placeholder="#e07a4a"
+                value={brand.accentOverride || ''}
+                onChange={(e)=>setBrandField('accentOverride', e.target.value)} />
+              {brand.accentOverride && (
+                <button className="tw-tool" style={{ whiteSpace:'nowrap' }}
+                  onClick={()=>setBrandField('accentOverride', '')}>Clear</button>
+              )}
+            </div>
+            <div className="tw-hint">Hex code overrides the theme's accent (upvote pill + highlights).</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="tw-toolbar">
+        <input ref={csvRef} type="file" accept=".csv,text/csv" style={{ display:'none' }}
+               onChange={(e)=>onCsvFile(e.target.files[0])} />
+        <button className="tw-tool" onClick={()=>csvRef.current.click()}>⤓ Import CSV</button>
+        <button className="tw-tool" onClick={addVariation}>+ Add</button>
+        <button className="tw-tool" onClick={duplicateActive}>⧉ Duplicate</button>
+        <button className="tw-tool danger" onClick={deleteActive}>✕ Delete</button>
+      </div>
+
+      <div className="tw-tabs">
+        {brand.variations.map((_, i) =>
+          <button key={i} className={`tw-tab ${i===activeIdx ? 'active' : ''}`} onClick={()=>setActiveIdx(i)}>V{i+1}</button>
+        )}
+        <button className="tw-tab add" onClick={addVariation}>+</button>
+      </div>
+
+      <div className="tw-body">
+        <div className="tw-card">
+          <div className="tw-card-head"><div className="tw-card-title">Variation {activeIdx+1}</div></div>
+
+          <div className="tw-field">
+            <label className="tw-label">Community (f/_____)</label>
+            <input className="tw-input" value={v.community} onChange={(e)=>update(activeIdx, 'community', e.target.value)} />
+          </div>
+          <div className="tw-field">
+            <label className="tw-label">Author handle (u/_____)</label>
+            <input className="tw-input" value={v.handle} onChange={(e)=>update(activeIdx, 'handle', e.target.value)} />
+          </div>
+          <div className="tw-field">
+            <label className="tw-label">Post title</label>
+            <textarea className="tw-textarea" value={v.title} onChange={(e)=>update(activeIdx, 'title', e.target.value)} />
+          </div>
+          <div className="tw-field">
+            <label className="tw-label">Post body</label>
+            <textarea className="tw-textarea" style={{ minHeight: 90 }} value={v.body} onChange={(e)=>update(activeIdx, 'body', e.target.value)} />
+          </div>
+          <div style={{ display:'flex', gap:8 }}>
+            <div className="tw-field" style={{ flex:1 }}>
+              <label className="tw-label">Upvotes</label>
+              <input className="tw-input" value={v.upvotes} onChange={(e)=>update(activeIdx, 'upvotes', e.target.value)} />
+            </div>
+            <div className="tw-field" style={{ flex:1 }}>
+              <label className="tw-label">Comments</label>
+              <input className="tw-input" value={v.comments} onChange={(e)=>update(activeIdx, 'comments', e.target.value)} />
+            </div>
+          </div>
+          <div className="tw-hint">CSV columns: community, handle, title, body, upvotes, comments</div>
+        </div>
+      </div>
+
+      <div className="tw-footer">
+        <span style={{ flex:1 }}>All copy & theme saves to disk</span>
+        <button onClick={resetAll}>Reset all</button>
+      </div>
+    </div>
+  );
+}
+
+/* ────────────────────────── BRAND SWITCHER ────────────────────────────── */
+
+function BrandSwitcher({ state, onSelect, onAdd, onRename, onDelete }){
+  const [renamingId, setRenamingId] = React.useState(null);
+  const [draft, setDraft] = React.useState('');
+  const inputRef = React.useRef(null);
+
+  React.useEffect(()=>{ if (renamingId && inputRef.current){ inputRef.current.focus(); inputRef.current.select(); } }, [renamingId]);
+
+  const commitRename = () => { if (renamingId && draft.trim()) onRename(renamingId, draft.trim()); setRenamingId(null); };
+
+  return (
+    <div style={{ position:'fixed', top:12, left:'50%', transform:'translateX(-50%)',
+      display:'flex', alignItems:'center', gap:6, padding:6,
+      background:'rgba(255,255,255,0.95)', border:'1px solid #e4e4e4', borderRadius:999,
+      boxShadow:'0 4px 16px rgba(0,0,0,.08)', zIndex:50, fontSize:13, backdropFilter:'blur(8px)',
+      maxWidth:'calc(100vw - 32px)', overflow:'auto' }}>
+      <span style={{ padding:'0 10px', color:'#888', fontSize:11, letterSpacing:.6, textTransform:'uppercase' }}>Brand</span>
+      {state.brands.map(b => {
+        const active = b.id === state.activeBrandId;
+        if (renamingId === b.id) return (
+          <input key={b.id} ref={inputRef} value={draft}
+            onChange={(e)=>setDraft(e.target.value)}
+            onBlur={commitRename}
+            onKeyDown={(e)=>{ if(e.key==='Enter') commitRename(); if(e.key==='Escape') setRenamingId(null); }}
+            style={{ padding:'6px 12px', borderRadius:999, border:'1px solid #e07a4a', fontSize:13, outline:'none', minWidth:120 }}/>
+        );
+        return (
+          <button key={b.id}
+            onClick={()=>onSelect(b.id)}
+            onDoubleClick={()=>{ setDraft(b.name); setRenamingId(b.id); }}
+            style={{
+              padding:'6px 14px', borderRadius:999,
+              border:'none', cursor:'pointer',
+              background: active ? '#13100c' : 'transparent',
+              color: active ? '#fff' : '#333',
+              fontFamily:'inherit', fontSize:13, fontWeight: active ? 600 : 500,
+            }}>{b.name}</button>
+        );
+      })}
+      <button onClick={onAdd} style={{
+        padding:'6px 12px', borderRadius:999, border:'1px dashed #bbb', background:'transparent',
+        color:'#888', cursor:'pointer', fontSize:13,
+      }}>+ Add brand</button>
+    </div>
+  );
+}
+
+/* ────────────────────────── APP ───────────────────────────────────────── */
+
+function App(){
+  const [state, setState] = React.useState(TWEAKS);
+  const [tweaksOpen, setTweaksOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const handler = (e) => {
+      if (!e.data || typeof e.data !== 'object') return;
+      if (e.data.type === '__activate_edit_mode') setTweaksOpen(true);
+      if (e.data.type === '__deactivate_edit_mode') setTweaksOpen(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  const persist = (next) => {
+    setState(next);
+    window.parent.postMessage({ type:'__edit_mode_set_keys', edits: next }, '*');
+  };
+
+  const updateActiveBrand = (fn) => {
+    setState(s => {
+      const next = { ...s, brands: s.brands.map(b => b.id === s.activeBrandId ? { ...b, ...fn(b) } : b) };
+      window.parent.postMessage({ type:'__edit_mode_set_keys', edits: next }, '*');
+      return next;
+    });
+  };
+
+  const selectBrand = (id) => persist({ ...state, activeBrandId: id });
+  const addBrand = () => {
+    const nb = { id:`b${Date.now().toString(36)}`, name:'New brand', theme:'threadly', variations:[mkVariation()] };
+    persist({ ...state, brands:[...state.brands, nb], activeBrandId: nb.id });
+  };
+  const renameBrand = (id, name) => persist({ ...state, brands: state.brands.map(b=>b.id===id ? { ...b, name } : b) });
+  const deleteBrand = (id) => {
+    if (state.brands.length <= 1){ alert('Keep at least one brand'); return; }
+    if (!confirm('Delete this brand?')) return;
+    const next = state.brands.filter(b=>b.id !== id);
+    persist({ ...state, brands: next, activeBrandId: next[0].id });
+  };
+
+  const brand = activeBrandOf(state);
+  const baseTheme = THEMES[brand.theme] || THEMES.threadly;
+  const theme = brand.accentOverride
+    ? { ...baseTheme, accent: brand.accentOverride, markBg: brand.accentOverride }
+    : baseTheme;
+
+  const onDeleteVariation = (i) => {
+    if (brand.variations.length <= 1){ alert('Keep at least one variation'); return; }
+    if (!confirm(`Delete variation ${i+1}?`)) return;
+    updateActiveBrand((b)=>({ variations: b.variations.filter((_,j)=>j!==i) }));
+  };
+  const onDuplicateVariation = (i) => {
+    const v = brand.variations[i];
+    const copy = { ...v, id:`v${Math.random().toString(36).slice(2,8)}` };
+    updateActiveBrand((b)=>({ variations: [...b.variations.slice(0,i+1), copy, ...b.variations.slice(i+1)] }));
+  };
+
+  return (
+    <div style={{ minHeight:'100vh', background:'#efece5', paddingTop:72, paddingBottom:40 }}>
+      <BrandSwitcher state={state} onSelect={selectBrand} onAdd={addBrand} onRename={renameBrand} onDelete={deleteBrand} />
+
+      <div style={{ maxWidth:1400, margin:'0 auto', padding:'0 24px', display:'flex', flexDirection:'column', gap:20 }}>
+        <div style={{ padding:'8px 4px 0' }}>
+          <div style={{ fontSize:28, fontWeight:700, color:'#1a1612', letterSpacing:-.6 }}>
+            {brand.name} · Forum post template
+          </div>
+          <div style={{ fontSize:14, color:'rgba(60,50,40,.65)', marginTop:4 }}>
+            Community endorsement post format · {theme.name} platform theme · 1:1 + 9:16 export
+          </div>
+        </div>
+
+        {brand.variations.map((v, i) => (
+          <VariationCard key={v.id} variation={v} index={i} theme={theme}
+            onDelete={()=>onDeleteVariation(i)}
+            onDuplicate={()=>onDuplicateVariation(i)} />
+        ))}
+      </div>
+
+      {tweaksOpen && (
+        <TweaksPanel state={state} setState={persist} updateActiveBrand={updateActiveBrand}
+          onClose={()=>setTweaksOpen(false)} />
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+</script>
+</body>
+</html>

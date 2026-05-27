@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Ad Variations — Rara</title>
+<style>
+  html,body{margin:0;padding:0;background:#f0eee9;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel">
+// The 10 variations from the CSV
+const VARIATIONS = [
+  { context: "Week 2 of switching to barefoot shoes ✨", question: "Do your feet not hurt after a full office day?", answer: "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm" },
+  { context: "My feet finally stopped aching at work 🙏", question: "Are barefoot shoes actually worth it for desk jobs?", answer: "Yes. Rara changed how my feet feel after 9 hours. No pinching, no fatigue. Just comfort" },
+  { context: "Wore Rara to back to back meetings today", question: "Can you wear barefoot shoes to a formal office?", answer: "They look sleek and feel incredible. No one knew — my feet did though 😌" },
+  { context: "Office life hits different in these 🖤", question: "Do wide toe box shoes look weird with formals?", answer: "Not at all. Rara looks polished. But the real flex is zero foot pain after a full day" },
+  { context: "30 days of barefoot shoes at work — update", question: "I have flat feet. Will these actually help me?", answer: "Game changer for flat feet honestly. My posture improved and the ache just… stopped" },
+  { context: "Finally found shoes that get my feet 🖤", question: "Are barefoot shoes good if you stand all day?", answer: "Yes. Rara keeps your feet natural all day. No cramping, no stiffness. Total relief" },
+  { context: "My podiatrist actually approved these 😌", question: "Do these actually improve your posture at work?", answer: "Noticeably yes. Two weeks in and my back pain reduced. Feet just sit right in these" },
+  { context: "Wore these for a 10 hour work day today", question: "Will wide toe box shoes fit under a formal desk?", answer: "Looks sharp, feels barefoot. Colleagues thought they were regular formals. Feet disagree 😄" },
+  { context: "Rara has ruined regular shoes for me ✨", question: "I have narrow ankles — will these still fit well?", answer: "Perfect fit honestly. The toe box is wide but the heel holds. Stays secure all day" },
+  { context: "Day 1 of ditching uncomfortable work shoes", question: "Are these worth the price for daily office use?", answer: "Every rupee. My feet don't ache by noon anymore. Wish I'd switched sooner" },
+];
+
+// Matches the original: black box (context), white box (question) stacked top-left.
+// Light pink rounded boxes (answer) bottom-right, line-by-line.
+function AdFrame({ context, question, answer }) {
+  // Break the answer into visual lines similar to the original (≈18–22 chars)
+  const wrapLines = (txt, maxLen = 22) => {
+    const words = txt.split(/\s+/);
+    const lines = [];
+    let cur = "";
+    for (const w of words) {
+      if ((cur + " " + w).trim().length > maxLen && cur) {
+        lines.push(cur);
+        cur = w;
+      } else {
+        cur = (cur + " " + w).trim();
+      }
+    }
+    if (cur) lines.push(cur);
+    return lines;
+  };
+  const answerLines = wrapLines(answer, 22);
+
+  return (
+    <div style={{
+      position: 'relative',
+      width: 1080, height: 1080,
+      backgroundImage: 'url(assets/shoe-bg.jpg)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+    }}>
+      {/* Top-left stack: black context, white question */}
+      <div style={{ position: 'absolute', top: 70, left: 70, width: 520, display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{
+          background: '#000',
+          color: '#fff',
+          padding: '22px 28px',
+          fontSize: 30,
+          fontWeight: 700,
+          lineHeight: 1.25,
+          textAlign: 'center',
+          borderRadius: 4,
+          letterSpacing: -0.2,
+        }}>
+          {context}
+        </div>
+        <div style={{
+          background: '#fff',
+          color: '#111',
+          padding: '22px 28px',
+          fontSize: 28,
+          fontWeight: 500,
+          lineHeight: 1.3,
+          textAlign: 'center',
+          borderRadius: 4,
+          letterSpacing: -0.2,
+        }}>
+          {question}
+        </div>
+      </div>
+
+      {/* Bottom-right: pink answer bubbles, one per visual line */}
+      <div style={{
+        position: 'absolute',
+        bottom: 150,
+        right: 50,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: 6,
+      }}>
+        {answerLines.map((line, i) => (
+          <span key={i} style={{
+            background: '#f6dfe1',
+            color: '#111',
+            padding: '6px 14px',
+            fontSize: 32,
+            fontWeight: 800,
+            lineHeight: 1.25,
+            borderRadius: 4,
+            letterSpacing: -0.3,
+            display: 'inline-block',
+            boxShadow: '0 1px 0 rgba(0,0,0,0.04)',
+          }}>{line}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="ads" title="Rara — Ad Variations" subtitle="10 copy variations on the same creative · Drag to reorder · Click a label to focus">
+        {VARIATIONS.map((v, i) => (
+          <DCArtboard
+            key={i}
+            id={`v${i+1}`}
+            label={`V${i+1} · ${v.question.length > 38 ? v.question.slice(0,38) + '…' : v.question}`}
+            width={1080}
+            height={1080}
+          >
+            <AdFrame {...v} />
+          </DCArtboard>
+        ))}
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

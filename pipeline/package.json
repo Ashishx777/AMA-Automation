@@ -1,0 +1,24 @@
+{
+  "name": "porcellia-ads-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Folder-driven batch renderer for Porcellia social-proof ad templates. Reads a job folder (copy.csv + brand.json + images/), renders 1:1 + 9:16 PNGs via the existing HTML templates, auto-handles 1:1 -> 9:16 expansion, and opens a local review page.",
+  "type": "module",
+  "bin": {
+    "porcellia-ads": "./bin/render.js"
+  },
+  "scripts": {
+    "render": "node bin/render.js",
+    "example": "node bin/render.js --brand mileenia --archetype ama --folder jobs/example-mileenia",
+    "postinstall": "npx playwright install chromium"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "papaparse": "^5.4.1",
+    "playwright": "^1.47.0",
+    "sharp": "^0.33.5"
+  }
+}

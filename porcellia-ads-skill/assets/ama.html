@@ -1,0 +1,1814 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rara — Ad Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#f0eee9;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;}
+
+  /* ───── Tweaks panel ───── */
+  .tw-panel{position:fixed;top:16px;right:16px;width:380px;max-height:calc(100vh - 32px);
+    background:#1a1612;color:#f2ede3;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.45);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    font-size:13px;display:flex;flex-direction:column;z-index:1000;overflow:hidden}
+  .tw-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+  .tw-title{font-weight:600;font-size:14px;letter-spacing:-.2px}
+  .tw-close{background:transparent;border:none;color:rgba(255,255,255,.6);cursor:pointer;
+    width:28px;height:28px;border-radius:6px;font-size:18px;line-height:1;padding:0}
+  .tw-close:hover{background:rgba(255,255,255,.08);color:#fff}
+  .tw-body{overflow-y:auto;padding:10px 6px 14px;flex:1}
+  .tw-tabs{display:flex;gap:2px;padding:8px 10px 4px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.08)}
+  .tw-tab{border:none;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);
+    padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;
+    font-weight:500;letter-spacing:.2px}
+  .tw-tab:hover{background:rgba(255,255,255,.12);color:#fff}
+  .tw-tab.active{background:#c96442;color:#fff}
+  .tw-tab.add{background:transparent;color:rgba(255,255,255,.5);border:1px dashed rgba(255,255,255,.2)}
+  .tw-tab.add:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .tw-toolbar{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
+  .tw-tool{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);border:none;
+    padding:6px 10px;border-radius:5px;font-size:11px;cursor:pointer;font-family:inherit;
+    font-weight:500;display:inline-flex;align-items:center;gap:5px}
+  .tw-tool:hover{background:rgba(255,255,255,.12);color:#fff}
+  .tw-tool.danger{color:rgba(255,170,150,.9)}
+  .tw-tool.danger:hover{background:rgba(255,80,60,.15);color:#ff9884}
+  .tw-card{padding:12px 14px;margin:6px 10px;background:rgba(255,255,255,.04);border-radius:8px}
+  .tw-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+  .tw-card-title{font-weight:600;font-size:12px;color:#fff;letter-spacing:.2px}
+  .tw-field{margin-bottom:10px}
+  .tw-label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.8px;
+    color:rgba(255,255,255,.45);margin-bottom:4px;font-weight:600}
+  .tw-input,.tw-textarea,.tw-select{width:100%;box-sizing:border-box;background:rgba(0,0,0,.3);
+    color:#f2ede3;border:1px solid rgba(255,255,255,.08);border-radius:6px;
+    padding:7px 9px;font-family:inherit;font-size:12px;line-height:1.35;resize:vertical}
+  .tw-textarea{min-height:54px}
+  .tw-input:focus,.tw-textarea:focus,.tw-select:focus{outline:none;border-color:#c96442;
+    background:rgba(0,0,0,.4)}
+  .tw-drop{border:1.5px dashed rgba(255,255,255,.18);border-radius:8px;padding:18px 12px;
+    text-align:center;color:rgba(255,255,255,.55);font-size:12px;cursor:pointer;
+    transition:border-color .15s,background .15s}
+  .tw-drop:hover,.tw-drop.over{border-color:#c96442;color:#fff;background:rgba(201,100,66,.08)}
+  .tw-drop .tw-drop-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px}
+  .tw-thumb{width:100%;height:120px;border-radius:6px;background-size:cover;background-position:center;
+    background-color:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);margin-bottom:6px;
+    display:flex;align-items:flex-end;justify-content:flex-end;padding:6px}
+  .tw-thumb-replace{background:rgba(0,0,0,.6);color:#fff;font-size:10px;padding:3px 7px;
+    border-radius:4px;border:none;cursor:pointer;font-family:inherit;font-weight:500}
+  .tw-thumb-replace:hover{background:#c96442}
+  .tw-footer{padding:10px 14px;border-top:1px solid rgba(255,255,255,.08);
+    font-size:11px;color:rgba(255,255,255,.5);display:flex;gap:10px;align-items:center}
+  .tw-footer button{background:transparent;border:1px solid rgba(255,255,255,.15);
+    color:rgba(255,255,255,.7);padding:4px 9px;border-radius:5px;cursor:pointer;
+    font-family:inherit;font-size:11px}
+  .tw-footer button:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .tw-hint{font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;line-height:1.4}
+
+  /* ───── Draggable component hotspots on the canvas ───── */
+  .ad-hot{position:absolute;cursor:grab;user-select:none;z-index:2}
+  .ad-hot.dragging{cursor:grabbing;z-index:10}
+  .ad-hot .ad-handle{position:absolute;top:-10px;left:-10px;width:22px;height:22px;
+    border-radius:50%;background:#c96442;color:#fff;font-size:11px;font-weight:700;
+    display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.3);
+    border:2px solid #fff;pointer-events:none}
+  [data-edit-on] .ad-hot:hover .ad-handle,
+  [data-edit-on] .ad-hot.dragging .ad-handle{display:flex}
+  [data-edit-on] .ad-hot:hover > div:first-child{box-shadow:0 0 0 2px #c96442,0 2px 10px rgba(0,0,0,.12) !important}
+
+  /* ───── Top action bar on each variation ───── */
+  .v-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .v-btn{background:#fff;border:1px solid rgba(0,0,0,.1);color:#333;
+    padding:5px 10px;font-size:11px;border-radius:5px;cursor:pointer;font-family:inherit;
+    font-weight:500}
+  .v-btn:hover{background:#c96442;color:#fff;border-color:#c96442}
+  .v-btn.subtle{background:transparent;color:rgba(60,50,40,.55);border-color:transparent}
+  .v-btn.subtle:hover{background:rgba(0,0,0,.05);color:#333}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/html-to-image@1.11.11/dist/html-to-image.js"></script>
+</head>
+<body style="font-family: Arial; font-size: 24px;">
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx" data-plugins="transform-react-jsx-source" data-filename="design-canvas.jsx"></script>
+<script type="text/babel" data-plugins="transform-react-jsx-source" data-filename="inline-1">
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * Rara — reusable AMA ad template.
+ *
+ * Each variation has:
+ *   • c1, c2, c3 — copy (editable in Tweaks, or paste CSV)
+ *   • image — background (uploaded per-session, not persisted)
+ *   • pos — { square: { qa:{x,y}, ans:{x,y} }, story: { ... } }
+ *     (drag positions are SEPARATE per aspect ratio)
+ *
+ * Rendered in two aspect ratios side by side:
+ *   Square  1080 × 1080  (1:1)
+ *   Story   1080 × 1920  (9:16)
+ *
+ * Export: click "Export PNG" on any variation to download at 2x (2160px / 3840px).
+ */
+
+/* Position is stored as a fraction (0..1) of the frame size so the same
+   drag translates nicely across aspect ratios. */
+const DEFAULT_POS = {
+  square: { qa: { x: 0.046, y: 0.046 }, ans: { x: 0.046, y: 0.72 } }, // top-left / bottom-left
+  story: { qa: { x: 0.046, y: 0.05 }, ans: { x: 0.046, y: 0.82 } }
+};
+
+/* Image transform per frame: x,y,w,h as fractions (0..1) of the frame.
+   null means "auto cover-fit" — computed at render time once the image
+   natural dimensions are known. */
+const DEFAULT_IMG_T = { square: null, story: null };
+
+const FRAMES = {
+  square: { w: 1080, h: 1080, label: '1:1', previewW: 360 },
+  story: { w: 1080, h: 1920, label: '9:16', previewW: 260 }
+};
+
+const COPY_WIDTH_FRAC = 0.52; // copy block width as fraction of frame width
+
+const FONTS = [
+{ id: 'system', label: 'System sans', stack: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif' },
+{ id: 'serif', label: 'Serif', stack: 'Georgia, "Times New Roman", serif' },
+{ id: 'mono', label: 'Mono', stack: 'ui-monospace, "SF Mono", Menlo, monospace' },
+{ id: 'rounded', label: 'Rounded', stack: '"SF Pro Rounded", "Nunito", system-ui, sans-serif' },
+{ id: 'display', label: 'Display', stack: '"Helvetica Neue", Helvetica, Arial, sans-serif' },
+{ id: 'elegant', label: 'Elegant', stack: '"Playfair Display", Georgia, serif' },
+{ id: 'inter', label: 'Inter Medium', stack: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif', weight: 500 }];
+
+
+const defaultBrand = (overrides = {}) => ({
+  id: `b${Date.now().toString(36)}`,
+  name: 'New brand',
+  font: 'system',
+  variations: [
+  { id: `v${Date.now().toString(36)}1`, c1: '', c2: '', c3: '' }],
+
+  ...overrides
+});
+
+const TWEAKS = /*EDITMODE-BEGIN*/{
+  "activeBrandId": "rara",
+  "brands": [
+    {
+      "id": "rara",
+      "name": "Rara",
+      "font": "system",
+      "variations": [
+        {
+          "id": "v1",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm",
+          "pos": {
+            "square": {
+              "qa": {
+                "x": 0.04986256493462456,
+                "y": 0.04599973890516493
+              },
+              "ans": {
+                "x": 0.046,
+                "y": 0.72
+              }
+            }
+          },
+          "imgT": {
+            "story": {
+              "x": -0.06999951995150146,
+              "y": -0.015931149215532105,
+              "w": 1.2574982341073087,
+              "h": 1.0610141350280418
+            },
+            "square": {
+              "x": -0.05831614584751094,
+              "y": -0.6197170843351525,
+              "w": 1.0934696112452418,
+              "h": 1.6402044168678627
+            }
+          }
+        },
+        {
+          "id": "vmojmpch0",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm"
+        },
+        {
+          "id": "vmojmpbbr",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm"
+        },
+        {
+          "id": "vmojmp5d4",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm"
+        },
+        {
+          "id": "vmojmp3u3",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm"
+        },
+        {
+          "id": "vmojmp376",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm"
+        },
+        {
+          "id": "vmojmozu8",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm"
+        },
+        {
+          "id": "vmo9wbi38",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm"
+        },
+        {
+          "id": "vmo9wbca3",
+          "c1": "Hourly running session??",
+          "c2": "Do your feet not hurt after a full office day?",
+          "c3": "Honestly no. The toe box gives your feet real room. Feels like walking on air by 6pm"
+        },
+        {
+          "id": "v2",
+          "c1": "My feet finally stopped aching at work 🙏",
+          "c2": "Are barefoot shoes actually worth it for desk jobs?",
+          "c3": "Yes. Rara changed how my feet feel after 9 hours. No pinching, no fatigue. Just comfort"
+        }
+      ]
+    },
+    {
+      "id": "solvedskin",
+      "name": "The Solved Skin",
+      "font": "elegant",
+      "variations": [
+        {
+          "id": "ss1",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        },
+        {
+          "id": "vmoo1ygyu",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        },
+        {
+          "id": "vmoo1yio8",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        },
+        {
+          "id": "vmoo1yjul",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        },
+        {
+          "id": "vmoo1yko7",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        }
+      ]
+    },
+    {
+      "id": "mileenia",
+      "name": "Mileenia",
+      "font": "serif",
+      "variations": [
+        {
+          "id": "mi1",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        }
+      ]
+    },
+    {
+      "id": "zauv",
+      "name": "Zauv",
+      "font": "display",
+      "variations": [
+        {
+          "id": "zv1",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        }
+      ]
+    },
+    {
+      "id": "parman",
+      "name": "Parman",
+      "font": "system",
+      "variations": [
+        {
+          "id": "pa1",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        },
+        {
+          "id": "vmojmpnfu",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        },
+        {
+          "id": "vmojmpmsz",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        },
+        {
+          "id": "vmo8ogww7",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        }
+      ]
+    },
+    {
+      "id": "pragyanam",
+      "name": "Pragyanam",
+      "font": "serif",
+      "variations": [
+        {
+          "id": "pg1",
+          "c1": "6 months at Pragyanam — my daughter is thriving ✨",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Is a life-skills curriculum actually rigorous enough academically?",
+          "c3": "CBSE board, full academics. They just teach it differently.\n\nMy kid scores well AND can hold a conversation. Both, not either",
+          "pos": {
+            "square": {
+              "qa": {
+                "x": 0.050428220960828996,
+                "y": 0.057094913058810766
+              },
+              "ans": {
+                "x": 0.04738424089219835,
+                "y": 0.56408568488227
+              }
+            },
+            "story": {
+              "qa": {
+                "x": 0.046,
+                "y": 0.05
+              },
+              "ans": {
+                "x": 0.06840931683584432,
+                "y": 0.601207267925291
+              }
+            }
+          },
+          "imgT": {
+            "square": {
+              "x": 0.10097240871853301,
+              "y": -0.3133333841959636,
+              "w": 0.8637500286102295,
+              "h": 1.535555606418186
+            }
+          }
+        },
+        {
+          "id": "pg2",
+          "c1": "Finally a school that doesn't stress my kid out 🙏",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Are they too soft on academics? I want my child to compete",
+          "c3": "Competence over competitiveness is real here. But they win Olympiads regularly. 7 gold medals last year alone, actually"
+        },
+        {
+          "id": "pg3",
+          "c1": "Switched from a top tier school to Pragyanam 🖤",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Why move away from a 'big brand' school for this?",
+          "c3": "1:10 teacher ratio. Live CCTV till Grade 5. My son knows his teacher cares. That mattered more than the brand name"
+        },
+        {
+          "id": "pg4",
+          "c1": "The teachers actually know my kid 😌",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "How small are the classes really?",
+          "c3": "1:10 in pre-primary, 1:15 from Grade 1. Teacher remembers what my daughter likes, dislikes, struggles with. Game changer"
+        },
+        {
+          "id": "pg5",
+          "c1": "My child looks forward to school now ✨",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Do kids actually enjoy life-skills based learning?",
+          "c3": "Mine begs to go on weekends honestly. They learn through projects, debates, robotics. Subjects feel like adventures here"
+        },
+        {
+          "id": "pg6",
+          "c1": "Pragyanam parent for 2 years now 🙏",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Is the fee structure justified for this school?",
+          "c3": "Worth every rupee. Smaller classes, life skills, sports facilities, nutritious meals. You're paying for the whole child"
+        },
+        {
+          "id": "pg7",
+          "c1": "The Olympiad results made me a believer ✨",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Does the school prep kids for competitive exams later?",
+          "c3": "Strong fundamentals matter more than coaching at this age. Pragyanam builds critical thinking. That's what cracks any exam later"
+        },
+        {
+          "id": "pg8",
+          "c1": "My kid finally loves reading 🖤",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Tell me about the DEAR period — what is it?",
+          "c3": "Drop Everything And Read. Daily reading time built into school. My daughter went from struggling reader to bookworm in months"
+        },
+        {
+          "id": "pg9",
+          "c1": "Sports culture here is genuinely impressive 😌",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Are extracurriculars actually serious or just on paper?",
+          "c3": "Won 14 medals at the Delhi Taekwondo Championship last year. Sports football art music — all taken seriously. Not just optional"
+        },
+        {
+          "id": "pg10",
+          "c1": "IIT-IIM founders + WHO life skills = sold ✨",
+          "c1Font": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", system-ui, sans-serif",
+          "c2": "Why pick this over older schools in Gurgaon?",
+          "c3": "Newer school but better thought-out. Founders run Footprints, they understand kids. The pedagogy here actually keeps up with how kids learn today"
+        }
+      ]
+    },
+    {
+      "id": "gyros",
+      "name": "Gyros",
+      "font": "rounded",
+      "variations": [
+        {
+          "id": "gy1",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        }
+      ]
+    },
+    {
+      "id": "subtle",
+      "name": "Subtle",
+      "font": "rounded",
+      "variations": [
+        {
+          "id": "sb1",
+          "c1": "Ask us anything!",
+          "c2": "Does the Cloud Tee really hold its shape all day?",
+          "c3": "Yes. It's actually built to be worn and forgotten. The 100% natural cotton fabric makes it super breathable and just the right choice for a long, busy day.",
+          "pos": {
+            "square": {
+              "qa": {
+                "x": 0.046,
+                "y": 0.046
+              },
+              "ans": {
+                "x": 0.045999696519639754,
+                "y": 0.7203197903103299
+              }
+            }
+          },
+          "imgT": {
+            "story": {
+              "x": 0,
+              "y": 0.0031728891225961953,
+              "w": 1.2639302884615384,
+              "h": 0.8887009840745191
+            }
+          }
+        },
+        {
+          "id": "vmp0ysu04",
+          "c1": "Ask us anything!",
+          "c2": "Does the Cloud Tee really hold its shape all day?",
+          "c3": "Yes. It's actually built to be worn and forgotten. The 100% natural cotton fabric makes it super breathable and just the right choice for a long, busy day.",
+          "pos": {
+            "square": {
+              "qa": {
+                "x": 0.046,
+                "y": 0.046
+              },
+              "ans": {
+                "x": 0.045999696519639754,
+                "y": 0.7203197903103299
+              }
+            }
+          }
+        },
+        {
+          "id": "vmp0ysumc",
+          "c1": "Ask us anything!",
+          "c2": "Does the Cloud Tee really hold its shape all day?",
+          "c3": "Yes. It's actually built to be worn and forgotten. The 100% natural cotton fabric makes it super breathable and just the right choice for a long, busy day.",
+          "pos": {
+            "square": {
+              "qa": {
+                "x": 0.046,
+                "y": 0.046
+              },
+              "ans": {
+                "x": 0.045999696519639754,
+                "y": 0.7203197903103299
+              }
+            }
+          }
+        },
+        {
+          "id": "vmp0ysuuo",
+          "c1": "Ask us anything!",
+          "c2": "Does the Cloud Tee really hold its shape all day?",
+          "c3": "Yes. It's actually built to be worn and forgotten. The 100% natural cotton fabric makes it super breathable and just the right choice for a long, busy day.",
+          "pos": {
+            "square": {
+              "qa": {
+                "x": 0.046,
+                "y": 0.046
+              },
+              "ans": {
+                "x": 0.045999696519639754,
+                "y": 0.7203197903103299
+              }
+            }
+          }
+        },
+        {
+          "id": "vmp0ysvel",
+          "c1": "Ask us anything!",
+          "c2": "Does the Cloud Tee really hold its shape all day?",
+          "c3": "Yes. It's actually built to be worn and forgotten. The 100% natural cotton fabric makes it super breathable and just the right choice for a long, busy day.",
+          "pos": {
+            "square": {
+              "qa": {
+                "x": 0.046,
+                "y": 0.046
+              },
+              "ans": {
+                "x": 0.045999696519639754,
+                "y": 0.7203197903103299
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "atovio",
+      "name": "Atovio",
+      "font": "display",
+      "variations": [
+        {
+          "id": "at1",
+          "c1": "",
+          "c2": "",
+          "c3": ""
+        }
+      ]
+    }
+  ]
+}/*EDITMODE-END*/;
+
+const DEFAULTS = JSON.parse(JSON.stringify(TWEAKS));
+
+const getFont = (id) => {
+  const f = FONTS.find((x) => x.id === id) || FONTS[0];
+  return { stack: f.stack, weight: f.weight };
+};
+const activeBrandOf = (s) => s.brands.find((b) => b.id === s.activeBrandId) || s.brands[0];
+
+/* Images are session-only: keyed by variation id, stored in plain JS memory
+   (NOT in EDITMODE, because base64 would bloat disk). */
+/* Images are persisted to IndexedDB (keyed by variation id). Kept out of
+   EDITMODE because base64 strings would balloon the source file. The first
+   render hydrates from disk; subsequent set/clear writes asynchronously. */
+const ImageStore = {
+  _map: {},
+  _ready: false,
+  _readyPromise: null,
+  set(id, dataUrl) {
+    this._map[id] = dataUrl;
+    this._emit();
+    this._idbSet(id, dataUrl);
+  },
+  get(id) {return this._map[id];},
+  clear(id) {
+    delete this._map[id];
+    this._emit();
+    this._idbDelete(id);
+  },
+  _subs: new Set(),
+  _emit() {this._subs.forEach((fn) => fn());},
+  subscribe(fn) {this._subs.add(fn);return () => this._subs.delete(fn);},
+
+  // ---------- IndexedDB plumbing ----------
+  _DB: 'ama-ad-images',
+  _STORE: 'imgs',
+  _open() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(this._DB, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(this._STORE);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async _idbSet(id, dataUrl) {
+    try {
+      const db = await this._open();
+      const tx = db.transaction(this._STORE, 'readwrite');
+      tx.objectStore(this._STORE).put(dataUrl, id);
+    } catch (e) {console.warn('ImageStore: idb set failed', e);}
+  },
+  async _idbDelete(id) {
+    try {
+      const db = await this._open();
+      const tx = db.transaction(this._STORE, 'readwrite');
+      tx.objectStore(this._STORE).delete(id);
+    } catch (e) {console.warn('ImageStore: idb delete failed', e);}
+  },
+  async hydrate() {
+    if (this._readyPromise) return this._readyPromise;
+    this._readyPromise = (async () => {
+      try {
+        const db = await this._open();
+        const tx = db.transaction(this._STORE, 'readonly');
+        const store = tx.objectStore(this._STORE);
+        const keysReq = store.getAllKeys();
+        const valsReq = store.getAll();
+        await new Promise((res, rej) => {
+          tx.oncomplete = res;
+          tx.onerror = () => rej(tx.error);
+        });
+        const keys = keysReq.result || [];
+        const vals = valsReq.result || [];
+        keys.forEach((k, i) => {this._map[k] = vals[i];});
+      } catch (e) {console.warn('ImageStore: hydrate failed', e);}
+      this._ready = true;
+      this._emit();
+    })();
+    return this._readyPromise;
+  }
+};
+ImageStore.hydrate();
+
+// Patched for porcellia-ads-skill: when the EDITMODE block has been pre-
+// populated by the skill, each variation can carry _seedSquare and
+// _seedStory base64 dataURLs. Push them into ImageStore so the canvas
+// renders with copy AND images already in place on first paint.
+(function seedFromEditmode() {
+  try {
+    const data = typeof TWEAKS !== 'undefined' ? TWEAKS : null;
+    if (!data || !Array.isArray(data.brands)) return;
+    let count = 0;
+    for (const b of data.brands) {
+      for (const v of (b.variations || [])) {
+        if (v._seedSquare) { ImageStore.set(v.id + ':square', v._seedSquare); count++; }
+        if (v._seedStory)  { ImageStore.set(v.id + ':story',  v._seedStory);  count++; }
+        if (!v._seedSquare && !v._seedStory && v._seedImage) {
+          // Single-image fallback for variations where 9:16 isn't separate.
+          ImageStore.set(v.id, v._seedImage); count++;
+        }
+      }
+    }
+    if (count) console.log('[porcellia-ads-skill] seeded ' + count + ' images from EDITMODE');
+  } catch (e) { console.warn('[porcellia-ads-skill] seed failed', e); }
+})();
+
+function useImageStore() {
+  const [, force] = React.useReducer((x) => x + 1, 0);
+  React.useEffect(() => ImageStore.subscribe(force), []);
+}
+
+/* ───────── Draggable copy hotspot ───────── */
+function DraggableBlock({ frac, onChange, frameW, frameH, editOn, children, handleLabel }) {
+  const ref = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+
+  const onPointerDown = (e) => {
+    if (!editOn) return;
+    e.preventDefault();
+    const el = ref.current;
+    const parent = el.parentElement;
+    const parentRect = parent.getBoundingClientRect();
+    const scale = parentRect.width / frameW;
+    const elRect = el.getBoundingClientRect();
+    const offX = e.clientX - elRect.left;
+    const offY = e.clientY - elRect.top;
+    setDragging(true);
+
+    const onMove = (ev) => {
+      const px = (ev.clientX - parentRect.left - offX) / scale;
+      const py = (ev.clientY - parentRect.top - offY) / scale;
+      // Clamp so block stays inside frame (approx — use rendered rect)
+      const blockW = elRect.width / scale;
+      const blockH = elRect.height / scale;
+      const cx = Math.max(0, Math.min(frameW - blockW, px));
+      const cy = Math.max(0, Math.min(frameH - blockH, py));
+      onChange({ x: cx / frameW, y: cy / frameH });
+    };
+    const onUp = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={`ad-hot ${dragging ? 'dragging' : ''}`}
+      style={{
+        left: `${frac.x * 100}%`,
+        top: `${frac.y * 100}%`,
+        width: `${COPY_WIDTH_FRAC * 100}%`,
+        zIndex: 2
+      }}
+      onPointerDown={onPointerDown}>
+      
+      <div className="ad-handle">{handleLabel}</div>
+      {children}
+    </div>);
+
+}
+
+/* ───────── Draggable + resizable image ───────── */
+function DraggableImage({ src, frameW, frameH, editOn, transform, onTransformChange }) {
+  const [natural, setNatural] = React.useState(null); // {w,h}
+  const [mode, setMode] = React.useState(null); // 'drag' | 'resize-br' | 'resize-tl' | 'resize-tr' | 'resize-bl' | null
+  const elRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!src) {setNatural(null);return;}
+    const im = new Image();
+    im.onload = () => setNatural({ w: im.naturalWidth, h: im.naturalHeight });
+    im.src = src;
+  }, [src]);
+
+  // Compute the effective transform: explicit transform if set, else cover-fit default.
+  const effective = React.useMemo(() => {
+    if (transform) return transform;
+    if (!natural) return null;
+    const ar = natural.w / natural.h;
+    const fAr = frameW / frameH;
+    let w, h, x, y;
+    if (ar > fAr) {
+      // image wider than frame — fill width, crop top/bottom (cover)
+      w = 1;h = frameW / frameH / ar;
+      x = 0;y = (1 - h) / 2;
+    } else {
+      // image taller than frame — fill height, crop sides (cover)
+      h = 1;w = ar * (frameH / frameW);
+      y = 0;x = (1 - w) / 2;
+    }
+    return { x, y, w, h };
+  }, [transform, natural, frameW, frameH]);
+
+  if (!effective) return null;
+
+  const startDrag = (e, kind) => {
+    if (!editOn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const parentRect = elRef.current.parentElement.getBoundingClientRect();
+    const scale = parentRect.width / frameW;
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const start = { ...effective };
+    const ar = start.w / start.h;
+    setMode(kind);
+
+    const onMove = (ev) => {
+      const dx = (ev.clientX - startX) / (scale * frameW);
+      const dy = (ev.clientY - startY) / (scale * frameH);
+      let next = { ...start };
+      if (kind === 'drag') {
+        next.x = start.x + dx;
+        next.y = start.y + dy;
+      } else {
+        // resize from a corner; keep aspect ratio, anchor at opposite corner
+        // dominant axis = larger absolute change in frame-relative dx*frameW vs dy*frameH
+        const ddx = Math.abs(dx);
+        const ddy = Math.abs(dy);
+        let dw, dh;
+        if (ddx * frameW > ddy * frameH) {
+          dw = kind === 'resize-br' || kind === 'resize-tr' ? dx : -dx;
+          dh = dw / ar;
+        } else {
+          dh = kind === 'resize-br' || kind === 'resize-bl' ? dy : -dy;
+          dw = dh * ar;
+        }
+        let newW = Math.max(0.05, start.w + dw);
+        let newH = Math.max(0.05, start.h + dh);
+        // keep aspect via newW
+        newH = newW / ar;
+        if (kind === 'resize-br') {
+          next.w = newW;next.h = newH;
+        } else if (kind === 'resize-tl') {
+          next.x = start.x + (start.w - newW);
+          next.y = start.y + (start.h - newH);
+          next.w = newW;next.h = newH;
+        } else if (kind === 'resize-tr') {
+          next.y = start.y + (start.h - newH);
+          next.w = newW;next.h = newH;
+        } else if (kind === 'resize-bl') {
+          next.x = start.x + (start.w - newW);
+          next.w = newW;next.h = newH;
+        }
+      }
+      onTransformChange(next);
+    };
+    const onUp = () => {
+      setMode(null);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    };
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+  };
+
+  const handleStyle = {
+    position: 'absolute', width: 28, height: 28, borderRadius: '50%',
+    background: '#c96442', border: '3px solid #fff',
+    boxShadow: '0 2px 8px rgba(0,0,0,.3)', cursor: 'nwse-resize',
+    zIndex: 3, display: editOn ? 'block' : 'none'
+  };
+
+  return (
+    <div
+      ref={elRef}
+      onPointerDown={(e) => startDrag(e, 'drag')}
+      style={{ ...{
+          position: 'absolute',
+          left: `${effective.x * 100}%`,
+          top: `${effective.y * 100}%`,
+          width: `${effective.w * 100}%`,
+          height: `${effective.h * 100}%`,
+          cursor: editOn ? mode === 'drag' ? 'grabbing' : 'grab' : 'default',
+          outline: editOn ? '2px dashed rgba(201,100,66,.7)' : 'none',
+          outlineOffset: -2,
+          zIndex: 0
+        }, width: "1080px", padding: "0px", margin: "-5.01953px 0px 0px -110px" }}>
+      <img
+        src={src}
+        draggable={false}
+        style={{ width: '100%', height: '100%', objectFit: 'fill', display: 'block', userSelect: 'none', pointerEvents: 'none' }} />
+      
+      {editOn &&
+      <>
+          <div style={{ ...handleStyle, left: -14, top: -14, cursor: 'nwse-resize' }}
+        onPointerDown={(e) => startDrag(e, 'resize-tl')} />
+          <div style={{ ...handleStyle, right: -14, top: -14, cursor: 'nesw-resize' }}
+        onPointerDown={(e) => startDrag(e, 'resize-tr')} />
+          <div style={{ ...handleStyle, left: -14, bottom: -14, cursor: 'nesw-resize' }}
+        onPointerDown={(e) => startDrag(e, 'resize-bl')} />
+          <div style={{ ...handleStyle, right: -14, bottom: -14, cursor: 'nwse-resize' }}
+        onPointerDown={(e) => startDrag(e, 'resize-br')} />
+        </>
+      }
+    </div>);
+
+}
+
+/* ───────── The ad itself ───────── */
+function AdFrame({ variation, frame, editOn, onPosChange, onImgTChange, onUpload, exportRef, fontStack, fontWeightOverride }) {
+  useImageStore();
+  // Patched for porcellia-ads-skill: prefer a frame-specific image key
+  // (e.g. "v1:story") so 1:1 and 9:16 can carry different sources when the
+  // skill auto-pads a square source for 9:16. Falls back to the generic id
+  // key so manual uploads via the Tweaks panel still work unchanged.
+  const img = ImageStore.get(variation.id + ':' + frame) || ImageStore.get(variation.id);
+  const F = FRAMES[frame];
+  const pos = variation.pos && variation.pos[frame] || DEFAULT_POS[frame];
+  const imgT = variation.imgT && variation.imgT[frame];
+
+  // Type scale: keep visually consistent at both aspect ratios.
+  // Font sizes specified in frame units (px at 1080-wide).
+  const fs = { c1: 30, c2: 28, c3: 28 };
+
+  const c1Box = {
+    background: variation.c1Bg || '#000000',
+    color: variation.c1Color || '#fff',
+    fontFamily: variation.c1Font || 'inherit',
+    letterSpacing: variation.c1Font ? 1 : -0.3,
+    padding: '20px 28px', fontSize: fs.c1, fontWeight: fontWeightOverride || 700,
+    textAlign: 'center', textWrap: 'pretty', lineHeight: 1.25
+  };
+  const c2Box = {
+    background: '#fff', color: '#111',
+    padding: '20px 28px', fontSize: fs.c2, fontWeight: fontWeightOverride || 500,
+    textAlign: 'center', letterSpacing: -0.2, textWrap: 'pretty', lineHeight: 1.3
+  };
+  // Answer renders Instagram-story style: white inline pill hugging each
+  // line of text, no outer card.
+  const c3Box = {
+    background: 'transparent', color: '#111',
+    padding: 0, fontSize: fs.c3, fontWeight: fontWeightOverride || 700,
+    textAlign: 'left', letterSpacing: -0.2, textWrap: 'balance', lineHeight: 1.55,
+    borderRadius: 0, boxShadow: 'none'
+  };
+  const c3Inline = {
+    background: '#fff', color: '#111',
+    padding: '8px 14px',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+    WebkitBoxDecorationBreak: 'clone', boxDecorationBreak: 'clone',
+    borderRadius: 6
+  };
+
+  return (
+    <div
+      ref={exportRef}
+      data-edit-on={editOn ? '' : undefined}
+      data-variation-id={variation.id}
+      data-frame={frame}
+      data-export-canvas=""
+      style={{
+        position: 'relative',
+        width: F.w, height: F.h,
+        backgroundColor: img ? '#000' : '#e8e4dc',
+        fontFamily: fontStack || '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif',
+        overflow: 'hidden'
+      }}>
+      
+      {/* Product image — background mode renders full-bleed behind everything */}
+      {img && variation.imageMode === 'background' &&
+      <img
+        src={img}
+        draggable={false}
+        style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', display: 'block', userSelect: 'none',
+          pointerEvents: 'none', zIndex: 0
+        }} />
+
+      }
+      {img && variation.imageMode !== 'background' &&
+      <DraggableImage
+        src={img}
+        frameW={F.w}
+        frameH={F.h}
+        editOn={editOn}
+        transform={imgT}
+        onTransformChange={(t) => onImgTChange(frame, t)} />
+
+      }
+
+      {!img &&
+      <div
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => {e.stopPropagation();onUpload && onUpload();}}
+        onDragOver={(e) => {e.preventDefault();e.currentTarget.style.background = 'rgba(201,100,66,.12)';}}
+        onDragLeave={(e) => {e.currentTarget.style.background = 'transparent';}}
+        onDrop={(e) => {
+          e.preventDefault();
+          e.currentTarget.style.background = 'transparent';
+          const f = e.dataTransfer.files[0];
+          if (f && f.type.startsWith('image/') && onUpload) onUpload(f);
+        }}
+        style={{
+          position: 'absolute', inset: 0, display: 'flex',
+          flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          color: 'rgba(40,30,20,.45)', fontSize: 28, fontWeight: 600,
+          letterSpacing: -0.2, textAlign: 'center',
+          cursor: 'pointer',
+          border: '3px dashed rgba(40,30,20,.18)',
+          boxSizing: 'border-box',
+          transition: 'background .15s, border-color .15s', borderWidth: "3px 0px 3px 3px", borderStyle: "dashed", borderColor: "rgba(40, 30, 20, 0.18)", borderImage: "initial", padding: "0px"
+        }}
+        onMouseEnter={(e) => {e.currentTarget.style.borderColor = '#c96442';e.currentTarget.style.color = '#c96442';}}
+        onMouseLeave={(e) => {e.currentTarget.style.borderColor = 'rgba(40,30,20,.18)';e.currentTarget.style.color = 'rgba(40,30,20,.45)';}}>
+        
+        <div style={{ fontSize: 48, marginBottom: 8 }}>↑</div>
+        <div>Click or drop to upload</div>
+        <div style={{ fontSize: 16, fontWeight: 400, marginTop: 4, opacity: .7 }}>Product image</div>
+        </div>
+      }
+
+      {/* C1 + C2 joined module */}
+      <DraggableBlock
+        frac={pos.qa} frameW={F.w} frameH={F.h} editOn={editOn}
+        handleLabel="Q" onChange={(p) => onPosChange('qa', p)}>
+        
+        <div style={{ borderRadius: 22, overflow: 'hidden', boxShadow: '0 2px 12px rgba(0,0,0,.14)' }}>
+          <div style={{ ...c1Box, padding: "20px 73px 20px 28px" }}>{variation.c1}</div>
+          <div style={{ ...c2Box, padding: "10.5px 28px 20px" }}>{variation.c2}</div>
+        </div>
+      </DraggableBlock>
+
+      {/* C3 answer */}
+      <DraggableBlock
+        frac={pos.ans} frameW={F.w} frameH={F.h} editOn={editOn}
+        handleLabel="A" onChange={(p) => onPosChange('ans', p)}>
+        
+        <div style={{ ...c3Box, width: "602px" }}>
+          {(variation.c3 || '').split(/\n\n+/).filter(Boolean).map((part, i, arr) =>
+          <div key={i} style={{ marginTop: i === 0 ? 0 : 40 }}>
+              <span style={{ ...c3Inline, padding: "12.1211px 14px 18.0938px", fontWeight: "500", fontFamily: "Inter", lineHeight: "1.55" }}>{part}</span>
+            </div>
+          )}
+        </div>
+      </DraggableBlock>
+    </div>);
+
+}
+
+/* ───────── One variation card: two framed previews side-by-side ───────── */
+function VariationCard({ variation, index, editOn, font, onPosChange, onImgTChange, onUploadImage, onDelete, onDuplicate }) {
+  useImageStore();
+  const img = ImageStore.get(variation.id);
+  const fileRef = React.useRef(null);
+  const squareRef = React.useRef(null);
+  const storyRef = React.useRef(null);
+
+  const onFile = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => ImageStore.set(variation.id, e.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const exportPng = async (frame) => {
+    const ref = frame === 'square' ? squareRef : storyRef;
+    if (!ref.current) return;
+    const node = ref.current;
+    try {
+      const dataUrl = await htmlToImage.toPng(node, {
+        pixelRatio: 2,
+        width: FRAMES[frame].w,
+        height: FRAMES[frame].h,
+        cacheBust: true
+      });
+      const link = document.createElement('a');
+      link.download = `${variation.id}-${FRAMES[frame].label.replace(':', 'x')}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Export failed', err);
+      alert('Export failed — check console');
+    }
+  };
+
+  const triggerDownload = (dataUrl, name) => {
+    const link = document.createElement('a');
+    link.download = name;
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportBoth = async () => {
+    if (!squareRef.current || !storyRef.current) return;
+    try {
+      const [sq, st] = await Promise.all([
+      htmlToImage.toPng(squareRef.current, { pixelRatio: 2, width: FRAMES.square.w, height: FRAMES.square.h, cacheBust: true }),
+      htmlToImage.toPng(storyRef.current, { pixelRatio: 2, width: FRAMES.story.w, height: FRAMES.story.h, cacheBust: true })]
+      );
+      triggerDownload(sq, `${variation.id}-1x1.png`);
+      await new Promise((r) => setTimeout(r, 600));
+      triggerDownload(st, `${variation.id}-9x16.png`);
+    } catch (err) {console.error('Export both failed', err);alert('Export failed — check console');}
+  };
+
+  return (
+    <div style={{
+      padding: 20,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 14,
+      width: '100%',
+      height: '100%',
+      boxSizing: 'border-box'
+    }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+          <div style={{ fontSize: 18, fontWeight: 700, color: '#1a1612', letterSpacing: -0.3 }}>
+            Variation {index + 1}
+          </div>
+          <div style={{ fontSize: 12, color: 'rgba(60,50,40,.5)' }}>
+            {img ? '● Image uploaded' : '○ No image yet'}
+          </div>
+        </div>
+        <div className="v-actions">
+          <input
+            ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
+            onChange={(e) => {onFile(e.target.files[0]);e.target.value = '';}} />
+          
+          <button className="v-btn"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {e.stopPropagation();fileRef.current.click();}}>
+            {img ? 'Replace image' : '↑ Upload image'}
+          </button>
+          {img &&
+          <button className="v-btn"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            onImgTChange(variation.id, 'square', null, { txKey: `center:${variation.id}` });
+            onImgTChange(variation.id, 'story', null, { txKey: `center:${variation.id}` });
+          }}
+          title="Reset image to center cover-fit" style={{ borderWidth: "0px 1px", padding: "5px 10px" }}>⌖ Center</button>
+          }
+          <button className="v-btn"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {e.stopPropagation();exportPng('square');}}>Export 1:1</button>
+          <button className="v-btn"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {e.stopPropagation();exportPng('story');}}>Export 9:16</button>
+          <button className="v-btn"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {e.stopPropagation();exportBoth();}}
+          style={{ background: '#1a1612', color: '#fff', borderColor: '#1a1612' }}>↓ Export both</button>
+          <button className="v-btn subtle"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {e.stopPropagation();onDuplicate();}} title="Duplicate">⧉</button>
+          <button className="v-btn subtle"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {e.stopPropagation();onDelete();}} title="Delete">✕</button>
+        </div>
+      </div>
+
+      {/* Frames side by side */}
+      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+        {['square', 'story'].map((frame) => {
+          const F = FRAMES[frame];
+          const scale = F.previewW / F.w;
+          return (
+            <div key={frame} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ fontSize: 11, color: 'rgba(60,50,40,.55)', fontWeight: 600, letterSpacing: 0.4, textTransform: 'uppercase' }}>
+                {F.label} · {F.w}×{F.h}
+              </div>
+              <div style={{
+                width: F.previewW, height: F.h * scale,
+                position: 'relative', overflow: 'hidden',
+                borderRadius: 8, border: '1px solid rgba(0,0,0,.06)',
+                background: '#f4f1ea'
+              }}>
+                <div style={{
+                  width: F.w, height: F.h,
+                  transform: `scale(${scale})`, transformOrigin: 'top left',
+                  position: 'absolute', top: 0, left: 0
+                }}>
+                  <AdFrame
+                    variation={variation}
+                    frame={frame}
+                    editOn={editOn}
+                    exportRef={frame === 'square' ? squareRef : storyRef}
+                    fontStack={font.stack}
+                    fontWeightOverride={font.weight}
+                    onUpload={(f) => f ? onFile(f) : fileRef.current.click()}
+                    onPosChange={(role, p) => onPosChange(variation.id, frame, role, p)}
+                    onImgTChange={(fr, t) => onImgTChange(variation.id, fr, t)} />
+                  
+                </div>
+              </div>
+            </div>);
+
+        })}
+      </div>
+    </div>);
+
+}
+
+/* ───────── Tweaks panel ───────── */
+function TweaksPanel({ state, setState, updateActiveBrand, onClose }) {
+  const brand = activeBrandOf(state);
+  const [activeIdx, setActiveIdx] = React.useState(0);
+  const csvRef = React.useRef(null);
+  const imgRef = React.useRef(null);
+  const [dragOver, setDragOver] = React.useState(false);
+
+  // Clamp active index when switching brands or deleting variations.
+  React.useEffect(() => {
+    if (activeIdx >= brand.variations.length) setActiveIdx(Math.max(0, brand.variations.length - 1));
+  }, [brand.id, brand.variations.length]);
+
+  const persist = (next) => {
+    setState(next);
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: next }, '*');
+  };
+
+  const update = (i, key, value) => {
+    updateActiveBrand((b) => ({
+      variations: b.variations.map((v, j) => j === i ? { ...v, [key]: value } : v)
+    }));
+  };
+
+  const setBrandField = (key, value) => {
+    updateActiveBrand(() => ({ [key]: value }));
+  };
+
+  const addVariation = () => {
+    const id = `v${Date.now().toString(36)}`;
+    updateActiveBrand((b) => ({
+      variations: [...b.variations, { id, c1: '', c2: '', c3: '' }]
+    }));
+    setActiveIdx(brand.variations.length); // new one at end
+  };
+
+  const duplicateActive = () => {
+    const v = brand.variations[activeIdx];
+    const id = `v${Date.now().toString(36)}`;
+    const copy = { ...v, id };
+    updateActiveBrand((b) => ({
+      variations: [...b.variations.slice(0, activeIdx + 1), copy, ...b.variations.slice(activeIdx + 1)]
+    }));
+    setActiveIdx(activeIdx + 1);
+  };
+
+  const deleteActive = () => {
+    if (brand.variations.length <= 1) {alert('Keep at least one variation');return;}
+    if (!confirm(`Delete variation ${activeIdx + 1}?`)) return;
+    const v = brand.variations[activeIdx];
+    ImageStore.clear(v.id);
+    updateActiveBrand((b) => ({ variations: b.variations.filter((_, j) => j !== activeIdx) }));
+    setActiveIdx(Math.max(0, activeIdx - 1));
+  };
+
+  const resetAll = () => {
+    if (!confirm('Reset ALL brands and variations to defaults? This cannot be undone.')) return;
+    persist(JSON.parse(JSON.stringify(DEFAULTS)));
+    setActiveIdx(0);
+  };
+
+  const onCsvFile = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const rows = parseCsv(e.target.result);
+      if (rows.length === 0) {alert('No rows found');return;}
+      const first = rows[0].map((s) => s.toLowerCase().trim());
+      const hasHeader = first.includes('c1') || first.includes('context') || first.includes('context_bar');
+      const data = hasHeader ? rows.slice(1) : rows;
+      updateActiveBrand(() => ({
+        variations: data.map((r, i) => ({
+          id: `v${Date.now().toString(36)}${i}`,
+          c1: r[0] || '', c2: r[1] || '', c3: r[2] || ''
+        }))
+      }));
+      setActiveIdx(0);
+    };
+    reader.readAsText(file);
+  };
+
+  const onImgFile = (file) => {
+    if (!file) return;
+    const v = brand.variations[activeIdx];
+    const reader = new FileReader();
+    reader.onload = (e) => ImageStore.set(v.id, e.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const onDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    const f = e.dataTransfer.files[0];
+    if (!f) return;
+    if (f.type === 'text/csv' || f.name.endsWith('.csv')) onCsvFile(f);else
+    if (f.type.startsWith('image/')) onImgFile(f);
+  };
+
+  const v = brand.variations[activeIdx];
+  if (!v) return null;
+
+  return (
+    <div className="tw-panel">
+      <div className="tw-head">
+        <div className="tw-title">Tweaks · {brand.name}</div>
+        <button className="tw-close" onClick={onClose}>×</button>
+      </div>
+
+      {/* Brand-level controls */}
+      <div className="tw-body" style={{ borderBottom: '1px solid #eee', paddingBottom: 12 }}>
+        <div className="tw-card" style={{ background: '#fafafa' }}>
+          <div className="tw-card-head">
+            <div className="tw-card-title" style={{ fontSize: 11, letterSpacing: 0.6, textTransform: 'uppercase', color: '#888' }}>Brand</div>
+          </div>
+          <div className="tw-field">
+            <label className="tw-label">Brand name</label>
+            <input className="tw-textarea" style={{ minHeight: 0, height: 34, fontFamily: 'inherit' }}
+            value={brand.name}
+            onChange={(e) => setBrandField('name', e.target.value)} />
+          </div>
+          <div className="tw-field" style={{ marginBottom: 0 }}>
+            <label className="tw-label">Font family</label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {FONTS.map((f) =>
+              <button key={f.id}
+              onClick={() => setBrandField('font', f.id)}
+              style={{
+                padding: '6px 10px',
+                borderRadius: 6,
+                border: brand.font === f.id ? '1.5px solid #0b0b0b' : '1px solid #ddd',
+                background: brand.font === f.id ? '#0b0b0b' : '#fff',
+                color: brand.font === f.id ? '#fff' : '#222',
+                fontFamily: f.stack,
+                fontSize: 12,
+                cursor: 'pointer'
+              }}>{f.label}</button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="tw-toolbar">
+        <input ref={csvRef} type="file" accept=".csv,text/csv" style={{ display: 'none' }}
+        onChange={(e) => onCsvFile(e.target.files[0])} />
+        <button className="tw-tool" onClick={() => csvRef.current.click()}>⤓ Import CSV</button>
+        <button className="tw-tool" onClick={addVariation}>+ Add</button>
+        <button className="tw-tool" onClick={duplicateActive}>⧉ Duplicate</button>
+        <button className="tw-tool danger" onClick={deleteActive}>✕ Delete</button>
+      </div>
+
+      <div className="tw-tabs">
+        {brand.variations.map((_, i) =>
+        <button key={i}
+        className={`tw-tab ${i === activeIdx ? 'active' : ''}`}
+        onClick={() => setActiveIdx(i)}>V{i + 1}</button>
+        )}
+        <button className="tw-tab add" onClick={addVariation}>+</button>
+      </div>
+
+      <div className="tw-body">
+        <div className="tw-card">
+          <div className="tw-card-head">
+            <div className="tw-card-title">Variation {activeIdx + 1}</div>
+          </div>
+
+          <div className="tw-field">
+            <label className="tw-label">Product image (session-only)</label>
+            <input ref={imgRef} type="file" accept="image/*" style={{ display: 'none' }}
+            onChange={(e) => onImgFile(e.target.files[0])} />
+            {ImageStore.get(v.id) ?
+            <div className="tw-thumb" style={{ backgroundImage: `url(${ImageStore.get(v.id)})` }}>
+                <button className="tw-thumb-replace" onClick={() => imgRef.current.click()}>Replace</button>
+              </div> :
+            <div
+              className={`tw-drop ${dragOver ? 'over' : ''}`}
+              onClick={() => imgRef.current.click()}
+              onDragOver={(e) => {e.preventDefault();setDragOver(true);}}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={onDrop}>
+                Drop image or CSV here
+                <div className="tw-drop-sub">Images are session-only · CSV replaces this brand's variations</div>
+              </div>
+            }
+          </div>
+
+          <div className="tw-field">
+            <label className="tw-label">Component 1 · Context bar</label>
+            <textarea className="tw-textarea" value={v.c1}
+            onChange={(e) => update(activeIdx, 'c1', e.target.value)} />
+          </div>
+
+          <div className="tw-field">
+            <label className="tw-label">Component 2 · Question</label>
+            <textarea className="tw-textarea" value={v.c2}
+            onChange={(e) => update(activeIdx, 'c2', e.target.value)} />
+          </div>
+
+          <div className="tw-field" style={{ marginBottom: 0 }}>
+            <label className="tw-label">Component 3 · Answer</label>
+            <textarea className="tw-textarea" style={{ minHeight: 84 }} value={v.c3}
+            onChange={(e) => update(activeIdx, 'c3', e.target.value)} />
+          </div>
+
+          <div className="tw-hint">
+            Drag the Q-block and A-block directly on the canvas to reposition.
+            Each aspect ratio has its own positions.
+          </div>
+        </div>
+      </div>
+
+      <div className="tw-footer">
+        <span style={{ flex: 1 }}>Copy, font + positions save to disk</span>
+        <button onClick={resetAll}>Reset all</button>
+      </div>
+    </div>);
+}
+
+/* ───────── Brand switcher (top of canvas) ───────── */
+function BrandSwitcher({ state, onSelect, onAdd, onRename, onDelete, editOn, onUndo, onRedo, canUndo, canRedo }) {
+  const [renamingId, setRenamingId] = React.useState(null);
+  const [draft, setDraft] = React.useState('');
+  const inputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (renamingId && inputRef.current) {inputRef.current.focus();inputRef.current.select();}
+  }, [renamingId]);
+
+  const commitRename = () => {
+    if (renamingId && draft.trim()) onRename(renamingId, draft.trim());
+    setRenamingId(null);
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', top: 12, left: '50%', transform: 'translateX(-50%)',
+      display: 'flex', alignItems: 'center', gap: 6, padding: 6,
+      background: 'rgba(255,255,255,0.95)',
+      border: '1px solid #e4e4e4', borderRadius: 999,
+      boxShadow: '0 4px 16px rgba(0,0,0,.08)',
+      zIndex: 50, fontSize: 13,
+      backdropFilter: 'blur(8px)'
+    }}>
+      <span style={{ padding: '0 10px', color: '#888', fontSize: 11, letterSpacing: 0.6, textTransform: 'uppercase' }}>Brand</span>
+      {state.brands.map((b) => {
+        const active = b.id === state.activeBrandId;
+        if (renamingId === b.id) {
+          return (
+            <input key={b.id} ref={inputRef} value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onBlur={commitRename}
+            onKeyDown={(e) => {if (e.key === 'Enter') commitRename();if (e.key === 'Escape') setRenamingId(null);}}
+            style={{
+              padding: '6px 12px', borderRadius: 999,
+              border: '1.5px solid #0b0b0b', background: '#fff',
+              fontSize: 13, outline: 'none', minWidth: 80
+            }} />);
+
+        }
+        return (
+          <button key={b.id}
+          onClick={() => onSelect(b.id)}
+          onDoubleClick={() => editOn && (setDraft(b.name), setRenamingId(b.id))}
+          title={editOn ? 'Double-click to rename' : b.name}
+          style={{
+            padding: '6px 12px', borderRadius: 999, border: 'none',
+            background: active ? '#0b0b0b' : 'transparent',
+            color: active ? '#fff' : '#222',
+            fontSize: 13, cursor: 'pointer', fontWeight: active ? 600 : 500
+          }}>
+            {b.name}
+          </button>);
+
+      })}
+      {editOn && <>
+        <span style={{ width: 1, height: 16, background: '#e4e4e4' }} />
+        <button onClick={onUndo} disabled={!canUndo} title="Undo (Ctrl/Cmd+Z)"
+        style={{ padding: '6px 10px', border: 'none', background: 'transparent', cursor: canUndo ? 'pointer' : 'not-allowed', color: canUndo ? '#444' : '#bbb', fontSize: 14, lineHeight: 1 }}>↶</button>
+        <button onClick={onRedo} disabled={!canRedo} title="Redo (Ctrl/Cmd+Shift+Z)"
+        style={{ padding: '6px 10px', border: 'none', background: 'transparent', cursor: canRedo ? 'pointer' : 'not-allowed', color: canRedo ? '#444' : '#bbb', fontSize: 14, lineHeight: 1 }}>↷</button>
+        <span style={{ width: 1, height: 16, background: '#e4e4e4' }} />
+        <button onClick={onAdd} title="Add brand"
+        style={{ padding: '6px 10px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#444', fontSize: 15, lineHeight: 1 }}>+</button>
+        {state.brands.length > 1 &&
+        <button onClick={() => onDelete(state.activeBrandId)} title="Delete current brand"
+        style={{ padding: '6px 10px', border: 'none', background: 'transparent', cursor: 'pointer', color: '#b33', fontSize: 13, lineHeight: 1 }}>✕</button>
+        }
+      </>}
+    </div>);
+
+}
+
+/* Very small CSV parser — handles quoted fields with commas + escaped quotes. */
+function parseCsv(text) {
+  const rows = [];
+  let row = [],cell = '',q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) {
+      if (c === '"' && text[i + 1] === '"') {cell += '"';i++;} else
+      if (c === '"') q = false;else
+      cell += c;
+    } else {
+      if (c === '"') q = true;else
+      if (c === ',') {row.push(cell);cell = '';} else
+      if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(cell);cell = '';
+        if (row.some((x) => x.trim() !== '')) rows.push(row);
+        row = [];
+      } else cell += c;
+    }
+  }
+  if (cell !== '' || row.length) {row.push(cell);if (row.some((x) => x.trim() !== '')) rows.push(row);}
+  return rows;
+}
+
+/* ───────── App ───────── */
+function App() {
+  const [state, _setState] = React.useState(TWEAKS);
+  const [editOpen, setEditOpen] = React.useState(false);
+
+  // Undo/redo history (snapshots of full state). Capped to keep memory sane.
+  const historyRef = React.useRef({ past: [], future: [], txKey: null, txTimer: null });
+  const HISTORY_CAP = 100;
+
+  const persistToHost = (next) => {
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: next }, '*');
+  };
+
+  /* setState({ next, txKey?, commit? })
+     - txKey: if provided, coalesces consecutive calls with the SAME key into a
+       single history entry. The first call snapshots prev into past; subsequent
+       calls update state without pushing.
+     - commit: true ends the current transaction immediately.
+     - With no opts: a normal discrete history entry. */
+  const setState = React.useCallback((next, opts) => {
+    _setState((prev) => {
+      const nv = typeof next === 'function' ? next(prev) : next;
+      const h = historyRef.current;
+      const txKey = opts && opts.txKey;
+      const commit = opts && opts.commit;
+
+      if (txKey) {
+        if (h.txKey !== txKey) {
+          // Starting a new transaction — snapshot prev.
+          h.past.push(prev);
+          if (h.past.length > HISTORY_CAP) h.past.shift();
+          h.future = [];
+          h.txKey = txKey;
+        }
+        // Auto-commit after a short idle (typing pause)
+        if (h.txTimer) clearTimeout(h.txTimer);
+        h.txTimer = setTimeout(() => {h.txKey = null;h.txTimer = null;}, 600);
+      } else {
+        // Discrete change — close any open transaction and push.
+        h.txKey = null;
+        if (h.txTimer) {clearTimeout(h.txTimer);h.txTimer = null;}
+        h.past.push(prev);
+        if (h.past.length > HISTORY_CAP) h.past.shift();
+        h.future = [];
+      }
+      if (commit) {h.txKey = null;if (h.txTimer) {clearTimeout(h.txTimer);h.txTimer = null;}}
+      persistToHost(nv);
+      return nv;
+    });
+  }, []);
+
+  const endTx = React.useCallback(() => {
+    const h = historyRef.current;
+    h.txKey = null;
+    if (h.txTimer) {clearTimeout(h.txTimer);h.txTimer = null;}
+  }, []);
+
+  const undo = React.useCallback(() => {
+    _setState((prev) => {
+      const h = historyRef.current;
+      h.txKey = null;
+      if (h.txTimer) {clearTimeout(h.txTimer);h.txTimer = null;}
+      if (h.past.length === 0) return prev;
+      const last = h.past.pop();
+      h.future.push(prev);
+      persistToHost(last);
+      return last;
+    });
+  }, []);
+
+  const redo = React.useCallback(() => {
+    _setState((prev) => {
+      const h = historyRef.current;
+      h.txKey = null;
+      if (h.txTimer) {clearTimeout(h.txTimer);h.txTimer = null;}
+      if (h.future.length === 0) return prev;
+      const next = h.future.pop();
+      h.past.push(prev);
+      persistToHost(next);
+      return next;
+    });
+  }, []);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const d = e.data || {};
+      if (d.type === '__activate_edit_mode') setEditOpen(true);
+      if (d.type === '__deactivate_edit_mode') setEditOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  // Keyboard: Cmd/Ctrl+Z undo, Cmd+Shift+Z or Ctrl+Y redo.
+  React.useEffect(() => {
+    const onKey = (e) => {
+      const tag = e.target && e.target.tagName || '';
+      const editable = tag === 'INPUT' || tag === 'TEXTAREA' || e.target && e.target.isContentEditable;
+      if (editable) return;
+      const meta = e.metaKey || e.ctrlKey;
+      if (!meta) return;
+      const k = e.key.toLowerCase();
+      if (k === 'z' && !e.shiftKey) {e.preventDefault();undo();} else
+      if (k === 'z' && e.shiftKey || k === 'y') {e.preventDefault();redo();}
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [undo, redo]);
+
+  const brand = activeBrandOf(state);
+
+  // Update ONLY the active brand; leaves the rest alone.
+  // Functional setState avoids stale closures when several edits fire quickly.
+  const updateActiveBrand = (updater) => {
+    setState((prev) => {
+      const activeId = prev.activeBrandId;
+      return {
+        ...prev,
+        brands: prev.brands.map((b) => b.id === activeId ? { ...b, ...updater(b) } : b)
+      };
+    });
+  };
+
+  const setActiveBrandId = (id) => {
+    setState((prev) => ({ ...prev, activeBrandId: id }));
+  };
+
+  const addBrand = () => {
+    setState((prev) => {
+      const b = defaultBrand({ name: `Brand ${prev.brands.length + 1}` });
+      return { ...prev, brands: [...prev.brands, b], activeBrandId: b.id };
+    });
+  };
+
+  const renameBrand = (id, name) => {
+    setState((prev) => ({
+      ...prev,
+      brands: prev.brands.map((b) => b.id === id ? { ...b, name } : b)
+    }));
+  };
+
+  const deleteBrand = (id) => {
+    if (state.brands.length <= 1) {alert('Keep at least one brand');return;}
+    if (!confirm(`Delete brand "${state.brands.find((b) => b.id === id).name}" and all its variations?`)) return;
+    // Clean up any image references
+    const b = state.brands.find((x) => x.id === id);
+    (b.variations || []).forEach((v) => ImageStore.clear(v.id));
+    const brands = state.brands.filter((b) => b.id !== id);
+    setState((prev) => {
+      const remaining = prev.brands.filter((b) => b.id !== id);
+      if (remaining.length === 0) return prev;
+      const activeBrandId = prev.activeBrandId === id ? remaining[0].id : prev.activeBrandId;
+      return { ...prev, brands: remaining, activeBrandId };
+    });
+  };
+
+  const onPosChange = (variationId, frame, role, p, opts) => {
+    updateActiveBrand((b) => ({
+      variations: b.variations.map((v) => {
+        if (v.id !== variationId) return v;
+        const curPos = v.pos || {};
+        const curFrame = curPos[frame] || DEFAULT_POS[frame];
+        return { ...v, pos: { ...curPos, [frame]: { ...curFrame, [role]: p } } };
+      })
+    }), opts || { txKey: `pos:${variationId}:${frame}:${role}` });
+  };
+
+  const onImgTChange = (variationId, frame, t, opts) => {
+    updateActiveBrand((b) => ({
+      variations: b.variations.map((v) => {
+        if (v.id !== variationId) return v;
+        return { ...v, imgT: { ...(v.imgT || {}), [frame]: t } };
+      })
+    }), opts || { txKey: `imgT:${variationId}:${frame}` });
+  };
+
+  const onUploadImage = (variationId, file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => ImageStore.set(variationId, e.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const onDelete = (i) => {
+    if (brand.variations.length <= 1) {alert('Keep at least one variation');return;}
+    if (!confirm(`Delete variation ${i + 1}?`)) return;
+    ImageStore.clear(brand.variations[i].id);
+    updateActiveBrand((b) => ({ variations: b.variations.filter((_, j) => j !== i) }));
+  };
+
+  const onDuplicate = (i) => {
+    const v = brand.variations[i];
+    const id = `v${Date.now().toString(36)}`;
+    updateActiveBrand((b) => ({
+      variations: [...b.variations.slice(0, i + 1), { ...v, id }, ...b.variations.slice(i + 1)]
+    }));
+  };
+
+  const font = getFont(brand.font);
+
+  return (
+    <>
+      <BrandSwitcher
+        state={state}
+        onUndo={undo}
+        onRedo={redo}
+        canUndo={historyRef.current.past.length > 0}
+        canRedo={historyRef.current.future.length > 0}
+        onSelect={setActiveBrandId}
+        onAdd={addBrand}
+        onRename={renameBrand}
+        onDelete={deleteBrand}
+        editOn={editOpen} />
+      
+      <DesignCanvas>
+        <DCSection
+          id="ads"
+          title={`${brand.name} — Ad Template`}
+          subtitle={
+          editOpen ?
+          "Drag the Q / A blocks on any canvas to reposition · Upload images per variation · Export PNG at 1:1 or 9:16" :
+          "Turn on Tweaks to upload images, edit copy, drag components, or import a CSV"
+          }>
+          
+          {brand.variations.map((v, i) =>
+          <DCArtboard
+            key={v.id}
+            id={v.id}
+            label={`V${i + 1}`}
+            width={720}
+            height={580}>
+            
+              <VariationCard
+              variation={v}
+              index={i}
+              editOn={editOpen}
+              font={font}
+              onPosChange={onPosChange}
+              onImgTChange={onImgTChange}
+              onUploadImage={onUploadImage}
+              onDelete={() => onDelete(i)}
+              onDuplicate={() => onDuplicate(i)} />
+            
+            </DCArtboard>
+          )}
+        </DCSection>
+      </DesignCanvas>
+      {editOpen && <TweaksPanel state={state} setState={setState} updateActiveBrand={updateActiveBrand} onClose={() => setEditOpen(false)} />}
+    </>);
+
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+// ─── porcellia-ads-skill: headless-export hooks ─────────────────────────────
+// These globals let an external renderer (Browserless / Playwright / etc.)
+// drive PNG export without clicking per-card buttons. The skill's renderer:
+//   1. Loads this HTML with EDITMODE pre-populated (incl. _seedSquare/Story).
+//   2. Polls window.__porcelliaReady() until canvases mount + images decode.
+//   3. Calls window.__exportAll() to get all 1:1 + 9:16 PNGs as dataURLs.
+window.__porcelliaReady = function () {
+  const nodes = document.querySelectorAll('[data-export-canvas]');
+  if (nodes.length === 0) return false;
+  // Every <img> inside an export canvas must be decoded before capture.
+  const imgs = document.querySelectorAll('[data-export-canvas] img');
+  for (const im of imgs) {
+    if (!im.complete || im.naturalWidth === 0) return false;
+  }
+  return true;
+};
+
+window.__exportAll = async function (opts) {
+  opts = opts || {};
+  const pixelRatio = opts.pixelRatio || 2;
+  if (typeof htmlToImage === 'undefined') throw new Error('htmlToImage not loaded');
+  const FRAME_PX = { square: { w: 1080, h: 1080 }, story: { w: 1080, h: 1920 } };
+  const nodes = Array.from(document.querySelectorAll('[data-export-canvas]'));
+  const out = [];
+  for (const node of nodes) {
+    const id = node.getAttribute('data-variation-id');
+    const frame = node.getAttribute('data-frame');
+    const px = FRAME_PX[frame];
+    const dataUrl = await htmlToImage.toPng(node, {
+      pixelRatio,
+      width: px.w,
+      height: px.h,
+      cacheBust: true,
+    });
+    out.push({ id, frame, dataURL: dataUrl });
+  }
+  return out;
+};
+</script>
+
+</body></html>
