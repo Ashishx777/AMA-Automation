@@ -41,24 +41,41 @@ chat** instead of the project-bundled copies.
 
 ---
 
-## Phase 1 — Greeting menu (clickable artifact, only on a fresh chat with no upload yet)
+## Phase 1 — Greeting menu (inline clickable artifact)
 
 If the operator's first message is just a hello / has no clear intent and
-no files attached, **render `porcellia-ads-skill/assets/welcome-menu.html`
-as an inline artifact** in your reply.
+no files attached, **emit `porcellia-ads-skill/assets/welcome-menu.html`
+as an inline HTML artifact in your reply.**
 
-The artifact shows 4 clickable cards (Make ads / Worksheet / Re-expand /
-Help). If they pick "Make ads", a second panel slides in with a chip
-grid of all 9 brands + "new brand". When the operator clicks, the
-artifact copies the intent string to their clipboard (e.g.
-`make ads for mileenia`) — they paste that back into chat.
+This means: read the file, then output an artifact block of type
+`text/html` whose body is the entire HTML verbatim. claude.ai renders
+the artifact **inside the chat panel** (the right-side artifact pane) —
+the operator sees the clickable menu without leaving the chat. Do NOT
+provide a download link, do NOT instruct them to open it in a new tab,
+do NOT paste the HTML as a code block. It must be an artifact.
 
-Above the artifact, write one short line so the operator knows what to do:
+Concretely (claude.ai's artifact syntax):
 
-> **Pick an option below. Click → paste back into chat.**
+```
+<artifact identifier="porcellia-welcome" type="text/html" title="Porcellia Ads">
+[entire content of welcome-menu.html, unchanged]
+</artifact>
+```
 
-Once they paste, treat their message as their committed intent and
-proceed to Phase 2.
+Above the artifact, one short text line for context:
+
+> **Pick below. Click an option, paste the line it copies into the chat box.**
+
+The artifact's behavior:
+- 4 cards: Make ads / Worksheet / Re-expand / Help.
+- Picking "Make ads" slides in a brand chip grid (9 brands + "new brand").
+- Clicking any final option copies an intent string to the clipboard
+  (e.g. `make ads for mileenia`, `help`, `make a copywriter worksheet`).
+- A "paste-back" hint card shows the exact string so the operator can
+  also copy it manually if their clipboard API is restricted.
+
+When the operator pastes the string into chat, treat it as their committed
+intent and proceed to Phase 2.
 
 **Skip the menu entirely if** the operator's first message:
 - Already attached a folder/zip → go straight to Phase 2.

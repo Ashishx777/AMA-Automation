@@ -22,14 +22,20 @@ python scripts/self_update.py --target /mnt/user-data/scripts/porcellia-ads-skil
 
 Updated? Say one line. No-op? Say nothing.
 
-## Phase 1 — Greeting menu (clickable artifact)
+## Phase 1 — Greeting menu (inline HTML artifact)
 
-On fresh chat with no upload / no clear intent, **render
-`assets/welcome-menu.html` as an inline artifact**. Operator picks an
-option (and a brand, if "Make ads"); the artifact copies the intent
-string to their clipboard. They paste it back into chat.
+On fresh chat with no upload / no clear intent, read
+`assets/welcome-menu.html` and emit its content **as an inline
+`text/html` artifact** so it renders inside the claude.ai chat panel
+(not as a download, not as a code block, not as an external tab).
 
-One-line lead above the artifact: *"Pick below — click → paste back."*
+Above the artifact, one short text line:
+
+> **Pick below — click an option, paste the line it copies into the chat box.**
+
+The artifact shows 4 cards (Make ads / Worksheet / Re-expand / Help);
+"Make ads" reveals a 9-brand chip grid. Click copies an intent string
+to the operator's clipboard. They paste it back into chat.
 
 Skip the menu if the operator already attached a folder, named a brand,
 or asked a specific question.
