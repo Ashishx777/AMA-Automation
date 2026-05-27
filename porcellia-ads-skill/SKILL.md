@@ -1,79 +1,61 @@
 ---
 name: porcellia-ads
-description: Builds social-proof ad creative — AMA / Q&A / Reddit-thread, forum endorsement, testimonial card, DM / iMessage / WhatsApp screenshot, polaroid review, AirDrop / notification mockup, problem-vs-solution, before/after — for Porcellia brands Rara, The Solved Skin, Mileenia, Zauv, Parman, Pragyanam, Gyros, Subtle, Atovio. Operator drops a folder (copy.csv + brand.json + images/) into chat; the skill reads each row, auto-expands any 1:1 source image to 9:16 via AI outpaint (with a brand-color padded fallback), renders all variations at 1080×1080 + 1080×1920 PNGs through a headless browser service, and returns a zip plus a local review.html where the operator marks Keep / Drop per variation, can Re-expand any image with a different AI model from a cost+strength comparison, and downloads only the approved PNGs as a final zip. Use whenever the user asks for AMA ads, Reddit-thread ads, social-proof ads, before-after ads, or any creative for a Porcellia brand — either by uploading a copy-and-images folder, or in prose ("3 AMAs for Mileenia, copy attached, here are the images").
+description: Builds social-proof ad creative — AMA / Q&A / Reddit-thread, forum endorsement, testimonial card, DM / iMessage / WhatsApp screenshot, polaroid review, AirDrop / notification mockup, problem-vs-solution, before/after — for Porcellia brands Rara, The Solved Skin, Mileenia, Zauv, Parman, Pragyanam, Gyros, Subtle, Atovio. Operator drops a folder (copy.csv + brand.json + images/) into chat; the skill expands 1:1 sources to 9:16 via the project's design.ai image connector, renders all variations as PNGs, and presents an inline artifact in the chat for Keep / Drop review with a one-click clipboard-copy of the approval string. Operator pastes the approval back, gets a zip of the approved full-resolution PNGs. Everything happens inside claude.ai — no local Chrome, no local CLI. Use whenever the user asks for AMA ads, Reddit-thread ads, social-proof ads, before-after ads, or any creative for a Porcellia brand.
 ---
 
 # Porcellia Ads — claude.ai skill
 
-End-to-end social-proof ad pipeline. Operator drops a folder, gets back a
-zip of finished 1:1 + 9:16 PNGs plus a review page to pick the keepers.
-V1 supports the **AMA** archetype end-to-end; Forum and Social Proof
-master are next.
+End-to-end social-proof ad pipeline that runs **entirely inside claude.ai**.
+Operator drops a folder, gets back a clickable review artifact in the chat,
+then pastes their approval string back for a final zip of keepers.
 
-## What this skill does
+V1 supports the **AMA** archetype end-to-end; Forum and Social Proof master
+have CSV schemas documented but the pipeline is not yet wired for them.
 
-1. Reads `copy.csv` + `brand.json` + an `images/` folder the operator drops in chat.
-2. For every image that's 1:1, auto-expands it to 9:16 via a real AI
-   outpaint provider (fal.ai Flux Fill Pro by default) — the previous
-   manual Photoshop step is gone.
-3. Mutates the EDITMODE block in `assets/ama.html` so it carries the new
-   brand + variations, with both per-frame images base64-embedded.
-4. Renders all PNGs through Browserless (a hosted headless browser).
-5. Produces a `review.html` with Keep / Drop / Re-expand-with-model-picker
-   per variation, and an Export-approved button that zips only the kept
-   PNGs.
-6. Returns the whole package as a downloadable zip.
+## Architectural rule
 
-## Required environment
+Everything happens **inside the claude.ai chat**:
+- Input via chat file attachment (folder or zip).
+- Brand detection + pairing via chat conversation (with inline image thumbnails).
+- Image expansion via the project's image-edit connector (Higgsfield / equivalent).
+- PNG render via Browserless (called from the Python sandbox).
+- Review surface = an **inline claude.ai artifact** (not a downloadable HTML).
+- Approval = operator pastes a one-line string back into chat.
+- Final delivery = a downloadable zip returned in the chat.
 
-| Variable            | Used for               | Required?                                |
-|---------------------|------------------------|------------------------------------------|
-| `BROWSERLESS_TOKEN` | Headless PNG rendering | Strongly recommended for PNG output      |
+No local Chrome. No local CLI. No file open dialogs.
 
-**1:1 → 9:16 expansion uses the project's design.ai image-edit connector** —
-Claude calls it directly as a tool call (Higgsfield / `generate_image` /
-`image_edit` / whichever is enabled). The Python pipeline then reads the
-connector's outputs from `uploads/expanded/` via `--skip-outpaint`.
+## The 5-phase flow
 
-If `BROWSERLESS_TOKEN` is missing, the skill **still completes** — it writes
-the populated HTML for the operator to open in Chrome and click Export per
-card. Always honest in the summary.
+### 1. Intake + brand detection (conversational)
 
-## How to drive it (instructions to Claude)
+Operator drops a folder/zip. Look in `/mnt/user-data/uploads/` for:
+- A CSV (any name; preference for one with "copy" in the name).
+- Optional `brand.json`.
+- Images — in an `images/` subfolder or loose.
 
-### 1. Detect the request
+Detect brand: `brand.json` → filename prefix → ask the operator (short list).
 
-Trigger when the user mentions:
-- AMA / Q&A / Reddit-thread / ask-me-anything ad
-- Any of the brand ids: `rara`, `solvedskin`, `mileenia`, `zauv`,
-  `parman`, `pragyanam`, `gyros`, `subtle`, `atovio`
-- A folder / CSV / image batch they want made into ads
+### 2. Pairing (conversational, only if needed)
 
-### 2. Gather inputs
+If every CSV row's `id` matches an image filename → proceed silently.
 
-If the operator uploaded files via the chat:
-- Look in `/mnt/user-data/uploads/` for a CSV (any name; one that has
-  `copy` in the name wins if multiple).
-- Look for `brand.json` (optional).
-- Look for an `images/` subfolder. If files were uploaded loose,
-  treat anything in `/mnt/user-data/uploads/` with an image extension
-  as an image and use the uploads dir as the images dir.
+If not → propose pairings as a markdown table with inline image thumbnails.
+Operator confirms or asks for swaps. Write a corrected `copy.csv` with
+explicit `image_filename` column and rename images on disk only after the
+operator's confirmation.
 
-If anything required is missing, ask **once**, briefly. Don't loop.
+### 3. Expand 1:1 → 9:16 via the design.ai connector
 
-### 3. Expand 1:1 → 9:16 via the design.ai image connector
+For each 1:1 image:
+- Call the project's image-edit connector with the source + the row's
+  `image_note` as prompt (or default: *"extend the background naturally,
+  same lighting, same surface, no people, no text, no logos"*).
+- Save to `/mnt/user-data/uploads/expanded/<id>_9x16.<ext>`.
 
-For each image in `uploads/images/` whose dimensions are 1:1, call the
-project's image-edit connector (Higgsfield `generate_image` /
-`image_edit` / whichever is enabled in this project) with the image and
-the row's `image_note` as prompt (or default to *"extend the background
-naturally, same lighting, same surface, no people, no text, no logos"*).
+Failures → skip; the pipeline substitutes a brand-color padded fallback.
 
-Save each result to `/mnt/user-data/uploads/expanded/<id>_9x16.<ext>`.
-If the connector fails for any row, skip — the pipeline substitutes a
-brand-color padded fallback automatically.
-
-### 4. Run the build
+### 4. Build
 
 ```bash
 python /mnt/skills/porcellia-ads/scripts/build.py \
@@ -81,87 +63,77 @@ python /mnt/skills/porcellia-ads/scripts/build.py \
     --archetype ama \
     --uploads /mnt/user-data/uploads \
     --out     /mnt/user-data/outputs \
-    --skip-outpaint               # use connector outputs from step 3
+    --skip-outpaint
 ```
 
-The script:
-- Reads CSV with **column synonyms** (`context_bar/c1`, `question_text/c2`, `answer_text/c3`).
-- Classifies each image (square / vertical / landscape).
-- For 1:1 sources: picks up connector-produced 9:16 from `uploads/expanded/`.
-  Missing ones → brand-color padded fallback.
-- Populates the AMA template's EDITMODE block.
-- If `BROWSERLESS_TOKEN` is set, renders PNGs via Browserless. Otherwise
-  skips render and writes only the populated HTML.
-- Writes `review.html` with Keep / Drop / Re-expand / Export-approved.
-- Zips everything to `/mnt/user-data/outputs/<brand>-<archetype>.zip`.
+Reads CSV (column synonyms ok), populates EDITMODE, renders PNGs via
+Browserless if `BROWSERLESS_TOKEN` is set, and produces a thumbnail-based
+`review.html`. Final stdout line: `[ads-summary] {JSON}`.
 
-Final line of stdout is `[ads-summary] {JSON}` — parse that to know
-exactly what happened.
+### 5. Review as inline artifact + approval
 
-### 4. Report back to the operator
+**Read `review.html` and emit its content as an inline artifact in your
+chat reply.** Don't link to it as a download — render it in the chat panel.
 
-Use the summary JSON. A short message is best:
+Inside the artifact, the operator:
+- Clicks Keep / Drop per tile.
+- Clicks **Re-expand…** on bad 9:16s, picks a model — the button copies
+  `re-expand v3 with stability` to the clipboard.
+- Clicks **Copy approval string** when done — copies `approve v1, v3, v5`
+  to the clipboard.
 
-> Rendered 8 variations for **Mileenia** (AMA). 6 used real outpaint (Flux Fill Pro, $0.05/img), 2 used padded fallback. PNGs and review page are in your downloads — open `review.html`, mark Keep / Drop, hit **Export approved** to get the final zip.
-
-Always link or mention:
-- The output zip (primary deliverable).
-- `review.html` (so they actually open it).
-- Whether any 9:16 used the padded fallback (so they know which to scrutinize).
-
-### 5. If the operator says "re-expand v3 with Stability"
-
-Re-run only that variation:
+Operator pastes the string back into chat. Then:
 
 ```bash
-python /mnt/skills/porcellia-ads/scripts/build.py \
-    --brand <brand-id> --archetype ama \
-    --uploads <same uploads folder, but only the row for v3 needed> \
-    --out /mnt/user-data/outputs \
-    --outpaint-model stability
+python /mnt/skills/porcellia-ads/scripts/build_approved_zip.py \
+    --approved   "v1, v3, v5" \
+    --pngs-dir   /mnt/user-data/outputs/pngs \
+    --out        /mnt/user-data/outputs/<brand>-approved.zip \
+    --populated-html /mnt/user-data/outputs/<brand>-ama-populated.html
 ```
 
-Or, faster, manipulate the single-row CSV and re-run for that variation
-only. The review UI also writes a queue to `localStorage.reexpandQueue`
-when the operator hits Re-expand — they can paste that JSON back in chat
-and ask Claude to process it.
+Return the zip as a downloadable file.
 
-## Folder contract
+For `re-expand <id> with <model>` paste-backs: call the connector again for
+that image with the requested model, save to `uploads/expanded/`, re-run
+`build.py --skip-outpaint`, render a fresh review artifact.
 
+## Required environment
+
+| Variable            | Used for               | Required?                                |
+|---------------------|------------------------|------------------------------------------|
+| `BROWSERLESS_TOKEN` | Headless PNG rendering | Strongly recommended for PNG output      |
+
+**1:1 → 9:16 expansion** uses the project's design.ai image-edit connector,
+not an API key in the sandbox.
+
+Missing `BROWSERLESS_TOKEN` → no PNGs, but the review artifact still works
+(thumbnails come from expanded/source images), and the approval zip includes
+the populated HTML so the operator can export PNGs from the template's
+in-page buttons.
+
+## Worksheet generator (sub-flow)
+
+If the operator has images but no copy yet:
+
+```bash
+python /mnt/skills/porcellia-ads/scripts/build_worksheet.py \
+    --images   /mnt/user-data/uploads/images \
+    --archetype ama \
+    --out      /mnt/user-data/outputs/worksheet.xlsx
 ```
-uploads/
-├─ copy.csv                  ← any column scheme; synonyms handled
-├─ brand.json                ← optional brand override
-└─ images/                   ← OR loose at uploads/ root
-    ├─ v1.jpg
-    ├─ v2.png
-    └─ v3.webp
-```
 
-Image filenames must start with (or contain) the variation `id` from
-the CSV. The CSV may not have an `id` column — synonyms are mapped, or
-ids are auto-generated as `v1, v2, …` in row order.
-
-## Outputs
-
-```
-outputs/
-├─ <brand>-<archetype>.zip            ← primary deliverable (everything below)
-├─ review.html                        ← Keep / Drop / Re-expand / Export-approved
-├─ <brand>-<archetype>-populated.html ← editable in browser (opens the template
-│                                       with all copy + images pre-filled)
-├─ pngs/
-│   ├─ v1_1x1.png
-│   ├─ v1_9x16.png
-│   └─ …
-└─ expanded/                          ← intermediate 9:16 outpaint outputs
-    ├─ v1_9x16.jpg
-    ├─ v1_9x16_padded.jpg             ← safe-fallback version
-    └─ …
-```
+Returns a downloadable .xlsx with image thumbnails in column A. Copywriter
+fills the empty cells, saves as CSV, sends back.
 
 ## Tone
 
-Direct. One short message to ask for anything missing, then run. After
-the run, surface the summary in 2–4 lines and the path to the zip and
-review.html. No celebration, no emojis. Production mode.
+Direct. Production mode. Surface paths, summaries, deltas. No celebration,
+no emojis.
+
+## Not in v1
+
+- Forum + Social Proof master archetypes.
+- Multi-brand batches.
+- Webhook-driven repo refresh (claude.ai pulls on-demand per chat).
+- Real-time Re-expand inside the artifact (currently paste-back-based).

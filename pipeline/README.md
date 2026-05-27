@@ -1,4 +1,18 @@
-# Porcellia Ads Pipeline
+# Porcellia Ads Pipeline (legacy / offline / power-user path)
+
+> **This is not the primary surface for the Porcellia ad system.**
+>
+> The system runs **inside claude.ai** — operator drops a folder in the
+> chat, the skill renders a Keep/Drop review artifact inline, operator
+> approves with a one-line clipboard paste-back. See `../porcellia-ads-skill/`
+> and `../PROJECT_INSTRUCTIONS.md`.
+>
+> This Node CLI exists for:
+> - Offline batches when the operator has no internet.
+> - Power users who prefer terminal + Playwright over chat orchestration.
+> - Regression testing / smoke tests of the underlying templates.
+>
+> Day-to-day operators should use the claude.ai project.
 
 Folder-driven batch renderer for the Porcellia social-proof ad templates
 (`AMA AD TEMPLATE.html`, `Forum Post Ad Template.html`,

@@ -255,24 +255,37 @@ def main() -> int:
             render_skipped_reason = str(e)
             log(f"Skipping render: {e}")
 
-    # ── Populate review variations with PNG paths (rel to review.html) ──
+    # ── Populate review variations with THUMBNAIL DATA URLs ─────────────
+    # The review HTML is rendered as a claude.ai inline artifact, which runs
+    # in a sandboxed iframe that can't fetch files from /mnt/user-data/.
+    # So we embed 256px JPEG thumbnails as base64 dataURLs directly.
     by_key = {(r["id"], r["frame"]): r["path"] for r in rendered}
+    THUMB = 320
     for rv in review_variations:
         sq_path = by_key.get((rv["id"], "square"))
         st_path = by_key.get((rv["id"], "story"))
-        rv["square"] = _rel(args.out, sq_path) if sq_path else f"pngs/{rv['id']}_1x1.png"
-        rv["story"]  = _rel(args.out, st_path) if st_path else f"pngs/{rv['id']}_9x16.png"
+        rv["square"] = _thumb_data_url(sq_path, THUMB) if sq_path else \
+                       _thumb_data_url_for_id(rv["id"], "square", expanded_dir, images_dir, THUMB)
+        rv["story"]  = _thumb_data_url(st_path, THUMB) if st_path else \
+                       _thumb_data_url_for_id(rv["id"], "story",  expanded_dir, images_dir, THUMB)
 
     # ── Write review.html ─────────────────────────────────────────────────
+    # Strip the full-resolution _seedSquare/_seedStory dataURLs from the
+    # brand object before embedding. The review UI uses its own thumbnails
+    # in review_variations[*].square / .story; embedding the full-res seeds
+    # too would balloon the artifact past claude.ai's size limit.
+    brand_for_review = {
+        k: v for k, v in base_brand.items() if k != "variations"
+    }
     review_payload = {
         "archetype": archetype,
-        "brand": base_brand,
+        "brand": brand_for_review,
         "anyStub": any_stub,
         "models": models_as_dicts(),
         "variations": review_variations,
     }
     review_path = write_review_page(args.out / "review.html", review_payload)
-    log(f"Wrote review page: {review_path}")
+    log(f"Wrote review page: {review_path} ({review_path.stat().st_size // 1024} KB)")
 
     # ── Zip everything ───────────────────────────────────────────────────
     zip_path = args.out / f"{args.brand}-{archetype}.zip"
@@ -323,6 +336,39 @@ def _rel(base: Path, p: str | None) -> str:
         return str(Path(p).resolve().relative_to(base.resolve()))
     except Exception:
         return str(p)
+
+
+def _thumb_data_url(image_path: str | None, max_dim: int) -> str:
+    """Read an image, resize to <=max_dim, return data:image/jpeg;base64,…"""
+    if not image_path:
+        return ""
+    p = Path(image_path)
+    if not p.exists():
+        return ""
+    try:
+        img = Image.open(p).convert("RGB")
+        img.thumbnail((max_dim, max_dim), Image.LANCZOS)
+        return to_data_url(img, fmt="JPEG", quality=78)
+    except Exception:
+        return ""
+
+
+def _thumb_data_url_for_id(vid: str, frame: str, expanded_dir: Path,
+                           images_dir: Path, max_dim: int) -> str:
+    """Fallback when no PNG was rendered (Browserless skipped). Use the
+    expanded/source image so the review tile still shows something."""
+    candidates: list[Path] = []
+    if frame == "story":
+        candidates.append(expanded_dir / f"{vid}_9x16.jpg")
+        candidates.append(expanded_dir / f"{vid}_9x16_padded.jpg")
+    # for square, fall back to the original source image
+    src = find_image(images_dir, vid)
+    if src:
+        candidates.append(src)
+    for c in candidates:
+        if c and c.exists():
+            return _thumb_data_url(str(c), max_dim)
+    return ""
 
 
 if __name__ == "__main__":
