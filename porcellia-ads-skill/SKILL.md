@@ -64,6 +64,11 @@ Operator drops a folder/zip. Look in `/mnt/user-data/uploads/` for:
 
 Detect brand: `brand.json` → filename prefix → ask the operator (short list).
 
+If inputs are messy (random image names, unfamiliar CSV columns, no
+`images/` subfolder), run `prep_job.py` to normalize everything into a
+clean folder. It renames images to `v1, v2, …`, aligns the CSV, writes
+`brand.json`, and emits a worksheet.xlsx — all in one call.
+
 ### 2. Pairing (conversational, only if needed)
 
 If every CSV row's `id` matches an image filename → proceed silently.

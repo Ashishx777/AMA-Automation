@@ -103,20 +103,22 @@ Wait for the folder upload and the brand. Once both are in, proceed to Phase 2.
 
 ```
 Drop your images folder (any names; I'll number them v1, v2, …). I'll
-return an .xlsx with each image as a thumbnail and empty copy cells next
-to it — the copywriter fills it in and saves as CSV.
+return a clean job folder with each image renamed v1, v2, … and an
+.xlsx the copywriter fills in.
 ```
 
-When images arrive, run:
+When images arrive, run `prep_job.py` (without a CSV, so copy cells are blank):
 
 ```bash
-python scripts/build_worksheet.py \
-    --images   /mnt/user-data/uploads/images \
-    --archetype ama \
-    --out      /mnt/user-data/outputs/worksheet.xlsx
+python scripts/prep_job.py \
+    --in-images /mnt/user-data/uploads \
+    --brand     <brand-id> \
+    --out       /mnt/user-data/outputs/<brand>-prep
 ```
 
-Return the .xlsx as a download.
+Then zip the `<brand>-prep` folder and return it. The copywriter opens
+the worksheet, fills the cells, saves as CSV, and the operator drops the
+filled folder back for the full ad build.
 
 ### Option 3: Re-expand a variation
 
@@ -166,8 +168,40 @@ Files land in `/mnt/user-data/uploads/`. Look for:
 3. Operator already named the brand in chat → use that.
 4. None of the above → ask the operator (short list).
 
-**Validate the CSV**: rows have `id`, copy columns are present (synonyms ok:
-`context_bar/c1`, `question_text/c2`, `answer_text/c3`). If anything is
+### Auto-prep if inputs are messy
+
+If **any** of these are true:
+- Images have random filenames (don't match variation ids).
+- CSV uses unfamiliar column names.
+- The folder is loose (no clean `images/` subfolder).
+
+Run `prep_job.py` to normalize everything in one shot:
+
+```bash
+python scripts/prep_job.py \
+    --in-images /mnt/user-data/uploads \
+    --in-csv    /mnt/user-data/uploads/<the-csv>.csv \
+    --brand     <brand-id> \
+    --out       /mnt/user-data/uploads/prepared
+```
+
+It renames images to `v1.<ext>`, `v2.<ext>`, … in natural-sort order
+(originals untouched), aligns the CSV rows positionally with the new ids,
+writes friendly-header `copy.csv` (`context_bar/question_text/answer_text`)
+with `image_filename` + `source_image` columns for sanity-check, writes
+`brand.json` with seeded defaults, and builds `worksheet.xlsx` with
+thumbnails + pre-filled copy.
+
+Parse the `[prep-summary] {JSON}` stdout. Surface one line:
+
+> *"Prepped 4 images → v1–v4. Aligned with 4 of 10 CSV rows (6 copy rows have no image). Continuing."*
+
+Then use `/mnt/user-data/uploads/prepared` as the uploads path for the
+rest of the chat.
+
+### Validate the CSV (after prep, or skip prep if inputs were already clean)
+
+Rows have `id`, copy columns present (synonyms ok). If anything is
 malformed, say what's wrong in one line and ask for a fix.
 
 ---
