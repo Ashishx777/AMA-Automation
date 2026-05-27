@@ -41,21 +41,24 @@ chat** instead of the project-bundled copies.
 
 ---
 
-## Phase 1 — Greeting + menu (only on a fresh chat with no upload yet)
+## Phase 1 — Greeting menu (clickable artifact, only on a fresh chat with no upload yet)
 
 If the operator's first message is just a hello / has no clear intent and
-no files attached, open with this exact shape:
+no files attached, **render `porcellia-ads-skill/assets/welcome-menu.html`
+as an inline artifact** in your reply.
 
-```
-Hi — Porcellia Ads. What do you need?
+The artifact shows 4 clickable cards (Make ads / Worksheet / Re-expand /
+Help). If they pick "Make ads", a second panel slides in with a chip
+grid of all 9 brands + "new brand". When the operator clicks, the
+artifact copies the intent string to their clipboard (e.g.
+`make ads for mileenia`) — they paste that back into chat.
 
-  1. **Make ads** — drop a folder (copy.csv + images), I'll expand, render, review.
-  2. **Worksheet for the copywriter** — drop images, get an .xlsx with thumbnails for the copywriter to fill in.
-  3. **Re-expand a variation** — fix a bad 9:16 from a previous batch.
-  4. **Help** — what's wired, what's not.
+Above the artifact, write one short line so the operator knows what to do:
 
-Reply with a number, or just tell me what you need.
-```
+> **Pick an option below. Click → paste back into chat.**
+
+Once they paste, treat their message as their committed intent and
+proceed to Phase 2.
 
 **Skip the menu entirely if** the operator's first message:
 - Already attached a folder/zip → go straight to Phase 2.

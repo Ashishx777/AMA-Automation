@@ -22,24 +22,17 @@ python scripts/self_update.py --target /mnt/user-data/scripts/porcellia-ads-skil
 
 Updated? Say one line. No-op? Say nothing.
 
-## Phase 1 — Greeting + menu (only on a fresh chat with no upload)
+## Phase 1 — Greeting menu (clickable artifact)
 
-If the operator's first message is just a hello / no clear intent / no
-files attached, open with:
+On fresh chat with no upload / no clear intent, **render
+`assets/welcome-menu.html` as an inline artifact**. Operator picks an
+option (and a brand, if "Make ads"); the artifact copies the intent
+string to their clipboard. They paste it back into chat.
 
-```
-Hi — Porcellia Ads. What do you need?
+One-line lead above the artifact: *"Pick below — click → paste back."*
 
-  1. **Make ads** — drop a folder, I'll expand, render, review.
-  2. **Worksheet for the copywriter** — drop images, get an .xlsx for them to fill.
-  3. **Re-expand a variation** — fix a bad 9:16 from a previous batch.
-  4. **Help** — what's wired, what's not.
-
-Reply with a number, or just tell me what you need.
-```
-
-Skip the menu if they already attached a folder, named a brand, or asked
-a specific question. Then walk them through brand + folder upload step by step.
+Skip the menu if the operator already attached a folder, named a brand,
+or asked a specific question.
 
 ## Architectural rule
 
