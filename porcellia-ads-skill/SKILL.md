@@ -12,6 +12,17 @@ then pastes their approval string back for a final zip of keepers.
 V1 supports the **AMA** archetype end-to-end; Forum and Social Proof master
 have CSV schemas documented but the pipeline is not yet wired for them.
 
+## Phase 0 — Self-update at chat start
+
+```bash
+python scripts/self_update.py --target /mnt/user-data/scripts/porcellia-ads-skill
+```
+
+Checks `Ashishx777/AMA-Automation` on GitHub, downloads any new commits,
+and writes them to `/mnt/user-data/scripts/porcellia-ads-skill/`. Cheap
+when there's no update (one HEAD request). On update, switch to using
+the scripts from the updated path for the rest of the chat.
+
 ## Architectural rule
 
 Everything happens **inside the claude.ai chat**:

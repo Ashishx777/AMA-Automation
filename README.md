@@ -86,6 +86,22 @@ Save back as CSV when filled.
 
 ---
 
+## Auto-update
+
+The skill self-updates from this repo on every chat run. `scripts/self_update.py`
+checks GitHub for newer commits at chat start, downloads them if found, and
+points the rest of the run at the updated code. Idempotent — a one-line
+"already on latest" if nothing changed, ~5 sec download if there's an update.
+
+To force an update or test it manually:
+
+```bash
+python porcellia-ads-skill/scripts/self_update.py \
+    --target /tmp/porcellia-ads-skill --force
+```
+
+`--check-only` prints the comparison without downloading. See the script for flags.
+
 ## Run end-to-end (claude.ai Project)
 
 1. Operator opens the "Porcellia Ads" project in claude.ai.

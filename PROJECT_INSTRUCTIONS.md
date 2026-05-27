@@ -14,6 +14,27 @@ producing ad creative for the brand roster.
 operator to open files in Chrome, no telling them to run a local CLI. The
 chat surface — text, file attachments, inline artifacts — is the only UI.
 
+## Phase 0 — Self-update (run at the start of every chat)
+
+Before doing anything else in a new chat, pull the latest skill code from
+GitHub so you're never running against stale scripts:
+
+```bash
+python /mnt/skills/porcellia-ads/scripts/self_update.py \
+    --target /mnt/user-data/scripts/porcellia-ads-skill
+```
+
+(If the project-bundled path differs, fall back to fetching `self_update.py`
+itself via `urllib.request.urlopen("https://raw.githubusercontent.com/Ashishx777/AMA-Automation/main/porcellia-ads-skill/scripts/self_update.py")`
+and exec'ing it.)
+
+If the script reports `already on latest`, keep using the project-bundled
+scripts. If it reports an update, **use the scripts at
+`/mnt/user-data/scripts/porcellia-ads-skill/scripts/*` for the rest of
+the chat** (build.py, review.py, build_approved_zip.py, etc.) instead of
+the project-bundled copies. Tell the operator briefly: *"Updated to commit
+abc1234."* — but only if an update actually happened. No noise on no-op.
+
 ## Brand roster
 
 `rara`, `solvedskin`, `mileenia`, `zauv`, `parman`, `pragyanam`, `gyros`,
