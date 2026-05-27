@@ -12,16 +12,34 @@ then pastes their approval string back for a final zip of keepers.
 V1 supports the **AMA** archetype end-to-end; Forum and Social Proof master
 have CSV schemas documented but the pipeline is not yet wired for them.
 
-## Phase 0 — Self-update at chat start
+## Phase 0 — Self-update (silent unless updated)
+
+On the first message of every new chat:
 
 ```bash
 python scripts/self_update.py --target /mnt/user-data/scripts/porcellia-ads-skill
 ```
 
-Checks `Ashishx777/AMA-Automation` on GitHub, downloads any new commits,
-and writes them to `/mnt/user-data/scripts/porcellia-ads-skill/`. Cheap
-when there's no update (one HEAD request). On update, switch to using
-the scripts from the updated path for the rest of the chat.
+Updated? Say one line. No-op? Say nothing.
+
+## Phase 1 — Greeting + menu (only on a fresh chat with no upload)
+
+If the operator's first message is just a hello / no clear intent / no
+files attached, open with:
+
+```
+Hi — Porcellia Ads. What do you need?
+
+  1. **Make ads** — drop a folder, I'll expand, render, review.
+  2. **Worksheet for the copywriter** — drop images, get an .xlsx for them to fill.
+  3. **Re-expand a variation** — fix a bad 9:16 from a previous batch.
+  4. **Help** — what's wired, what's not.
+
+Reply with a number, or just tell me what you need.
+```
+
+Skip the menu if they already attached a folder, named a brand, or asked
+a specific question. Then walk them through brand + folder upload step by step.
 
 ## Architectural rule
 
