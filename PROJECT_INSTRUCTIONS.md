@@ -241,18 +241,55 @@ The artifact gives the operator:
 - Re-expand… on tiles that started as 1:1.
 - **Copy approval string** button — copies `approve v1, v3, v5` to clipboard.
 
-The operator pastes the approval string back. When they do, run:
+The operator pastes the approval string back. Parse the ratio filter if
+present (`approve v1, v3 — story only` or `… — square only`); default is `both`.
+
+When you receive the paste-back, run:
 
 ```bash
 python scripts/build_approved_zip.py \
-    --approved   "v1, v3, v5" \
-    --pngs-dir   /mnt/user-data/outputs/pngs \
-    --out        /mnt/user-data/outputs/<brand>-approved.zip \
-    --populated-html /mnt/user-data/outputs/<brand>-ama-populated.html
+    --approved       "v1, v3, v5" \
+    --brand          <brand-id> \
+    --ratio          both                # or "square" or "story"
+    --pngs-dir       /mnt/user-data/outputs/pngs \
+    --populated-html /mnt/user-data/outputs/<brand>-ama-populated.html \
+    --out            /mnt/user-data/outputs/<brand>-approved.zip
 ```
 
-Return the resulting zip as a downloadable file. One-line summary: *"3 of 10
-approved. Zip ready."*
+The script outputs `[zip-summary] {JSON}` on the final stdout line. Parse it.
+
+### Export rules (what's in / out)
+
+In the zip:
+- `<brand>_<id>_1x1.png` and/or `<brand>_<id>_9x16.png` for each approved id.
+- `approved.json` manifest.
+- Populated HTML fallback (renamed `no_pngs_export.html`) — ONLY when no PNGs exist.
+
+Never in the zip:
+- Dropped (non-approved) variations.
+- `expanded/*` intermediate connector outputs.
+- Padded fallback JPGs.
+- `review.html`.
+- Operator's input CSV / brand.json / images / worksheet.
+
+### Reporting to the operator
+
+After the run, surface the JSON in plain English. Examples:
+
+> "Zipped 3 approved (mileenia_v1_1x1.png + 9:16, mileenia_v3_*, mileenia_v5_*). Download below."
+
+If `missing` is non-empty (PNGs weren't rendered for one or more approved ids,
+typically because `BROWSERLESS_TOKEN` was unset at build time):
+
+> "Heads up — v3 and v5 were approved but had no PNGs (Browserless wasn't set). Want me to re-run with PNG rendering on?"
+
+If `html_fallback_included` is true:
+
+> "No PNGs were rendered, so the zip contains `no_pngs_export.html`. Open it in Chrome and click Export on each card — that's the manual fallback. Or set `BROWSERLESS_TOKEN` and I'll re-run."
+
+If `status` is "error" (empty approval list):
+
+> "Nothing in the approval string — paste again with at least one id, e.g. `approve v1`."
 
 For `re-expand <id> with <model>` paste-backs: handle as the Phase-3 single-image
 flow described above.

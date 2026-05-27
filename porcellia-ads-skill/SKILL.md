@@ -110,17 +110,26 @@ Inside the artifact, the operator:
 - Clicks **Copy approval string** when done — copies `approve v1, v3, v5`
   to the clipboard.
 
-Operator pastes the string back into chat. Then:
+Operator pastes the string back. Parse the ratio filter if present
+(`approve v1, v3 — story only` or `… — square only`); default is `both`.
 
 ```bash
 python /mnt/skills/porcellia-ads/scripts/build_approved_zip.py \
-    --approved   "v1, v3, v5" \
-    --pngs-dir   /mnt/user-data/outputs/pngs \
-    --out        /mnt/user-data/outputs/<brand>-approved.zip \
-    --populated-html /mnt/user-data/outputs/<brand>-ama-populated.html
+    --approved       "v1, v3, v5" \
+    --brand          <brand-id> \
+    --ratio          both \
+    --pngs-dir       /mnt/user-data/outputs/pngs \
+    --populated-html /mnt/user-data/outputs/<brand>-ama-populated.html \
+    --out            /mnt/user-data/outputs/<brand>-approved.zip
 ```
 
-Return the zip as a downloadable file.
+Parse `[zip-summary] {JSON}`. Files in the zip are brand-prefixed
+(`mileenia_v1_1x1.png`). Surface `missing` to the operator; if
+`html_fallback_included` is true, tell them PNG render was off and the
+zip contains the populated HTML for manual export.
+
+Never include dropped variations, intermediate connector outputs, padded
+fallbacks, the review HTML, or operator inputs in the zip.
 
 For `re-expand <id> with <model>` paste-backs: call the connector again for
 that image with the requested model, save to `uploads/expanded/`, re-run
