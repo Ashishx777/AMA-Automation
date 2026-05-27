@@ -185,20 +185,24 @@ operator confirmation.
 
 ---
 
-## Phase 4 — Expand 1:1 → 9:16 via the design.ai connector
+## Phase 4 — Expand 1:1 → 9:16  **SKIPPED in v1**
 
-For every 1:1 image:
-- Call the project's image-edit connector (Higgsfield `generate_image` /
-  `image_edit` / whichever is enabled).
-- **Prompt**: row's `image_note` if present; else
-  *"extend the background of this product photo naturally, same lighting,
-  same surface, no people, no text, no logos"*.
-- **Save to**: `/mnt/user-data/uploads/expanded/<id>_9x16.<ext>`.
+No image-edit connector is wired into this project yet. Do NOT try to call
+Higgsfield / `generate_image` / any image-editing tool — none are available.
 
-Failures for individual rows → skip (the pipeline substitutes brand-color
-padded fallback). Don't block the whole run on one bad expansion.
+**Skip this phase entirely.** Move directly to Phase 5. The pipeline's
+`--skip-outpaint` mode looks for connector outputs in `uploads/expanded/`,
+finds nothing, and substitutes a **brand-color padded 9:16** for every 1:1
+source automatically. Padding is safe and on-brand; bars top and bottom.
 
-Tell the operator the count as it progresses: *"Expanding 3/10..."*
+Tell the operator one line before Phase 5:
+
+> *"No AI expand connector yet — 9:16 frames will use brand-color padding (top + bottom bars in the brand accent). Real outpaint wires in later, no code change needed."*
+
+When a connector (Higgsfield or similar) is eventually enabled in this
+project, this phase activates with no other changes — Claude calls the
+tool per 1:1 image, saves outputs to `/mnt/user-data/uploads/expanded/`,
+and the pipeline picks them up via `--skip-outpaint`.
 
 ---
 

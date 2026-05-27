@@ -151,8 +151,11 @@ dict.
 
 ## Honest caveats
 
-- **Outpaint quality varies.** ~10% of expansions need a different model. The review
-  UI's "Re-expand…" button is for exactly that — pick a different provider per variation.
+- **AI 1:1 → 9:16 outpaint is not wired in v1.** No image-edit connector is enabled
+  in the claude.ai project yet. The pipeline falls back to **brand-color padded 9:16**
+  for every 1:1 source — bars top and bottom in the brand accent. Padding is safe
+  and on-brand; when a connector (Higgsfield / equivalent) is enabled later, real
+  outpaint activates automatically with no code change.
 - **Browserless costs scale with volume.** Free tier covers light use; production batches
   may want a paid tier or a self-hosted Playwright service.
 - **Forum + Social Proof master pipelines are not wired in v1.** Use the original

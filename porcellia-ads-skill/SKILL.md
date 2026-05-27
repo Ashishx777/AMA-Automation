@@ -73,15 +73,17 @@ Operator confirms or asks for swaps. Write a corrected `copy.csv` with
 explicit `image_filename` column and rename images on disk only after the
 operator's confirmation.
 
-### 3. Expand 1:1 → 9:16 via the design.ai connector
+### 3. Expand 1:1 → 9:16  **SKIPPED in v1**
 
-For each 1:1 image:
-- Call the project's image-edit connector with the source + the row's
-  `image_note` as prompt (or default: *"extend the background naturally,
-  same lighting, same surface, no people, no text, no logos"*).
-- Save to `/mnt/user-data/uploads/expanded/<id>_9x16.<ext>`.
+No image-edit connector is wired yet. Do NOT call any image-editing tool;
+none are available in this project. Move directly to step 4 — the pipeline
+uses brand-color padded fallback for every 1:1 source.
 
-Failures → skip; the pipeline substitutes a brand-color padded fallback.
+One line to the operator before running the build:
+> *"No AI expand connector yet — 9:16 frames will use brand-color padding."*
+
+When a connector is enabled later (Higgsfield / equivalent), this step
+activates automatically with no pipeline change required.
 
 ### 4. Build
 
