@@ -26,21 +26,18 @@ master are next.
 
 ## Required environment
 
-The skill calls two external services. Set their keys in the chat session
-(use `os.environ['…'] = …` in a Python cell *before* running the build,
-or instruct the operator to add them to their claude.ai project secrets):
+| Variable            | Used for               | Required?                                |
+|---------------------|------------------------|------------------------------------------|
+| `BROWSERLESS_TOKEN` | Headless PNG rendering | Strongly recommended for PNG output      |
 
-| Variable             | Used by                  | Required?                                              |
-|----------------------|--------------------------|--------------------------------------------------------|
-| `FAL_KEY`            | fal.ai outpaint          | Required for real outpaint; without it falls back to padded |
-| `BROWSERLESS_TOKEN`  | PNG rendering            | Required for PNG output; without it skill returns HTML only |
-| `OPENAI_API_KEY`     | OpenAI outpaint (option) | Only if operator picks gpt-image-1 in the model picker |
-| `STABILITY_API_KEY`  | Stability outpaint       | Only if picked                                          |
+**1:1 → 9:16 expansion uses the project's design.ai image-edit connector** —
+Claude calls it directly as a tool call (Higgsfield / `generate_image` /
+`image_edit` / whichever is enabled). The Python pipeline then reads the
+connector's outputs from `uploads/expanded/` via `--skip-outpaint`.
 
-If a key is missing, the skill **still completes** — outpaint falls back
-to a brand-color padded image (visible bars but never wrong), and PNG
-rendering falls back to "operator opens the HTML and clicks Export Both
-per card." The skill is honest about what happened in the summary.
+If `BROWSERLESS_TOKEN` is missing, the skill **still completes** — it writes
+the populated HTML for the operator to open in Chrome and click Export per
+card. Always honest in the summary.
 
 ## How to drive it (instructions to Claude)
 
@@ -64,7 +61,19 @@ If the operator uploaded files via the chat:
 
 If anything required is missing, ask **once**, briefly. Don't loop.
 
-### 3. Run the build
+### 3. Expand 1:1 → 9:16 via the design.ai image connector
+
+For each image in `uploads/images/` whose dimensions are 1:1, call the
+project's image-edit connector (Higgsfield `generate_image` /
+`image_edit` / whichever is enabled in this project) with the image and
+the row's `image_note` as prompt (or default to *"extend the background
+naturally, same lighting, same surface, no people, no text, no logos"*).
+
+Save each result to `/mnt/user-data/uploads/expanded/<id>_9x16.<ext>`.
+If the connector fails for any row, skip — the pipeline substitutes a
+brand-color padded fallback automatically.
+
+### 4. Run the build
 
 ```bash
 python /mnt/skills/porcellia-ads/scripts/build.py \
@@ -72,15 +81,14 @@ python /mnt/skills/porcellia-ads/scripts/build.py \
     --archetype ama \
     --uploads /mnt/user-data/uploads \
     --out     /mnt/user-data/outputs \
-    --outpaint-model flux-fill-pro      # default; safe to omit
+    --skip-outpaint               # use connector outputs from step 3
 ```
 
 The script:
-- Reads CSV with **column synonyms** (handles `context_bar/c1`,
-  `question_text/c2`, `answer_text/c3`).
+- Reads CSV with **column synonyms** (`context_bar/c1`, `question_text/c2`, `answer_text/c3`).
 - Classifies each image (square / vertical / landscape).
-- For 1:1 sources, calls the outpaint provider. If `FAL_KEY` is missing
-  or the call fails, falls back to padded automatically.
+- For 1:1 sources: picks up connector-produced 9:16 from `uploads/expanded/`.
+  Missing ones → brand-color padded fallback.
 - Populates the AMA template's EDITMODE block.
 - If `BROWSERLESS_TOKEN` is set, renders PNGs via Browserless. Otherwise
   skips render and writes only the populated HTML.

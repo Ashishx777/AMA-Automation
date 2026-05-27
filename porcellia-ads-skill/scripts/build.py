@@ -103,6 +103,10 @@ def main() -> int:
     ap.add_argument("--out",     type=Path, default=Path("/mnt/user-data/outputs"))
     ap.add_argument("--outpaint-model", default="flux-fill-pro",
                     help="Outpaint model id. Falls back to padded if its key is missing.")
+    ap.add_argument("--skip-outpaint", action="store_true",
+                    help="Use pre-expanded 9:16s from <uploads>/expanded/ (Claude already "
+                         "called the design.ai image connector). Falls back to padded if a "
+                         "specific variation's expanded image is missing.")
     ap.add_argument("--pixel-ratio", type=int, default=2)
     ap.add_argument("--no-render", action="store_true",
                     help="Skip Browserless render; only produce the populated HTML.")
@@ -173,11 +177,35 @@ def main() -> int:
                 expanded_path = expanded_dir / f"{row['id']}_9x16.jpg"
                 # Always write a padded fallback alongside.
                 write_padded_alongside(src_path, expanded_dir, row["id"], base_brand)
-                result = outpaint(
-                    src_path=src_path, dst_path=expanded_path,
-                    model_id=args.outpaint_model, brand=base_brand,
-                    prompt=row.get("image_note", ""),
-                )
+
+                # --skip-outpaint: look for an already-expanded image that the
+                # design.ai connector (e.g. Higgsfield) produced upstream of
+                # this script. Accept any common extension.
+                preexpanded = None
+                if args.skip_outpaint:
+                    for ext in (".jpg", ".jpeg", ".png", ".webp"):
+                        cand = args.uploads / "expanded" / f"{row['id']}_9x16{ext}"
+                        if cand.exists():
+                            preexpanded = cand; break
+                    if preexpanded:
+                        # Use the connector's output as the 9:16; copy it into
+                        # out/expanded so downstream looks the same.
+                        from shutil import copyfile
+                        copyfile(preexpanded, expanded_path)
+                        result = {"out_path": str(expanded_path), "model": "design.ai-connector", "stub": False}
+                    else:
+                        # Connector didn't supply one for this row — fall back to padded.
+                        result = outpaint(
+                            src_path=src_path, dst_path=expanded_path,
+                            model_id="padded", brand=base_brand,
+                            prompt=row.get("image_note", ""),
+                        )
+                else:
+                    result = outpaint(
+                        src_path=src_path, dst_path=expanded_path,
+                        model_id=args.outpaint_model, brand=base_brand,
+                        prompt=row.get("image_note", ""),
+                    )
                 if result.get("stub"):
                     any_stub = True
                 with Image.open(expanded_path) as story:

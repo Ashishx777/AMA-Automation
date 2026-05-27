@@ -41,7 +41,26 @@ CSV column names are flexible — `context_bar / question_text / answer_text`
 (Porcellia convention) and `c1 / c2 / c3` (canonical) both work. The script
 normalizes synonyms via `porcellia-ads-skill/scripts/utils.py`.
 
-## Standard run
+## Standard run (two phases)
+
+### Phase 1 — Expand 1:1 sources to 9:16
+
+For every image in `uploads/images/` whose dimensions are 1:1, call the
+project's image-edit connector (Higgsfield / whichever `generate_image` /
+`image_edit` / `outpaint` tool is enabled) to extend the canvas to 1080×1920.
+
+- Source: the 1:1 image
+- Prompt: use the row's `image_note` if present; otherwise default to
+  `"extend the background of this product photo naturally, same lighting,
+  same surface, no people, no text, no logos"`
+- Save the result to: `/mnt/user-data/uploads/expanded/<id>_9x16.<ext>`
+  (preserve the connector's output extension; jpg/png/webp all accepted)
+
+If the connector fails or doesn't return a usable image for some `<id>`,
+skip — the pipeline will substitute a brand-color padded fallback for
+that variation automatically.
+
+### Phase 2 — Run the pipeline
 
 ```bash
 python porcellia-ads-skill/scripts/build.py \
@@ -49,15 +68,16 @@ python porcellia-ads-skill/scripts/build.py \
     --archetype ama \
     --uploads /mnt/user-data/uploads \
     --out     /mnt/user-data/outputs \
-    --outpaint-model flux-fill-pro     # default; safe to omit
+    --skip-outpaint               # use the connector's expanded images from phase 1
 ```
 
 The script:
 
 1. Reads the CSV (column-synonym-aware), the brand override, and the images folder.
 2. Classifies each image (square / vertical / landscape).
-3. For 1:1 sources, calls the outpaint provider (default fal.ai Flux Fill Pro). If
-   `FAL_KEY` is missing or the call fails, falls back to a brand-color padded 9:16.
+3. For 1:1 sources: looks for `uploads/expanded/<id>_9x16.*` from phase 1.
+   If found, uses it as the 9:16 source. If not, falls back to a brand-color
+   padded image so the run never crashes.
 4. Populates the EDITMODE block in `porcellia-ads-skill/assets/ama.html` with the
    active brand + new variations, base64-embedding both per-frame images.
 5. If `BROWSERLESS_TOKEN` is set, renders all PNGs via Browserless. Otherwise writes
@@ -107,15 +127,18 @@ when done.
 
 ## Required environment
 
-| Variable             | Used for                                | Required? |
-|----------------------|-----------------------------------------|-----------|
-| `FAL_KEY`            | fal.ai outpaint                         | Strongly recommended |
-| `BROWSERLESS_TOKEN`  | Headless PNG rendering                  | Strongly recommended for PNG output |
-| `OPENAI_API_KEY`     | OpenAI gpt-image-1 (alternate outpaint) | Only if operator picks it |
-| `STABILITY_API_KEY`  | Stability outpaint                      | Only if operator picks it |
+| Variable             | Used for                  | Required? |
+|----------------------|---------------------------|-----------|
+| `BROWSERLESS_TOKEN`  | Headless PNG rendering    | Strongly recommended for PNG output |
 
-Missing keys never crash the pipeline — outpaint falls back to padded; render
-falls back to operator-clicks-Export-locally. Always flag what happened.
+**1:1 → 9:16 expansion uses the design.ai image-edit connector** (see Phase 1
+above) — no API key in the Python sandbox. The connector is invoked by you
+(Claude) directly as a tool call, then `build.py --skip-outpaint` reads the
+results from `uploads/expanded/`.
+
+Missing `BROWSERLESS_TOKEN` never crashes the pipeline — it just skips PNG render
+and the operator clicks Export per card in the populated HTML. Always flag what
+happened in the summary.
 
 ## Tone
 

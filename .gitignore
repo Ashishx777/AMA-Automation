@@ -52,8 +52,10 @@ Desktop.ini
 *.swo
 
 # ─── Local-only artifacts ────────────────────────────────────────────────
-.claude/                       # local Claude Code settings + skill drafts
-.design-canvas.state.json      # local design-canvas state
+# local Claude Code settings + skill drafts
+.claude/
+# local design-canvas state
+.design-canvas.state.json
 .env
 .env.local
 secrets.json
