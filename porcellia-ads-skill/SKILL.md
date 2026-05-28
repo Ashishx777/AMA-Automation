@@ -122,21 +122,28 @@ Operator pastes the string back. Parse the ratio filter if present
 
 ```bash
 python /mnt/skills/porcellia-ads/scripts/build_approved_zip.py \
-    --approved       "v1, v3, v5" \
-    --brand          <brand-id> \
-    --ratio          both \
-    --pngs-dir       /mnt/user-data/outputs/pngs \
-    --populated-html /mnt/user-data/outputs/<brand>-ama-populated.html \
-    --out            /mnt/user-data/outputs/<brand>-approved.zip
+    --approved "v1, v3, v5" \
+    --brand    <brand-id> \
+    --ratio    both \
+    --pngs-dir /mnt/user-data/outputs/pngs \
+    --out      /mnt/user-data/outputs/<brand>-approved.zip
 ```
 
-Parse `[zip-summary] {JSON}`. Files in the zip are brand-prefixed
-(`mileenia_v1_1x1.png`). Surface `missing` to the operator; if
-`html_fallback_included` is true, tell them PNG render was off and the
-zip contains the populated HTML for manual export.
+Parse `[zip-summary] {JSON}`. Zip layout — exactly this, nothing more:
 
-Never include dropped variations, intermediate connector outputs, padded
-fallbacks, the review HTML, or operator inputs in the zip.
+```
+<brand>-approved.zip
+├── v1/
+│   ├── v1_1x1.png
+│   └── v1_9x16.png
+├── v3/
+│   └── ...
+```
+
+One folder per approved variation, two PNGs per folder (or one if `--ratio`
+filters). No manifest, no metadata, no HTML fallback. If the script returns
+`status: no_pngs` (exit 3), tell the operator Browserless wasn't set and
+offer to re-run the build with it on.
 
 For `re-expand <id> with <model>` paste-backs: call the connector again for
 that image with the requested model, save to `uploads/expanded/`, re-run
